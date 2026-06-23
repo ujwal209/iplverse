@@ -1,0 +1,2495 @@
+[
+  {
+    "cricsheet_name": "V Kohli",
+    "display_name": "Virat Kohli",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=Virat%20Kohli&background=random&color=fff&size=128",
+    "aliases": [
+      "v kohli",
+      "virat",
+      "kohli",
+      "virat kohli",
+      "vkohli",
+      "vk",
+      "king kohli",
+      "chiku"
+    ]
+  },
+  {
+    "cricsheet_name": "RG Sharma",
+    "display_name": "Rohit Sharma",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Rohit%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "rg sharma",
+      "rohit",
+      "sharma",
+      "rohit sharma",
+      "r sharma",
+      "rsharma",
+      "rs",
+      "hitman"
+    ]
+  },
+  {
+    "cricsheet_name": "S Dhawan",
+    "display_name": "Shikhar Dhawan",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Shikhar%20Dhawan&background=random&color=fff&size=128",
+    "aliases": [
+      "s dhawan",
+      "shikhar",
+      "dhawan",
+      "shikhar dhawan",
+      "sdhawan",
+      "sd",
+      "gabbar"
+    ]
+  },
+  {
+    "cricsheet_name": "DA Warner",
+    "display_name": "David Warner",
+    "team": "DC",
+    "photo": "https://ui-avatars.com/api/?name=David%20Warner&background=random&color=fff&size=128",
+    "aliases": [
+      "da warner",
+      "david",
+      "warner",
+      "david warner",
+      "d warner",
+      "dwarner",
+      "dw",
+      "bull"
+    ]
+  },
+  {
+    "cricsheet_name": "KL Rahul",
+    "display_name": "KL Rahul",
+    "team": "LSG",
+    "photo": "https://ui-avatars.com/api/?name=KL%20Rahul&background=random&color=fff&size=128",
+    "aliases": [
+      "kl rahul",
+      "kl",
+      "rahul",
+      "k rahul",
+      "krahul",
+      "kr",
+      "klr"
+    ]
+  },
+  {
+    "cricsheet_name": "SK Raina",
+    "display_name": "Suresh Raina",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Suresh%20Raina&background=random&color=fff&size=128",
+    "aliases": [
+      "sk raina",
+      "suresh",
+      "raina",
+      "suresh raina",
+      "s raina",
+      "sraina",
+      "sr",
+      "mr ipl",
+      "chinna thala",
+      "skr"
+    ]
+  },
+  {
+    "cricsheet_name": "MS Dhoni",
+    "display_name": "MS Dhoni",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=MS%20Dhoni&background=random&color=fff&size=128",
+    "aliases": [
+      "ms dhoni",
+      "ms",
+      "dhoni",
+      "m dhoni",
+      "mdhoni",
+      "md",
+      "mahi",
+      "thala",
+      "captain cool",
+      "msd"
+    ]
+  },
+  {
+    "cricsheet_name": "AM Rahane",
+    "display_name": "Ajinkya Rahane",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Ajinkya%20Rahane&background=random&color=fff&size=128",
+    "aliases": [
+      "am rahane",
+      "ajinkya",
+      "rahane",
+      "ajinkya rahane",
+      "a rahane",
+      "arahane",
+      "ar",
+      "jinks"
+    ]
+  },
+  {
+    "cricsheet_name": "AB de Villiers",
+    "display_name": "AB de Villiers",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=AB%20de%20Villiers&background=random&color=fff&size=128",
+    "aliases": [
+      "ab de villiers",
+      "ab",
+      "de villiers",
+      "a de villiers",
+      "ade villiers",
+      "ad",
+      "abd",
+      "mrv360",
+      "alien",
+      "de vill"
+    ]
+  },
+  {
+    "cricsheet_name": "SV Samson",
+    "display_name": "Sanju Samson",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Sanju%20Samson&background=random&color=fff&size=128",
+    "aliases": [
+      "sv samson",
+      "sanju",
+      "samson",
+      "sanju samson",
+      "s samson",
+      "ssamson",
+      "ss"
+    ]
+  },
+  {
+    "cricsheet_name": "CH Gayle",
+    "display_name": "Chris Gayle",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Chris%20Gayle&background=random&color=fff&size=128",
+    "aliases": [
+      "ch gayle",
+      "chris",
+      "gayle",
+      "chris gayle",
+      "c gayle",
+      "cgayle",
+      "cg",
+      "universe boss",
+      "gayle storm"
+    ]
+  },
+  {
+    "cricsheet_name": "RV Uthappa",
+    "display_name": "Robin Uthappa",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Robin%20Uthappa&background=random&color=fff&size=128",
+    "aliases": [
+      "rv uthappa",
+      "robin",
+      "uthappa",
+      "robin uthappa",
+      "r uthappa",
+      "ruthappa",
+      "ru",
+      "robbie"
+    ]
+  },
+  {
+    "cricsheet_name": "KD Karthik",
+    "display_name": "Dinesh Karthik",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=Dinesh%20Karthik&background=random&color=fff&size=128",
+    "aliases": [
+      "kd karthik",
+      "dinesh",
+      "karthik",
+      "dinesh karthik",
+      "d karthik",
+      "dkarthik",
+      "dk"
+    ]
+  },
+  {
+    "cricsheet_name": "F du Plessis",
+    "display_name": "Faf du Plessis",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=Faf%20du%20Plessis&background=random&color=fff&size=128",
+    "aliases": [
+      "f du plessis",
+      "faf",
+      "du plessis",
+      "faf du plessis",
+      "fdu plessis",
+      "fd"
+    ]
+  },
+  {
+    "cricsheet_name": "JC Buttler",
+    "display_name": "Jos Buttler",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Jos%20Buttler&background=random&color=fff&size=128",
+    "aliases": [
+      "jc buttler",
+      "jos",
+      "buttler",
+      "jos buttler",
+      "j buttler",
+      "jbuttler",
+      "jb",
+      "jos the boss"
+    ]
+  },
+  {
+    "cricsheet_name": "Shubman Gill",
+    "display_name": "Shubman Gill",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Shubman%20Gill&background=random&color=fff&size=128",
+    "aliases": [
+      "shubman gill",
+      "shubman",
+      "gill",
+      "s gill",
+      "sgill",
+      "sg",
+      "prince"
+    ]
+  },
+  {
+    "cricsheet_name": "SA Yadav",
+    "display_name": "Suryakumar Yadav",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Suryakumar%20Yadav&background=random&color=fff&size=128",
+    "aliases": [
+      "sa yadav",
+      "suryakumar",
+      "yadav",
+      "suryakumar yadav",
+      "s yadav",
+      "syadav",
+      "sy",
+      "sky",
+      "surya"
+    ]
+  },
+  {
+    "cricsheet_name": "AT Rayudu",
+    "display_name": "Ambati Rayudu",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Ambati%20Rayudu&background=random&color=fff&size=128",
+    "aliases": [
+      "at rayudu",
+      "ambati",
+      "rayudu",
+      "ambati rayudu",
+      "a rayudu",
+      "arayudu",
+      "ar"
+    ]
+  },
+  {
+    "cricsheet_name": "SS Iyer",
+    "display_name": "Shreyas Iyer",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Shreyas%20Iyer&background=random&color=fff&size=128",
+    "aliases": [
+      "ss iyer",
+      "shreyas",
+      "iyer",
+      "shreyas iyer",
+      "s iyer",
+      "siyer",
+      "si"
+    ]
+  },
+  {
+    "cricsheet_name": "G Gambhir",
+    "display_name": "Gautam Gambhir",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Gautam%20Gambhir&background=random&color=fff&size=128",
+    "aliases": [
+      "g gambhir",
+      "gautam",
+      "gambhir",
+      "gautam gambhir",
+      "ggambhir",
+      "gg",
+      "gauti"
+    ]
+  },
+  {
+    "cricsheet_name": "MK Pandey",
+    "display_name": "Manish Pandey",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Manish%20Pandey&background=random&color=fff&size=128",
+    "aliases": [
+      "mk pandey",
+      "manish",
+      "pandey",
+      "manish pandey",
+      "m pandey",
+      "mpandey",
+      "mp"
+    ]
+  },
+  {
+    "cricsheet_name": "SR Watson",
+    "display_name": "Shane Watson",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Shane%20Watson&background=random&color=fff&size=128",
+    "aliases": [
+      "sr watson",
+      "shane",
+      "watson",
+      "shane watson",
+      "s watson",
+      "swatson",
+      "sw",
+      "watto"
+    ]
+  },
+  {
+    "cricsheet_name": "RR Pant",
+    "display_name": "Rishabh Pant",
+    "team": "DC",
+    "photo": "https://ui-avatars.com/api/?name=Rishabh%20Pant&background=random&color=fff&size=128",
+    "aliases": [
+      "rr pant",
+      "rishabh",
+      "pant",
+      "rishabh pant",
+      "r pant",
+      "rpant",
+      "rp",
+      "spiderman"
+    ]
+  },
+  {
+    "cricsheet_name": "Ishan Kishan",
+    "display_name": "Ishan Kishan",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Ishan%20Kishan&background=random&color=fff&size=128",
+    "aliases": [
+      "ishan kishan",
+      "ishan",
+      "kishan",
+      "i kishan",
+      "ikishan",
+      "ik"
+    ]
+  },
+  {
+    "cricsheet_name": "RA Jadeja",
+    "display_name": "Ravindra Jadeja",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Ravindra%20Jadeja&background=random&color=fff&size=128",
+    "aliases": [
+      "ra jadeja",
+      "ravindra",
+      "jadeja",
+      "ravindra jadeja",
+      "r jadeja",
+      "rjadeja",
+      "rj",
+      "jaddu",
+      "sir"
+    ]
+  },
+  {
+    "cricsheet_name": "Q de Kock",
+    "display_name": "Quinton de Kock",
+    "team": "LSG",
+    "photo": "https://ui-avatars.com/api/?name=Quinton%20de%20Kock&background=random&color=fff&size=128",
+    "aliases": [
+      "q de kock",
+      "quinton",
+      "de kock",
+      "quinton de kock",
+      "qde kock",
+      "qd",
+      "qdk"
+    ]
+  },
+  {
+    "cricsheet_name": "KA Pollard",
+    "display_name": "Kieron Pollard",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Kieron%20Pollard&background=random&color=fff&size=128",
+    "aliases": [
+      "ka pollard",
+      "kieron",
+      "pollard",
+      "kieron pollard",
+      "k pollard",
+      "kpollard",
+      "kp",
+      "polly"
+    ]
+  },
+  {
+    "cricsheet_name": "DA Miller",
+    "display_name": "David Miller",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=David%20Miller&background=random&color=fff&size=128",
+    "aliases": [
+      "da miller",
+      "david",
+      "miller",
+      "david miller",
+      "d miller",
+      "dmiller",
+      "dm",
+      "killer miller"
+    ]
+  },
+  {
+    "cricsheet_name": "YK Pathan",
+    "display_name": "Yusuf Pathan",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Yusuf%20Pathan&background=random&color=fff&size=128",
+    "aliases": [
+      "yk pathan",
+      "yusuf",
+      "pathan",
+      "yusuf pathan",
+      "y pathan",
+      "ypathan",
+      "yp"
+    ]
+  },
+  {
+    "cricsheet_name": "N Rana",
+    "display_name": "Nitish Rana",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Nitish%20Rana&background=random&color=fff&size=128",
+    "aliases": [
+      "n rana",
+      "nitish",
+      "rana",
+      "nitish rana",
+      "nrana",
+      "nr"
+    ]
+  },
+  {
+    "cricsheet_name": "HH Pandya",
+    "display_name": "Hardik Pandya",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Hardik%20Pandya&background=random&color=fff&size=128",
+    "aliases": [
+      "hh pandya",
+      "hardik",
+      "pandya",
+      "hardik pandya",
+      "h pandya",
+      "hpandya",
+      "hp",
+      "kung fu pandya"
+    ]
+  },
+  {
+    "cricsheet_name": "WP Saha",
+    "display_name": "Wriddhiman Saha",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Wriddhiman%20Saha&background=random&color=fff&size=128",
+    "aliases": [
+      "wp saha",
+      "wriddhiman",
+      "saha",
+      "wriddhiman saha",
+      "w saha",
+      "wsaha",
+      "ws",
+      "superman"
+    ]
+  },
+  {
+    "cricsheet_name": "BB McCullum",
+    "display_name": "Brendon McCullum",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Brendon%20McCullum&background=random&color=fff&size=128",
+    "aliases": [
+      "bb mccullum",
+      "brendon",
+      "mccullum",
+      "brendon mccullum",
+      "b mccullum",
+      "bmccullum",
+      "bm",
+      "baz"
+    ]
+  },
+  {
+    "cricsheet_name": "PA Patel",
+    "display_name": "Parthiv Patel",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=Parthiv%20Patel&background=random&color=fff&size=128",
+    "aliases": [
+      "pa patel",
+      "parthiv",
+      "patel",
+      "parthiv patel",
+      "p patel",
+      "ppatel",
+      "pp"
+    ]
+  },
+  {
+    "cricsheet_name": "RD Gaikwad",
+    "display_name": "Ruturaj Gaikwad",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Ruturaj%20Gaikwad&background=random&color=fff&size=128",
+    "aliases": [
+      "rd gaikwad",
+      "ruturaj",
+      "gaikwad",
+      "ruturaj gaikwad",
+      "r gaikwad",
+      "rgaikwad",
+      "rg",
+      "rutu"
+    ]
+  },
+  {
+    "cricsheet_name": "GJ Maxwell",
+    "display_name": "Glenn Maxwell",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=Glenn%20Maxwell&background=random&color=fff&size=128",
+    "aliases": [
+      "gj maxwell",
+      "glenn",
+      "maxwell",
+      "glenn maxwell",
+      "g maxwell",
+      "gmaxwell",
+      "gm",
+      "maxi",
+      "big show"
+    ]
+  },
+  {
+    "cricsheet_name": "MA Agarwal",
+    "display_name": "Mayank Agarwal",
+    "team": "SRH",
+    "photo": "https://ui-avatars.com/api/?name=Mayank%20Agarwal&background=random&color=fff&size=128",
+    "aliases": [
+      "ma agarwal",
+      "mayank",
+      "agarwal",
+      "mayank agarwal",
+      "m agarwal",
+      "magarwal",
+      "ma"
+    ]
+  },
+  {
+    "cricsheet_name": "Yuvraj Singh",
+    "display_name": "Yuvraj Singh",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Yuvraj%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "yuvraj singh",
+      "yuvraj",
+      "singh",
+      "y singh",
+      "ysingh",
+      "ys",
+      "yuvi"
+    ]
+  },
+  {
+    "cricsheet_name": "V Sehwag",
+    "display_name": "Virender Sehwag",
+    "team": "DC",
+    "photo": "https://ui-avatars.com/api/?name=Virender%20Sehwag&background=random&color=fff&size=128",
+    "aliases": [
+      "v sehwag",
+      "virender",
+      "sehwag",
+      "virender sehwag",
+      "vsehwag",
+      "vs",
+      "viru"
+    ]
+  },
+  {
+    "cricsheet_name": "AD Russell",
+    "display_name": "Andre Russell",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Andre%20Russell&background=random&color=fff&size=128",
+    "aliases": [
+      "ad russell",
+      "andre",
+      "russell",
+      "andre russell",
+      "a russell",
+      "arussell",
+      "ar",
+      "dre russ"
+    ]
+  },
+  {
+    "cricsheet_name": "M Vijay",
+    "display_name": "Murali Vijay",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Murali%20Vijay&background=random&color=fff&size=128",
+    "aliases": [
+      "m vijay",
+      "murali",
+      "vijay",
+      "murali vijay",
+      "mvijay",
+      "mv",
+      "monk"
+    ]
+  },
+  {
+    "cricsheet_name": "YBK Jaiswal",
+    "display_name": "Yashasvi Jaiswal",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Yashasvi%20Jaiswal&background=random&color=fff&size=128",
+    "aliases": [
+      "ybk jaiswal",
+      "yashasvi",
+      "jaiswal",
+      "yashasvi jaiswal",
+      "y jaiswal",
+      "yjaiswal",
+      "yj"
+    ]
+  },
+  {
+    "cricsheet_name": "N Pooran",
+    "display_name": "N Pooran",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=N%20Pooran&background=random&color=fff&size=128",
+    "aliases": [
+      "n pooran",
+      "pooran",
+      "npooran"
+    ]
+  },
+  {
+    "cricsheet_name": "B Sai Sudharsan",
+    "display_name": "Sai Sudharsan",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Sai%20Sudharsan&background=random&color=fff&size=128",
+    "aliases": [
+      "b sai sudharsan",
+      "sai",
+      "sudharsan",
+      "sai sudharsan",
+      "s sudharsan",
+      "ssudharsan",
+      "ss"
+    ]
+  },
+  {
+    "cricsheet_name": "SPD Smith",
+    "display_name": "Steve Smith",
+    "team": "RPS",
+    "photo": "https://ui-avatars.com/api/?name=Steve%20Smith&background=random&color=fff&size=128",
+    "aliases": [
+      "spd smith",
+      "steve",
+      "smith",
+      "steve smith",
+      "s smith",
+      "ssmith",
+      "ss",
+      "smudge"
+    ]
+  },
+  {
+    "cricsheet_name": "SE Marsh",
+    "display_name": "Shaun Marsh",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Shaun%20Marsh&background=random&color=fff&size=128",
+    "aliases": [
+      "se marsh",
+      "shaun",
+      "marsh",
+      "shaun marsh",
+      "s marsh",
+      "smarsh",
+      "sm"
+    ]
+  },
+  {
+    "cricsheet_name": "JH Kallis",
+    "display_name": "Jacques Kallis",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Jacques%20Kallis&background=random&color=fff&size=128",
+    "aliases": [
+      "jh kallis",
+      "jacques",
+      "kallis",
+      "jacques kallis",
+      "j kallis",
+      "jkallis",
+      "jk"
+    ]
+  },
+  {
+    "cricsheet_name": "DR Smith",
+    "display_name": "Dwayne Smith",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Dwayne%20Smith&background=random&color=fff&size=128",
+    "aliases": [
+      "dr smith",
+      "dwayne",
+      "smith",
+      "dwayne smith",
+      "d smith",
+      "dsmith",
+      "ds"
+    ]
+  },
+  {
+    "cricsheet_name": "Abhishek Sharma",
+    "display_name": "Abhishek Sharma",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Abhishek%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "abhishek sharma",
+      "abhishek",
+      "sharma"
+    ]
+  },
+  {
+    "cricsheet_name": "SR Tendulkar",
+    "display_name": "Sachin Tendulkar",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Sachin%20Tendulkar&background=random&color=fff&size=128",
+    "aliases": [
+      "sr tendulkar",
+      "sachin",
+      "tendulkar",
+      "sachin tendulkar",
+      "s tendulkar",
+      "stendulkar",
+      "st",
+      "master blaster",
+      "god"
+    ]
+  },
+  {
+    "cricsheet_name": "RA Tripathi",
+    "display_name": "RA Tripathi",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=RA%20Tripathi&background=random&color=fff&size=128",
+    "aliases": [
+      "ra tripathi",
+      "tripathi",
+      "r tripathi",
+      "rtripathi"
+    ]
+  },
+  {
+    "cricsheet_name": "D Padikkal",
+    "display_name": "D Padikkal",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=D%20Padikkal&background=random&color=fff&size=128",
+    "aliases": [
+      "d padikkal",
+      "padikkal",
+      "dpadikkal"
+    ]
+  },
+  {
+    "cricsheet_name": "MP Stoinis",
+    "display_name": "Marcus Stoinis",
+    "team": "LSG",
+    "photo": "https://ui-avatars.com/api/?name=Marcus%20Stoinis&background=random&color=fff&size=128",
+    "aliases": [
+      "mp stoinis",
+      "marcus",
+      "stoinis",
+      "marcus stoinis",
+      "m stoinis",
+      "mstoinis",
+      "ms",
+      "hulk"
+    ]
+  },
+  {
+    "cricsheet_name": "R Dravid",
+    "display_name": "Rahul Dravid",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Rahul%20Dravid&background=random&color=fff&size=128",
+    "aliases": [
+      "r dravid",
+      "rahul",
+      "dravid",
+      "rahul dravid",
+      "rdravid",
+      "rd",
+      "the wall"
+    ]
+  },
+  {
+    "cricsheet_name": "KS Williamson",
+    "display_name": "Kane Williamson",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Kane%20Williamson&background=random&color=fff&size=128",
+    "aliases": [
+      "ks williamson",
+      "kane",
+      "williamson",
+      "kane williamson",
+      "k williamson",
+      "kwilliamson",
+      "kw",
+      "kane mama"
+    ]
+  },
+  {
+    "cricsheet_name": "S Dube",
+    "display_name": "Shivam Dube",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Shivam%20Dube&background=random&color=fff&size=128",
+    "aliases": [
+      "s dube",
+      "shivam",
+      "dube",
+      "shivam dube",
+      "sdube",
+      "sd"
+    ]
+  },
+  {
+    "cricsheet_name": "H Klaasen",
+    "display_name": "H Klaasen",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=H%20Klaasen&background=random&color=fff&size=128",
+    "aliases": [
+      "h klaasen",
+      "klaasen",
+      "hklaasen"
+    ]
+  },
+  {
+    "cricsheet_name": "AJ Finch",
+    "display_name": "AJ Finch",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=AJ%20Finch&background=random&color=fff&size=128",
+    "aliases": [
+      "aj finch",
+      "finch",
+      "a finch",
+      "afinch"
+    ]
+  },
+  {
+    "cricsheet_name": "AR Patel",
+    "display_name": "Axar Patel",
+    "team": "DC",
+    "photo": "https://ui-avatars.com/api/?name=Axar%20Patel&background=random&color=fff&size=128",
+    "aliases": [
+      "ar patel",
+      "axar",
+      "patel",
+      "axar patel",
+      "a patel",
+      "apatel",
+      "ap",
+      "bapu"
+    ]
+  },
+  {
+    "cricsheet_name": "AC Gilchrist",
+    "display_name": "AC Gilchrist",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=AC%20Gilchrist&background=random&color=fff&size=128",
+    "aliases": [
+      "ac gilchrist",
+      "gilchrist",
+      "a gilchrist",
+      "agilchrist"
+    ]
+  },
+  {
+    "cricsheet_name": "JP Duminy",
+    "display_name": "JP Duminy",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JP%20Duminy&background=random&color=fff&size=128",
+    "aliases": [
+      "jp duminy",
+      "duminy",
+      "j duminy",
+      "jduminy"
+    ]
+  },
+  {
+    "cricsheet_name": "KH Pandya",
+    "display_name": "Krunal Pandya",
+    "team": "LSG",
+    "photo": "https://ui-avatars.com/api/?name=Krunal%20Pandya&background=random&color=fff&size=128",
+    "aliases": [
+      "kh pandya",
+      "krunal",
+      "pandya",
+      "krunal pandya",
+      "k pandya",
+      "kpandya",
+      "kp"
+    ]
+  },
+  {
+    "cricsheet_name": "MEK Hussey",
+    "display_name": "MEK Hussey",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MEK%20Hussey&background=random&color=fff&size=128",
+    "aliases": [
+      "mek hussey",
+      "hussey",
+      "m hussey",
+      "mhussey"
+    ]
+  },
+  {
+    "cricsheet_name": "PP Shaw",
+    "display_name": "PP Shaw",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=PP%20Shaw&background=random&color=fff&size=128",
+    "aliases": [
+      "pp shaw",
+      "shaw",
+      "p shaw",
+      "pshaw"
+    ]
+  },
+  {
+    "cricsheet_name": "R Parag",
+    "display_name": "R Parag",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=R%20Parag&background=random&color=fff&size=128",
+    "aliases": [
+      "r parag",
+      "parag",
+      "rparag"
+    ]
+  },
+  {
+    "cricsheet_name": "P Simran Singh",
+    "display_name": "P Singh",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=P%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "p simran singh",
+      "singh",
+      "p singh",
+      "psingh"
+    ]
+  },
+  {
+    "cricsheet_name": "Tilak Varma",
+    "display_name": "Tilak Varma",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Tilak%20Varma&background=random&color=fff&size=128",
+    "aliases": [
+      "tilak varma",
+      "tilak",
+      "varma",
+      "t varma",
+      "tvarma",
+      "tv"
+    ]
+  },
+  {
+    "cricsheet_name": "MR Marsh",
+    "display_name": "MR Marsh",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MR%20Marsh&background=random&color=fff&size=128",
+    "aliases": [
+      "mr marsh",
+      "marsh",
+      "m marsh",
+      "mmarsh"
+    ]
+  },
+  {
+    "cricsheet_name": "SP Narine",
+    "display_name": "Sunil Narine",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Sunil%20Narine&background=random&color=fff&size=128",
+    "aliases": [
+      "sp narine",
+      "sunil",
+      "narine",
+      "sunil narine",
+      "s narine",
+      "snarine",
+      "sn",
+      "sunny"
+    ]
+  },
+  {
+    "cricsheet_name": "DPMD Jayawardene",
+    "display_name": "DPMD Jayawardene",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=DPMD%20Jayawardene&background=random&color=fff&size=128",
+    "aliases": [
+      "dpmd jayawardene",
+      "dpmd",
+      "jayawardene"
+    ]
+  },
+  {
+    "cricsheet_name": "KK Nair",
+    "display_name": "KK Nair",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=KK%20Nair&background=random&color=fff&size=128",
+    "aliases": [
+      "kk nair",
+      "nair",
+      "k nair",
+      "knair"
+    ]
+  },
+  {
+    "cricsheet_name": "Mandeep Singh",
+    "display_name": "Mandeep Singh",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Mandeep%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "mandeep singh",
+      "mandeep",
+      "singh"
+    ]
+  },
+  {
+    "cricsheet_name": "MK Tiwary",
+    "display_name": "MK Tiwary",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MK%20Tiwary&background=random&color=fff&size=128",
+    "aliases": [
+      "mk tiwary",
+      "tiwary",
+      "m tiwary",
+      "mtiwary"
+    ]
+  },
+  {
+    "cricsheet_name": "KC Sangakkara",
+    "display_name": "KC Sangakkara",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=KC%20Sangakkara&background=random&color=fff&size=128",
+    "aliases": [
+      "kc sangakkara",
+      "sangakkara",
+      "k sangakkara",
+      "ksangakkara"
+    ]
+  },
+  {
+    "cricsheet_name": "VR Iyer",
+    "display_name": "VR Iyer",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=VR%20Iyer&background=random&color=fff&size=128",
+    "aliases": [
+      "vr iyer",
+      "iyer",
+      "v iyer",
+      "viyer"
+    ]
+  },
+  {
+    "cricsheet_name": "JM Bairstow",
+    "display_name": "JM Bairstow",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JM%20Bairstow&background=random&color=fff&size=128",
+    "aliases": [
+      "jm bairstow",
+      "bairstow",
+      "j bairstow",
+      "jbairstow"
+    ]
+  },
+  {
+    "cricsheet_name": "AK Markram",
+    "display_name": "AK Markram",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=AK%20Markram&background=random&color=fff&size=128",
+    "aliases": [
+      "ak markram",
+      "markram",
+      "a markram",
+      "amarkram"
+    ]
+  },
+  {
+    "cricsheet_name": "RM Patidar",
+    "display_name": "RM Patidar",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=RM%20Patidar&background=random&color=fff&size=128",
+    "aliases": [
+      "rm patidar",
+      "patidar",
+      "r patidar",
+      "rpatidar"
+    ]
+  },
+  {
+    "cricsheet_name": "SO Hetmyer",
+    "display_name": "SO Hetmyer",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=SO%20Hetmyer&background=random&color=fff&size=128",
+    "aliases": [
+      "so hetmyer",
+      "hetmyer",
+      "s hetmyer",
+      "shetmyer"
+    ]
+  },
+  {
+    "cricsheet_name": "DJ Bravo",
+    "display_name": "Dwayne Bravo",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Dwayne%20Bravo&background=random&color=fff&size=128",
+    "aliases": [
+      "dj bravo",
+      "dwayne",
+      "bravo",
+      "dwayne bravo",
+      "d bravo",
+      "dbravo",
+      "db",
+      "champion",
+      "djb"
+    ]
+  },
+  {
+    "cricsheet_name": "TM Head",
+    "display_name": "TM Head",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=TM%20Head&background=random&color=fff&size=128",
+    "aliases": [
+      "tm head",
+      "head",
+      "t head",
+      "thead"
+    ]
+  },
+  {
+    "cricsheet_name": "NV Ojha",
+    "display_name": "NV Ojha",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=NV%20Ojha&background=random&color=fff&size=128",
+    "aliases": [
+      "nv ojha",
+      "ojha",
+      "n ojha",
+      "nojha"
+    ]
+  },
+  {
+    "cricsheet_name": "DJ Hooda",
+    "display_name": "DJ Hooda",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=DJ%20Hooda&background=random&color=fff&size=128",
+    "aliases": [
+      "dj hooda",
+      "hooda",
+      "d hooda",
+      "dhooda"
+    ]
+  },
+  {
+    "cricsheet_name": "SS Tiwary",
+    "display_name": "SS Tiwary",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=SS%20Tiwary&background=random&color=fff&size=128",
+    "aliases": [
+      "ss tiwary",
+      "tiwary",
+      "s tiwary",
+      "stiwary"
+    ]
+  },
+  {
+    "cricsheet_name": "S Badrinath",
+    "display_name": "S Badrinath",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=S%20Badrinath&background=random&color=fff&size=128",
+    "aliases": [
+      "s badrinath",
+      "badrinath",
+      "sbadrinath"
+    ]
+  },
+  {
+    "cricsheet_name": "EJG Morgan",
+    "display_name": "EJG Morgan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=EJG%20Morgan&background=random&color=fff&size=128",
+    "aliases": [
+      "ejg morgan",
+      "morgan",
+      "e morgan",
+      "emorgan"
+    ]
+  },
+  {
+    "cricsheet_name": "BJ Hodge",
+    "display_name": "BJ Hodge",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=BJ%20Hodge&background=random&color=fff&size=128",
+    "aliases": [
+      "bj hodge",
+      "hodge",
+      "b hodge",
+      "bhodge"
+    ]
+  },
+  {
+    "cricsheet_name": "RK Singh",
+    "display_name": "RK Singh",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=RK%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "rk singh",
+      "singh",
+      "r singh",
+      "rsingh"
+    ]
+  },
+  {
+    "cricsheet_name": "SC Ganguly",
+    "display_name": "SC Ganguly",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=SC%20Ganguly&background=random&color=fff&size=128",
+    "aliases": [
+      "sc ganguly",
+      "ganguly",
+      "s ganguly",
+      "sganguly"
+    ]
+  },
+  {
+    "cricsheet_name": "CA Lynn",
+    "display_name": "CA Lynn",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=CA%20Lynn&background=random&color=fff&size=128",
+    "aliases": [
+      "ca lynn",
+      "lynn",
+      "c lynn",
+      "clynn"
+    ]
+  },
+  {
+    "cricsheet_name": "DJ Hussey",
+    "display_name": "DJ Hussey",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=DJ%20Hussey&background=random&color=fff&size=128",
+    "aliases": [
+      "dj hussey",
+      "hussey",
+      "d hussey",
+      "dhussey"
+    ]
+  },
+  {
+    "cricsheet_name": "R Tewatia",
+    "display_name": "R Tewatia",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=R%20Tewatia&background=random&color=fff&size=128",
+    "aliases": [
+      "r tewatia",
+      "tewatia",
+      "rtewatia"
+    ]
+  },
+  {
+    "cricsheet_name": "PD Salt",
+    "display_name": "PD Salt",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=PD%20Salt&background=random&color=fff&size=128",
+    "aliases": [
+      "pd salt",
+      "salt",
+      "p salt",
+      "psalt"
+    ]
+  },
+  {
+    "cricsheet_name": "V Shankar",
+    "display_name": "V Shankar",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=V%20Shankar&background=random&color=fff&size=128",
+    "aliases": [
+      "v shankar",
+      "shankar",
+      "vshankar"
+    ]
+  },
+  {
+    "cricsheet_name": "KM Jadhav",
+    "display_name": "KM Jadhav",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=KM%20Jadhav&background=random&color=fff&size=128",
+    "aliases": [
+      "km jadhav",
+      "jadhav",
+      "k jadhav",
+      "kjadhav"
+    ]
+  },
+  {
+    "cricsheet_name": "Dhruv Jurel",
+    "display_name": "Dhruv Jurel",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Dhruv%20Jurel&background=random&color=fff&size=128",
+    "aliases": [
+      "dhruv jurel",
+      "dhruv",
+      "jurel"
+    ]
+  },
+  {
+    "cricsheet_name": "A Badoni",
+    "display_name": "A Badoni",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=A%20Badoni&background=random&color=fff&size=128",
+    "aliases": [
+      "a badoni",
+      "badoni",
+      "abadoni"
+    ]
+  },
+  {
+    "cricsheet_name": "MM Ali",
+    "display_name": "Moeen Ali",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Moeen%20Ali&background=random&color=fff&size=128",
+    "aliases": [
+      "mm ali",
+      "moeen",
+      "ali",
+      "moeen ali",
+      "m ali",
+      "mali",
+      "ma",
+      "mo"
+    ]
+  },
+  {
+    "cricsheet_name": "TM Dilshan",
+    "display_name": "TM Dilshan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=TM%20Dilshan&background=random&color=fff&size=128",
+    "aliases": [
+      "tm dilshan",
+      "dilshan",
+      "t dilshan",
+      "tdilshan"
+    ]
+  },
+  {
+    "cricsheet_name": "TH David",
+    "display_name": "Tim David",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Tim%20David&background=random&color=fff&size=128",
+    "aliases": [
+      "th david",
+      "tim",
+      "david",
+      "tim david",
+      "t david",
+      "tdavid",
+      "td"
+    ]
+  },
+  {
+    "cricsheet_name": "YS Chahal",
+    "display_name": "Yuzvendra Chahal",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Yuzvendra%20Chahal&background=random&color=fff&size=128",
+    "aliases": [
+      "ys chahal",
+      "yuzvendra",
+      "chahal",
+      "yuzvendra chahal",
+      "y chahal",
+      "ychahal",
+      "yc",
+      "yuzi"
+    ]
+  },
+  {
+    "cricsheet_name": "B Kumar",
+    "display_name": "Bhuvneshwar Kumar",
+    "team": "SRH",
+    "photo": "https://ui-avatars.com/api/?name=Bhuvneshwar%20Kumar&background=random&color=fff&size=128",
+    "aliases": [
+      "b kumar",
+      "bhuvneshwar",
+      "kumar",
+      "bhuvneshwar kumar",
+      "bkumar",
+      "bk",
+      "bhuvi"
+    ]
+  },
+  {
+    "cricsheet_name": "PP Chawla",
+    "display_name": "Piyush Chawla",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Piyush%20Chawla&background=random&color=fff&size=128",
+    "aliases": [
+      "pp chawla",
+      "piyush",
+      "chawla",
+      "piyush chawla",
+      "p chawla",
+      "pchawla",
+      "pc"
+    ]
+  },
+  {
+    "cricsheet_name": "JJ Bumrah",
+    "display_name": "Jasprit Bumrah",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Jasprit%20Bumrah&background=random&color=fff&size=128",
+    "aliases": [
+      "jj bumrah",
+      "jasprit",
+      "bumrah",
+      "jasprit bumrah",
+      "j bumrah",
+      "jbumrah",
+      "jb",
+      "boom",
+      "bum",
+      "jas"
+    ]
+  },
+  {
+    "cricsheet_name": "R Ashwin",
+    "display_name": "Ravichandran Ashwin",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Ravichandran%20Ashwin&background=random&color=fff&size=128",
+    "aliases": [
+      "r ashwin",
+      "ravichandran",
+      "ashwin",
+      "ravichandran ashwin",
+      "rashwin",
+      "ra",
+      "ash",
+      "anna"
+    ]
+  },
+  {
+    "cricsheet_name": "Rashid Khan",
+    "display_name": "Rashid Khan",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Rashid%20Khan&background=random&color=fff&size=128",
+    "aliases": [
+      "rashid khan",
+      "rashid",
+      "khan",
+      "r khan",
+      "rkhan",
+      "rk"
+    ]
+  },
+  {
+    "cricsheet_name": "A Mishra",
+    "display_name": "Amit Mishra",
+    "team": "LSG",
+    "photo": "https://ui-avatars.com/api/?name=Amit%20Mishra&background=random&color=fff&size=128",
+    "aliases": [
+      "a mishra",
+      "amit",
+      "mishra",
+      "amit mishra",
+      "amishra",
+      "am",
+      "mishy"
+    ]
+  },
+  {
+    "cricsheet_name": "SL Malinga",
+    "display_name": "Lasith Malinga",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Lasith%20Malinga&background=random&color=fff&size=128",
+    "aliases": [
+      "sl malinga",
+      "lasith",
+      "malinga",
+      "lasith malinga",
+      "l malinga",
+      "lmalinga",
+      "lm",
+      "slinga"
+    ]
+  },
+  {
+    "cricsheet_name": "HV Patel",
+    "display_name": "Harshal Patel",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Harshal%20Patel&background=random&color=fff&size=128",
+    "aliases": [
+      "hv patel",
+      "harshal",
+      "patel",
+      "harshal patel",
+      "h patel",
+      "hpatel",
+      "hp",
+      "purple patel"
+    ]
+  },
+  {
+    "cricsheet_name": "K Rabada",
+    "display_name": "Kagiso Rabada",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Kagiso%20Rabada&background=random&color=fff&size=128",
+    "aliases": [
+      "k rabada",
+      "kagiso",
+      "rabada",
+      "kagiso rabada",
+      "krabada",
+      "kr",
+      "kg"
+    ]
+  },
+  {
+    "cricsheet_name": "Sandeep Sharma",
+    "display_name": "Sandeep Sharma",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Sandeep%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "sandeep sharma",
+      "sandeep",
+      "sharma",
+      "s sharma",
+      "ssharma",
+      "ss",
+      "sandy"
+    ]
+  },
+  {
+    "cricsheet_name": "Harbhajan Singh",
+    "display_name": "Harbhajan Singh",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Harbhajan%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "harbhajan singh",
+      "harbhajan",
+      "singh",
+      "h singh",
+      "hsingh",
+      "hs",
+      "bhajji"
+    ]
+  },
+  {
+    "cricsheet_name": "TA Boult",
+    "display_name": "Trent Boult",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Trent%20Boult&background=random&color=fff&size=128",
+    "aliases": [
+      "ta boult",
+      "trent",
+      "boult",
+      "trent boult",
+      "t boult",
+      "tboult",
+      "tb",
+      "boulty"
+    ]
+  },
+  {
+    "cricsheet_name": "Mohammed Shami",
+    "display_name": "Mohammed Shami",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Mohammed%20Shami&background=random&color=fff&size=128",
+    "aliases": [
+      "mohammed shami",
+      "mohammed",
+      "shami",
+      "m shami",
+      "mshami",
+      "ms",
+      "lala"
+    ]
+  },
+  {
+    "cricsheet_name": "UT Yadav",
+    "display_name": "Umesh Yadav",
+    "team": "KKR",
+    "photo": "https://ui-avatars.com/api/?name=Umesh%20Yadav&background=random&color=fff&size=128",
+    "aliases": [
+      "ut yadav",
+      "umesh",
+      "yadav",
+      "umesh yadav",
+      "u yadav",
+      "uyadav",
+      "uy"
+    ]
+  },
+  {
+    "cricsheet_name": "MM Sharma",
+    "display_name": "Mohit Sharma",
+    "team": "GT",
+    "photo": "https://ui-avatars.com/api/?name=Mohit%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "mm sharma",
+      "mohit",
+      "sharma",
+      "mohit sharma",
+      "m sharma",
+      "msharma",
+      "ms"
+    ]
+  },
+  {
+    "cricsheet_name": "Mohammed Siraj",
+    "display_name": "Mohammed Siraj",
+    "team": "RCB",
+    "photo": "https://ui-avatars.com/api/?name=Mohammed%20Siraj&background=random&color=fff&size=128",
+    "aliases": [
+      "mohammed siraj",
+      "mohammed",
+      "siraj",
+      "m siraj",
+      "msiraj",
+      "ms",
+      "miyan"
+    ]
+  },
+  {
+    "cricsheet_name": "SN Thakur",
+    "display_name": "Shardul Thakur",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Shardul%20Thakur&background=random&color=fff&size=128",
+    "aliases": [
+      "sn thakur",
+      "shardul",
+      "thakur",
+      "shardul thakur",
+      "s thakur",
+      "sthakur",
+      "st",
+      "lord"
+    ]
+  },
+  {
+    "cricsheet_name": "JD Unadkat",
+    "display_name": "Jaydev Unadkat",
+    "team": "SRH",
+    "photo": "https://ui-avatars.com/api/?name=Jaydev%20Unadkat&background=random&color=fff&size=128",
+    "aliases": [
+      "jd unadkat",
+      "jaydev",
+      "unadkat",
+      "jaydev unadkat",
+      "j unadkat",
+      "junadkat",
+      "ju"
+    ]
+  },
+  {
+    "cricsheet_name": "Kuldeep Yadav",
+    "display_name": "Kuldeep Yadav",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Kuldeep%20Yadav&background=random&color=fff&size=128",
+    "aliases": [
+      "kuldeep yadav",
+      "kuldeep",
+      "yadav"
+    ]
+  },
+  {
+    "cricsheet_name": "Arshdeep Singh",
+    "display_name": "Arshdeep Singh",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Arshdeep%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "arshdeep singh",
+      "arshdeep",
+      "singh",
+      "a singh",
+      "asingh",
+      "as"
+    ]
+  },
+  {
+    "cricsheet_name": "CV Varun",
+    "display_name": "CV Varun",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=CV%20Varun&background=random&color=fff&size=128",
+    "aliases": [
+      "cv varun",
+      "varun",
+      "c varun",
+      "cvarun"
+    ]
+  },
+  {
+    "cricsheet_name": "A Nehra",
+    "display_name": "Ashish Nehra",
+    "team": "CSK",
+    "photo": "https://ui-avatars.com/api/?name=Ashish%20Nehra&background=random&color=fff&size=128",
+    "aliases": [
+      "a nehra",
+      "ashish",
+      "nehra",
+      "ashish nehra",
+      "anehra",
+      "an",
+      "nehra ji"
+    ]
+  },
+  {
+    "cricsheet_name": "R Vinay Kumar",
+    "display_name": "R Kumar",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=R%20Kumar&background=random&color=fff&size=128",
+    "aliases": [
+      "r vinay kumar",
+      "kumar",
+      "r kumar",
+      "rkumar"
+    ]
+  },
+  {
+    "cricsheet_name": "Z Khan",
+    "display_name": "Zaheer Khan",
+    "team": "MI",
+    "photo": "https://ui-avatars.com/api/?name=Zaheer%20Khan&background=random&color=fff&size=128",
+    "aliases": [
+      "z khan",
+      "zaheer",
+      "khan",
+      "zaheer khan",
+      "zkhan",
+      "zk",
+      "zak"
+    ]
+  },
+  {
+    "cricsheet_name": "DW Steyn",
+    "display_name": "DW Steyn",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=DW%20Steyn&background=random&color=fff&size=128",
+    "aliases": [
+      "dw steyn",
+      "steyn",
+      "d steyn",
+      "dsteyn"
+    ]
+  },
+  {
+    "cricsheet_name": "DL Chahar",
+    "display_name": "DL Chahar",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=DL%20Chahar&background=random&color=fff&size=128",
+    "aliases": [
+      "dl chahar",
+      "chahar",
+      "d chahar",
+      "dchahar"
+    ]
+  },
+  {
+    "cricsheet_name": "I Sharma",
+    "display_name": "Ishant Sharma",
+    "team": "DC",
+    "photo": "https://ui-avatars.com/api/?name=Ishant%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "i sharma",
+      "ishant",
+      "sharma",
+      "ishant sharma",
+      "isharma",
+      "is"
+    ]
+  },
+  {
+    "cricsheet_name": "CH Morris",
+    "display_name": "Chris Morris",
+    "team": "RR",
+    "photo": "https://ui-avatars.com/api/?name=Chris%20Morris&background=random&color=fff&size=128",
+    "aliases": [
+      "ch morris",
+      "chris",
+      "morris",
+      "chris morris",
+      "c morris",
+      "cmorris",
+      "cm"
+    ]
+  },
+  {
+    "cricsheet_name": "Avesh Khan",
+    "display_name": "Avesh Khan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Avesh%20Khan&background=random&color=fff&size=128",
+    "aliases": [
+      "avesh khan",
+      "avesh",
+      "khan"
+    ]
+  },
+  {
+    "cricsheet_name": "M Prasidh Krishna",
+    "display_name": "M Krishna",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=M%20Krishna&background=random&color=fff&size=128",
+    "aliases": [
+      "m prasidh krishna",
+      "krishna",
+      "m krishna",
+      "mkrishna"
+    ]
+  },
+  {
+    "cricsheet_name": "KK Ahmed",
+    "display_name": "KK Ahmed",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=KK%20Ahmed&background=random&color=fff&size=128",
+    "aliases": [
+      "kk ahmed",
+      "ahmed",
+      "k ahmed",
+      "kahmed"
+    ]
+  },
+  {
+    "cricsheet_name": "P Kumar",
+    "display_name": "Praveen Kumar",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Praveen%20Kumar&background=random&color=fff&size=128",
+    "aliases": [
+      "p kumar",
+      "praveen",
+      "kumar",
+      "praveen kumar",
+      "pkumar",
+      "pk"
+    ]
+  },
+  {
+    "cricsheet_name": "RP Singh",
+    "display_name": "RP Singh",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=RP%20Singh&background=random&color=fff&size=128",
+    "aliases": [
+      "rp singh",
+      "singh",
+      "r singh",
+      "rsingh"
+    ]
+  },
+  {
+    "cricsheet_name": "PP Ojha",
+    "display_name": "PP Ojha",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=PP%20Ojha&background=random&color=fff&size=128",
+    "aliases": [
+      "pp ojha",
+      "ojha",
+      "p ojha",
+      "pojha"
+    ]
+  },
+  {
+    "cricsheet_name": "PJ Cummins",
+    "display_name": "PJ Cummins",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=PJ%20Cummins&background=random&color=fff&size=128",
+    "aliases": [
+      "pj cummins",
+      "cummins",
+      "p cummins",
+      "pcummins"
+    ]
+  },
+  {
+    "cricsheet_name": "DS Kulkarni",
+    "display_name": "DS Kulkarni",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=DS%20Kulkarni&background=random&color=fff&size=128",
+    "aliases": [
+      "ds kulkarni",
+      "kulkarni",
+      "d kulkarni",
+      "dkulkarni"
+    ]
+  },
+  {
+    "cricsheet_name": "JA Morkel",
+    "display_name": "JA Morkel",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JA%20Morkel&background=random&color=fff&size=128",
+    "aliases": [
+      "ja morkel",
+      "morkel",
+      "j morkel",
+      "jmorkel"
+    ]
+  },
+  {
+    "cricsheet_name": "JC Archer",
+    "display_name": "JC Archer",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JC%20Archer&background=random&color=fff&size=128",
+    "aliases": [
+      "jc archer",
+      "archer",
+      "j archer",
+      "jarcher"
+    ]
+  },
+  {
+    "cricsheet_name": "Ravi Bishnoi",
+    "display_name": "Ravi Bishnoi",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Ravi%20Bishnoi&background=random&color=fff&size=128",
+    "aliases": [
+      "ravi bishnoi",
+      "ravi",
+      "bishnoi"
+    ]
+  },
+  {
+    "cricsheet_name": "KV Sharma",
+    "display_name": "KV Sharma",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=KV%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "kv sharma",
+      "sharma",
+      "k sharma",
+      "ksharma"
+    ]
+  },
+  {
+    "cricsheet_name": "Imran Tahir",
+    "display_name": "Imran Tahir",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Imran%20Tahir&background=random&color=fff&size=128",
+    "aliases": [
+      "imran tahir",
+      "imran",
+      "tahir"
+    ]
+  },
+  {
+    "cricsheet_name": "IK Pathan",
+    "display_name": "IK Pathan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=IK%20Pathan&background=random&color=fff&size=128",
+    "aliases": [
+      "ik pathan",
+      "pathan",
+      "i pathan",
+      "ipathan"
+    ]
+  },
+  {
+    "cricsheet_name": "M Morkel",
+    "display_name": "M Morkel",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=M%20Morkel&background=random&color=fff&size=128",
+    "aliases": [
+      "m morkel",
+      "morkel",
+      "mmorkel"
+    ]
+  },
+  {
+    "cricsheet_name": "L Balaji",
+    "display_name": "L Balaji",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=L%20Balaji&background=random&color=fff&size=128",
+    "aliases": [
+      "l balaji",
+      "balaji",
+      "lbalaji"
+    ]
+  },
+  {
+    "cricsheet_name": "MA Starc",
+    "display_name": "MA Starc",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MA%20Starc&background=random&color=fff&size=128",
+    "aliases": [
+      "ma starc",
+      "starc",
+      "m starc",
+      "mstarc"
+    ]
+  },
+  {
+    "cricsheet_name": "RD Chahar",
+    "display_name": "RD Chahar",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=RD%20Chahar&background=random&color=fff&size=128",
+    "aliases": [
+      "rd chahar",
+      "chahar",
+      "r chahar",
+      "rchahar"
+    ]
+  },
+  {
+    "cricsheet_name": "MM Patel",
+    "display_name": "MM Patel",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MM%20Patel&background=random&color=fff&size=128",
+    "aliases": [
+      "mm patel",
+      "patel",
+      "m patel",
+      "mpatel"
+    ]
+  },
+  {
+    "cricsheet_name": "T Natarajan",
+    "display_name": "T Natarajan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=T%20Natarajan&background=random&color=fff&size=128",
+    "aliases": [
+      "t natarajan",
+      "natarajan",
+      "tnatarajan"
+    ]
+  },
+  {
+    "cricsheet_name": "JR Hazlewood",
+    "display_name": "JR Hazlewood",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JR%20Hazlewood&background=random&color=fff&size=128",
+    "aliases": [
+      "jr hazlewood",
+      "hazlewood",
+      "j hazlewood",
+      "jhazlewood"
+    ]
+  },
+  {
+    "cricsheet_name": "R Bhatia",
+    "display_name": "R Bhatia",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=R%20Bhatia&background=random&color=fff&size=128",
+    "aliases": [
+      "r bhatia",
+      "bhatia",
+      "rbhatia"
+    ]
+  },
+  {
+    "cricsheet_name": "MJ McClenaghan",
+    "display_name": "MJ McClenaghan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MJ%20McClenaghan&background=random&color=fff&size=128",
+    "aliases": [
+      "mj mcclenaghan",
+      "mcclenaghan",
+      "m mcclenaghan",
+      "mmcclenaghan"
+    ]
+  },
+  {
+    "cricsheet_name": "JO Holder",
+    "display_name": "JO Holder",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JO%20Holder&background=random&color=fff&size=128",
+    "aliases": [
+      "jo holder",
+      "holder",
+      "j holder",
+      "jholder"
+    ]
+  },
+  {
+    "cricsheet_name": "AB Dinda",
+    "display_name": "AB Dinda",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=AB%20Dinda&background=random&color=fff&size=128",
+    "aliases": [
+      "ab dinda",
+      "dinda",
+      "a dinda",
+      "adinda"
+    ]
+  },
+  {
+    "cricsheet_name": "Mustafizur Rahman",
+    "display_name": "Mustafizur Rahman",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Mustafizur%20Rahman&background=random&color=fff&size=128",
+    "aliases": [
+      "mustafizur rahman",
+      "mustafizur",
+      "rahman"
+    ]
+  },
+  {
+    "cricsheet_name": "SK Trivedi",
+    "display_name": "SK Trivedi",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=SK%20Trivedi&background=random&color=fff&size=128",
+    "aliases": [
+      "sk trivedi",
+      "trivedi",
+      "s trivedi",
+      "strivedi"
+    ]
+  },
+  {
+    "cricsheet_name": "M Muralitharan",
+    "display_name": "M Muralitharan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=M%20Muralitharan&background=random&color=fff&size=128",
+    "aliases": [
+      "m muralitharan",
+      "muralitharan",
+      "mmuralitharan"
+    ]
+  },
+  {
+    "cricsheet_name": "Shakib Al Hasan",
+    "display_name": "Shakib Al Hasan",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Shakib%20Al%20Hasan&background=random&color=fff&size=128",
+    "aliases": [
+      "shakib al hasan",
+      "shakib",
+      "hasan"
+    ]
+  },
+  {
+    "cricsheet_name": "MG Johnson",
+    "display_name": "MG Johnson",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MG%20Johnson&background=random&color=fff&size=128",
+    "aliases": [
+      "mg johnson",
+      "johnson",
+      "m johnson",
+      "mjohnson"
+    ]
+  },
+  {
+    "cricsheet_name": "A Nortje",
+    "display_name": "A Nortje",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=A%20Nortje&background=random&color=fff&size=128",
+    "aliases": [
+      "a nortje",
+      "nortje",
+      "anortje"
+    ]
+  },
+  {
+    "cricsheet_name": "Noor Ahmad",
+    "display_name": "Noor Ahmad",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Noor%20Ahmad&background=random&color=fff&size=128",
+    "aliases": [
+      "noor ahmad",
+      "noor",
+      "ahmad"
+    ]
+  },
+  {
+    "cricsheet_name": "JP Faulkner",
+    "display_name": "JP Faulkner",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=JP%20Faulkner&background=random&color=fff&size=128",
+    "aliases": [
+      "jp faulkner",
+      "faulkner",
+      "j faulkner",
+      "jfaulkner"
+    ]
+  },
+  {
+    "cricsheet_name": "SM Curran",
+    "display_name": "Sam Curran",
+    "team": "PBKS",
+    "photo": "https://ui-avatars.com/api/?name=Sam%20Curran&background=random&color=fff&size=128",
+    "aliases": [
+      "sm curran",
+      "sam",
+      "curran",
+      "sam curran",
+      "s curran",
+      "scurran",
+      "sc"
+    ]
+  },
+  {
+    "cricsheet_name": "S Kaul",
+    "display_name": "S Kaul",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=S%20Kaul&background=random&color=fff&size=128",
+    "aliases": [
+      "s kaul",
+      "kaul",
+      "skaul"
+    ]
+  },
+  {
+    "cricsheet_name": "SK Warne",
+    "display_name": "SK Warne",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=SK%20Warne&background=random&color=fff&size=128",
+    "aliases": [
+      "sk warne",
+      "warne",
+      "s warne",
+      "swarne"
+    ]
+  },
+  {
+    "cricsheet_name": "TU Deshpande",
+    "display_name": "TU Deshpande",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=TU%20Deshpande&background=random&color=fff&size=128",
+    "aliases": [
+      "tu deshpande",
+      "deshpande",
+      "t deshpande",
+      "tdeshpande"
+    ]
+  },
+  {
+    "cricsheet_name": "LH Ferguson",
+    "display_name": "LH Ferguson",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=LH%20Ferguson&background=random&color=fff&size=128",
+    "aliases": [
+      "lh ferguson",
+      "ferguson",
+      "l ferguson",
+      "lferguson"
+    ]
+  },
+  {
+    "cricsheet_name": "S Gopal",
+    "display_name": "S Gopal",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=S%20Gopal&background=random&color=fff&size=128",
+    "aliases": [
+      "s gopal",
+      "gopal",
+      "sgopal"
+    ]
+  },
+  {
+    "cricsheet_name": "S Nadeem",
+    "display_name": "S Nadeem",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=S%20Nadeem&background=random&color=fff&size=128",
+    "aliases": [
+      "s nadeem",
+      "nadeem",
+      "snadeem"
+    ]
+  },
+  {
+    "cricsheet_name": "NM Coulter-Nile",
+    "display_name": "NM Coulter-Nile",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=NM%20Coulter-Nile&background=random&color=fff&size=128",
+    "aliases": [
+      "nm coulternile",
+      "coulter-nile",
+      "n coulter-nile",
+      "ncoulter-nile"
+    ]
+  },
+  {
+    "cricsheet_name": "M Pathirana",
+    "display_name": "M Pathirana",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=M%20Pathirana&background=random&color=fff&size=128",
+    "aliases": [
+      "m pathirana",
+      "pathirana",
+      "mpathirana"
+    ]
+  },
+  {
+    "cricsheet_name": "SB Jakati",
+    "display_name": "SB Jakati",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=SB%20Jakati&background=random&color=fff&size=128",
+    "aliases": [
+      "sb jakati",
+      "jakati",
+      "s jakati",
+      "sjakati"
+    ]
+  },
+  {
+    "cricsheet_name": "VG Arora",
+    "display_name": "VG Arora",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=VG%20Arora&background=random&color=fff&size=128",
+    "aliases": [
+      "vg arora",
+      "arora",
+      "v arora",
+      "varora"
+    ]
+  },
+  {
+    "cricsheet_name": "TG Southee",
+    "display_name": "TG Southee",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=TG%20Southee&background=random&color=fff&size=128",
+    "aliases": [
+      "tg southee",
+      "southee",
+      "t southee",
+      "tsouthee"
+    ]
+  },
+  {
+    "cricsheet_name": "PWH de Silva",
+    "display_name": "PWH Silva",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=PWH%20Silva&background=random&color=fff&size=128",
+    "aliases": [
+      "pwh de silva",
+      "silva",
+      "p silva",
+      "psilva"
+    ]
+  },
+  {
+    "cricsheet_name": "A Kumble",
+    "display_name": "A Kumble",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=A%20Kumble&background=random&color=fff&size=128",
+    "aliases": [
+      "a kumble",
+      "kumble",
+      "akumble"
+    ]
+  },
+  {
+    "cricsheet_name": "M Jansen",
+    "display_name": "M Jansen",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=M%20Jansen&background=random&color=fff&size=128",
+    "aliases": [
+      "m jansen",
+      "jansen",
+      "mjansen"
+    ]
+  },
+  {
+    "cricsheet_name": "RJ Harris",
+    "display_name": "RJ Harris",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=RJ%20Harris&background=random&color=fff&size=128",
+    "aliases": [
+      "rj harris",
+      "harris",
+      "r harris",
+      "rharris"
+    ]
+  },
+  {
+    "cricsheet_name": "S Aravind",
+    "display_name": "S Aravind",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=S%20Aravind&background=random&color=fff&size=128",
+    "aliases": [
+      "s aravind",
+      "aravind",
+      "saravind"
+    ]
+  },
+  {
+    "cricsheet_name": "VR Aaron",
+    "display_name": "VR Aaron",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=VR%20Aaron&background=random&color=fff&size=128",
+    "aliases": [
+      "vr aaron",
+      "aaron",
+      "v aaron",
+      "vaaron"
+    ]
+  },
+  {
+    "cricsheet_name": "AJ Tye",
+    "display_name": "AJ Tye",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=AJ%20Tye&background=random&color=fff&size=128",
+    "aliases": [
+      "aj tye",
+      "tye",
+      "a tye",
+      "atye"
+    ]
+  },
+  {
+    "cricsheet_name": "L Ngidi",
+    "display_name": "L Ngidi",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=L%20Ngidi&background=random&color=fff&size=128",
+    "aliases": [
+      "l ngidi",
+      "ngidi",
+      "lngidi"
+    ]
+  },
+  {
+    "cricsheet_name": "MC Henriques",
+    "display_name": "MC Henriques",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=MC%20Henriques&background=random&color=fff&size=128",
+    "aliases": [
+      "mc henriques",
+      "henriques",
+      "m henriques",
+      "mhenriques"
+    ]
+  },
+  {
+    "cricsheet_name": "Mukesh Kumar",
+    "display_name": "Mukesh Kumar",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Mukesh%20Kumar&background=random&color=fff&size=128",
+    "aliases": [
+      "mukesh kumar",
+      "mukesh",
+      "kumar"
+    ]
+  },
+  {
+    "cricsheet_name": "Yash Dayal",
+    "display_name": "Yash Dayal",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=Yash%20Dayal&background=random&color=fff&size=128",
+    "aliases": [
+      "yash dayal",
+      "yash",
+      "dayal"
+    ]
+  },
+  {
+    "cricsheet_name": "R Sharma",
+    "display_name": "R Sharma",
+    "team": "Free Agent",
+    "photo": "https://ui-avatars.com/api/?name=R%20Sharma&background=random&color=fff&size=128",
+    "aliases": [
+      "r sharma",
+      "sharma",
+      "rsharma"
+    ]
+  }
+]

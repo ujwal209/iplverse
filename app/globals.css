@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+/* Tailwind v4: dark variant matches .dark on the element itself OR any ancestor */
+@custom-variant dark (&:is(.dark, .dark *));
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-xl: var(--radius);
+  --radius-lg: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 6px);
+  --radius-sm: calc(var(--radius) - 8px);
+
+  --font-sans: "Google Sans", sans-serif;
+  --font-google-sans: "Google Sans", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+/* LIGHT THEME (Unified Light Theme) */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 345.8 42.2% 17.6%;
+  --card: 0 0% 100%;
+  --card-foreground: 345.8 42.2% 17.6%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 345.8 42.2% 17.6%;
+  --primary: 227 86% 32%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 227 86% 95%;
+  --secondary-foreground: 227 86% 32%;
+  --muted: 227 30% 96%;
+  --muted-foreground: 227 30% 45%;
+  --accent: 227 86% 95%;
+  --accent-foreground: 227 86% 32%;
+  --destructive: 345.8 42.2% 17.6%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 227 35% 88%;
+  --input: 227 35% 88%;
+  --ring: 227 86% 32%;
+  --radius: 0.75rem;
+}
+
+/* DARK THEME (Unified Light Theme - Forced) */
+html.dark {
+  --background: 0 0% 100%;
+  --foreground: 345.8 42.2% 17.6%;
+  --card: 0 0% 100%;
+  --card-foreground: 345.8 42.2% 17.6%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 345.8 42.2% 17.6%;
+  --primary: 227 86% 32%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 227 86% 95%;
+  --secondary-foreground: 227 86% 32%;
+  --muted: 227 30% 96%;
+  --muted-foreground: 227 30% 45%;
+  --accent: 227 86% 95%;
+  --accent-foreground: 227 86% 32%;
+  --destructive: 345.8 42.2% 17.6%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 227 35% 88%;
+  --input: 227 35% 88%;
+  --ring: 227 86% 32%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  ::-webkit-scrollbar { width: 2px; height: 2px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground) / 0.3); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.8); }
+}
+
+@layer components {
+  .text-display { @apply font-outfit font-extrabold tracking-tight leading-none text-foreground; }
+  .text-heading { @apply font-outfit font-semibold tracking-tight text-foreground; }
+  .text-subheading { @apply font-outfit font-medium text-muted-foreground; }
+  .text-body { @apply font-inter font-normal text-foreground leading-relaxed; }
+  .text-caption { @apply font-inter font-normal text-sm text-muted-foreground; }
+}
+
+.google-sans-regular {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.google-sans-bold {
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "GRAD" 0;
+}
+
+.outfit-regular {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.outfit-bold {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.inter-regular {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inter-bold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+.animate-shake { animation: shake 0.4s ease-in-out; }
+
+/* Clerk Unified Light Theme CSS Overrides */
+.cl-rootBox, .cl-card, [class^="cl-"] {
+  --cl-color-background: #ffffff !important;
+  --cl-color-text: #401A23 !important;
+  --cl-color-primary: #0B2A96 !important;
+  --cl-color-text-secondary: #401A23 !important;
+  --cl-color-input-background: #ffffff !important;
+  --cl-color-input-text: #401A23 !important;
+}
+
+.cl-rootBox, .cl-card {
+  background-color: #ffffff !important;
+  color: #401A23 !important;
+}
+
+.cl-headerTitle {
+  color: #401A23 !important;
+  font-family: "Outfit", sans-serif !important;
+  font-weight: 700 !important;
+}
+
+.cl-headerSubtitle, .cl-footerActionText, .cl-dividerText {
+  color: #401A23 !important;
+  opacity: 0.7 !important;
+}
+
+.cl-formFieldInput {
+  background-color: #ffffff !important;
+  color: #401A23 !important;
+  border: 1px solid rgba(11, 42, 150, 0.2) !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: #0B2A96 !important;
+  box-shadow: 0 0 0 2px rgba(11, 42, 150, 0.2) !important;
+}
+
+.cl-socialButtonsBlockButton {
+  background-color: #ffffff !important;
+  color: #401A23 !important;
+  border: 1px solid rgba(11, 42, 150, 0.2) !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  background-color: rgba(11, 42, 150, 0.05) !important;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: #401A23 !important;
+}
+
+.cl-formButtonPrimary {
+  background-color: #0B2A96 !important;
+  color: #ffffff !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background-color: #0B2A96 !important;
+  opacity: 0.95 !important;
+}
+
+.cl-footerActionLink {
+  color: #0B2A96 !important;
+}
+

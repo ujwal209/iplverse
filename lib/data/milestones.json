@@ -1,0 +1,102 @@
+{
+  "Virat Kohli": {
+    "total_runs": 8004,
+    "highest_score": 113,
+    "centuries": 8,
+    "orange_caps": 1,
+    "sixes": 272,
+    "fifties": 55,
+    "teams_played_for": ["RCB"]
+  },
+  "Rohit Sharma": {
+    "total_runs": 6628,
+    "highest_score": 109,
+    "centuries": 2,
+    "orange_caps": 0,
+    "sixes": 280,
+    "fifties": 43,
+    "teams_played_for": ["Deccan Chargers", "MI"]
+  },
+  "MS Dhoni": {
+    "total_runs": 5243,
+    "highest_score": 84,
+    "centuries": 0,
+    "orange_caps": 0,
+    "sixes": 252,
+    "fifties": 24,
+    "teams_played_for": ["CSK", "RPS"]
+  },
+  "AB de Villiers": {
+    "total_runs": 5162,
+    "highest_score": 133,
+    "centuries": 3,
+    "orange_caps": 0,
+    "sixes": 251,
+    "fifties": 40,
+    "teams_played_for": ["Delhi Daredevils", "RCB"]
+  },
+  "Chris Gayle": {
+    "total_runs": 4965,
+    "highest_score": 175,
+    "centuries": 6,
+    "orange_caps": 2,
+    "sixes": 357,
+    "fifties": 31,
+    "teams_played_for": ["KKR", "RCB", "PBKS"]
+  },
+  "Suresh Raina": {
+    "total_runs": 5528,
+    "highest_score": 100,
+    "centuries": 1,
+    "orange_caps": 0,
+    "sixes": 203,
+    "fifties": 39,
+    "teams_played_for": ["CSK", "Gujarat Lions"]
+  },
+  "David Warner": {
+    "total_runs": 6565,
+    "highest_score": 126,
+    "centuries": 4,
+    "orange_caps": 3,
+    "sixes": 236,
+    "fifties": 62,
+    "teams_played_for": ["Delhi Daredevils", "SRH", "DC"]
+  },
+  "Shikhar Dhawan": {
+    "total_runs": 6769,
+    "highest_score": 106,
+    "centuries": 2,
+    "orange_caps": 0,
+    "sixes": 152,
+    "fifties": 51,
+    "teams_played_for": ["Delhi Daredevils", "MI", "Deccan Chargers", "SRH", "DC", "PBKS"]
+  },
+  "Jasprit Bumrah": {
+    "total_wickets": 165,
+    "best_bowling": "5/10",
+    "economy": 7.3,
+    "purple_caps": 0,
+    "teams_played_for": ["MI"]
+  },
+  "Rashid Khan": {
+    "total_wickets": 149,
+    "best_bowling": "4/24",
+    "economy": 6.82,
+    "purple_caps": 0,
+    "teams_played_for": ["SRH", "GT"]
+  },
+  "Yuzvendra Chahal": {
+    "total_wickets": 205,
+    "best_bowling": "5/40",
+    "economy": 7.71,
+    "purple_caps": 1,
+    "teams_played_for": ["MI", "RCB", "RR"]
+  },
+  "Lasith Malinga": {
+    "total_wickets": 170,
+    "best_bowling": "5/13",
+    "economy": 7.14,
+    "purple_caps": 1,
+    "teams_played_for": ["MI"]
+  }
+}

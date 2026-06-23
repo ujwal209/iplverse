@@ -1,0 +1,65 @@
+[
+  {
+    "id": "rcb-abd-kohli",
+    "player1": "Virat Kohli",
+    "player2": "AB de Villiers",
+    "team": "RCB",
+    "runs": 3123,
+    "highest_partnership": 229,
+    "century_stands": 10
+  },
+  {
+    "id": "rcb-gayle-kohli",
+    "player1": "Virat Kohli",
+    "player2": "Chris Gayle",
+    "team": "RCB",
+    "runs": 2787,
+    "highest_partnership": 204,
+    "century_stands": 9
+  },
+  {
+    "id": "csk-dhoni-raina",
+    "player1": "MS Dhoni",
+    "player2": "Suresh Raina",
+    "team": "CSK",
+    "runs": 1461,
+    "highest_partnership": 74,
+    "century_stands": 0
+  },
+  {
+    "id": "mi-rohit-pollard",
+    "player1": "Rohit Sharma",
+    "player2": "Kieron Pollard",
+    "team": "MI",
+    "runs": 1021,
+    "highest_partnership": 97,
+    "century_stands": 0
+  },
+  {
+    "id": "srh-warner-bairstow",
+    "player1": "David Warner",
+    "player2": "Jonny Bairstow",
+    "team": "SRH",
+    "runs": 1401,
+    "highest_partnership": 185,
+    "century_stands": 4
+  },
+  {
+    "id": "csk-gaikwad-conway",
+    "player1": "Ruturaj Gaikwad",
+    "player2": "Devon Conway",
+    "team": "CSK",
+    "runs": 1208,
+    "highest_partnership": 182,
+    "century_stands": 4
+  },
+  {
+    "id": "kkr-gambhir-uthappa",
+    "player1": "Gautam Gambhir",
+    "player2": "Robin Uthappa",
+    "team": "KKR",
+    "runs": 1906,
+    "highest_partnership": 158,
+    "century_stands": 5
+  }
+]

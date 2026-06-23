@@ -1,0 +1,367 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { 
+  Search, 
+  Target, 
+  Gamepad2, 
+  MapPin, 
+  Network, 
+  Trophy, 
+  ChevronRight,
+  Play,
+  Clock,
+  Award,
+  HelpCircle,
+  Zap,
+  ArrowRight,
+  Swords,
+  ChevronLeft,
+  X
+} from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
+import { GlobalNav } from "@/components/global-nav";
+import { Sidebar } from "@/components/dashboard/sidebar";
+import { GameMockup } from "@/components/mockups/GameMockups";
+
+const games = [
+  {
+    id: "guess-who",
+    title: "Guess Who",
+    description: "Deduce the mystery IPL cricketer in 6 attempts using visual clues like batting/bowling style, nationality, and team history.",
+    icon: Search,
+    href: "/games/guess-who",
+    difficulty: "Easy",
+    time: "2 mins",
+    xp: "100 XP"
+  },
+  {
+    id: "stat-smash",
+    title: "Stat Smash",
+    description: "Compare historic statistics of IPL legends. Guess if the target player's stats are higher or lower to build your streak.",
+    icon: Target,
+    href: "/games/stat-smash",
+    difficulty: "Medium",
+    time: "3 mins",
+    xp: "150 XP"
+  },
+  {
+    id: "guess-match",
+    title: "Guess the Match",
+    description: "Analyze a partially redacted historic match sheet. Deduce the exact IPL clash based on wickets, runs, and partnerships.",
+    icon: Gamepad2,
+    href: "/games/guess-match",
+    difficulty: "Hard",
+    time: "5 mins",
+    xp: "250 XP"
+  },
+  {
+    id: "career-path",
+    title: "Career Path",
+    description: "Reconstruct a player's franchise timeline chronologically from their debut season up to their current squad list.",
+    icon: MapPin,
+    href: "/games/career-path",
+    difficulty: "Medium",
+    time: "4 mins",
+    xp: "150 XP"
+  },
+  {
+    id: "connections",
+    title: "Connections",
+    description: "Group a grid of 16 IPL stars into 4 distinct groups of 4 based on subtle shared associations, milestones, or team histories.",
+    icon: Network,
+    href: "/games/connections",
+    difficulty: "Expert",
+    time: "5 mins",
+    xp: "300 XP",
+    isNew: true
+  },
+  {
+    id: "arena-quiz",
+    title: "Arena Quiz",
+    description: "Tackle cricket trivia questions curated from real IPL match scenarios and records, categorised by Era and Difficulty.",
+    icon: Trophy,
+    href: "/games/arena-quiz",
+    difficulty: "Medium",
+    time: "3 mins",
+    xp: "200 XP",
+    isNew: true
+  },
+  {
+    id: "battle-arena",
+    title: "Battle Arena (1v1)",
+    description: "Challenge friends in real-time 1v1 IPL trivia matches. Customize turn timers, game formats, max rounds, and difficulty, then share room links or invite via direct chat.",
+    icon: Swords,
+    href: "/dashboard/arena",
+    difficulty: "Dynamic",
+    time: "Varies",
+    xp: "XP + Rating",
+    isNew: true,
+    isMultiplayer: true
+  }
+];
+
+export default function Home() {
+  const router = useRouter();
+  const { isSignedIn } = useAuth();
+  const [roomCode, setRoomCode] = useState("");
+  const [selectedGame, setSelectedGame] = useState<string | null>(null);
+
+  const handleJoinMatchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (roomCode.trim().length === 6) {
+      router.push(`/dashboard/arena/${roomCode.toUpperCase()}`);
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-white text-slate-900 font-sans">
+      <GlobalNav />
+      <Sidebar mobileOnly={true} />
+      
+      <main className="flex-grow flex flex-col font-sans">
+        {/* Full-Width White 1v1 Battle Arena Hero Section */}
+        <section className="relative z-10 w-full font-sans select-none overflow-hidden bg-white border-b border-slate-100 mb-20">
+          {/* Subtle Light Pattern */}
+          <div className="absolute inset-0 opacity-[0.02] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-slate-50/50 pointer-events-none" />
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 flex flex-col lg:flex-row items-center min-h-[500px]">
+            
+            {/* Left Content */}
+            <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
+              <div className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#0B2A96]/5 text-[#0B2A96] text-[11px] font-black uppercase tracking-[0.2em] border border-[#0B2A96]/10 shadow-sm">
+                Live Multiplayer Arena
+              </div>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] tracking-tight drop-shadow-sm font-sans animate-in fade-in slide-in-from-bottom-8 duration-500">
+                1v1 Battle Arena
+              </h1>
+              
+              <p className="text-slate-600 text-lg sm:text-xl leading-relaxed font-medium font-sans animate-in fade-in slide-in-from-bottom-8 duration-700 max-w-xl">
+                Challenge friends in real-time cricket trivia. Enter a room code to join instantly, or host your own private match!
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                {/* Host Match Button */}
+                <Link 
+                  href={isSignedIn ? "/dashboard/arena" : "/login"}
+                  className="w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-10 rounded-2xl bg-[#0B2A96] hover:bg-[#082072] text-white font-black text-sm sm:text-base flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-[0_10px_30px_rgba(11,42,150,0.2)] hover:shadow-[0_15px_40px_rgba(11,42,150,0.3)] cursor-pointer tracking-wider uppercase shrink-0"
+                >
+                  <Play className="h-5 w-5 fill-white text-white shrink-0" /> Host Match
+                </Link>
+                
+                {/* Google Meet style input group */}
+                <form 
+                  onSubmit={handleJoinMatchSubmit}
+                  className="relative flex items-center w-full sm:w-[380px]"
+                >
+                  <div className="absolute left-5 text-slate-400">
+                    <Search className="h-5 w-5" />
+                  </div>
+                  <input 
+                    type="text"
+                    value={roomCode}
+                    onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+                    placeholder="Enter room code"
+                    maxLength={6}
+                    className="w-full h-14 sm:h-16 bg-white border-2 border-slate-200 rounded-2xl pl-14 pr-28 font-mono text-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-[#0B2A96]/10 focus:border-[#0B2A96] transition-all uppercase shadow-sm"
+                  />
+                  <button
+                    type="submit"
+                    disabled={roomCode.trim().length !== 6}
+                    className="absolute right-2 h-10 sm:h-12 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs sm:text-sm flex items-center justify-center transition-all disabled:opacity-50 cursor-pointer tracking-wider uppercase shadow-md"
+                  >
+                    Join
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            {/* Right Visual Imagery */}
+            <div className="w-full lg:w-1/2 mt-16 lg:mt-0 flex items-center justify-center relative min-h-[300px]">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] bg-[#0B2A96]/5 rounded-full blur-[80px] pointer-events-none" />
+              <img 
+                src="/1v1_logo.png" 
+                alt="1v1 Battle Arena" 
+                className="relative z-10 w-full h-full max-h-[500px] object-contain drop-shadow-[0_20px_50px_rgba(11,42,150,0.15)] animate-in slide-in-from-right-16 fade-in duration-1000"
+              />
+            </div>
+
+          </div>
+        </section>
+
+        {/* Game Library Section - Grid Layout */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col space-y-10 pb-32 justify-center font-sans">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-[#0B2A96]/10">
+            <div className="text-center sm:text-left">
+              <h2 className="text-4xl font-black text-[#0B2A96] tracking-tight mb-2">IPL Cricket Arenas</h2>
+              <p className="text-sm text-slate-500 font-medium max-w-xl">Explore our collection of cricket mini-games. Click any card to preview the game and dive right in!</p>
+            </div>
+            <span className="bg-[#0B2A96]/5 text-[#0B2A96] px-5 py-2.5 rounded-full border border-[#0B2A96]/10 uppercase font-black tracking-widest text-[10px] shadow-sm shrink-0">
+              Season 2026 Active
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {games.map(game => {
+              let imgSrc = "";
+              switch (game.id) {
+                case "guess-who": imgSrc = "/guess_the_player.jpeg"; break;
+                case "stat-smash": imgSrc = "/stat_smash.png"; break;
+                case "guess-match": imgSrc = "/guess_match.png"; break;
+                case "career-path": imgSrc = "/career_journey.jpeg"; break;
+                case "connections": imgSrc = "/connections.png"; break;
+                case "arena-quiz": imgSrc = "/arena_quiz.png"; break;
+                case "battle-arena": imgSrc = "/1v1_logo.png"; break;
+                default: imgSrc = "/guess_the_player.jpeg";
+              }
+
+              return (
+                <div 
+                  key={game.id}
+                  onClick={() => setSelectedGame(game.id)}
+                  className="group relative h-[420px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-[#0B2A96]/30 transition-all duration-500 hover:-translate-y-2 border border-[#0B2A96]/10 bg-slate-950"
+                >
+                  {/* Blurred Background Layer */}
+                  <img src={imgSrc} className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 transition-transform duration-700 group-hover:scale-110" />
+                  
+                  {/* Sharp Contain Layer */}
+                  <div className="absolute inset-0 p-2 pb-28 flex items-center justify-center pointer-events-none z-0">
+                    <img src={imgSrc} className="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-transform duration-700 group-hover:scale-[1.02]" />
+                  </div>
+                  
+                  {/* Stronger Gradient Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pointer-events-none transition-all duration-500 group-hover:bg-slate-950/40" />
+                  
+                  <div className="absolute inset-0 p-8 flex flex-col justify-end pointer-events-none z-10">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {game.isNew && <span className="bg-emerald-500 text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg">NEW</span>}
+                      <span className="bg-[#0B2A96] text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg border border-white/10">{game.difficulty}</span>
+                    </div>
+                    
+                    <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3 group-hover:text-blue-200 transition-colors">{game.title}</h3>
+                    <p className="text-sm font-medium text-slate-300 line-clamp-2 leading-relaxed mb-8 max-w-md">{game.description}</p>
+                    
+                    <div className="flex items-center justify-between mt-auto">
+                      <div className="flex gap-3">
+                        <span className="flex items-center gap-2 text-xs font-bold text-white/90 bg-white/10 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+                          <Clock className="w-3.5 h-3.5" /> {game.time}
+                        </span>
+                        <span className="flex items-center gap-2 text-xs font-bold text-yellow-400 bg-black/30 border border-yellow-500/20 px-4 py-2 rounded-full backdrop-blur-md">
+                          <Award className="w-3.5 h-3.5" /> {game.xp}
+                        </span>
+                      </div>
+                      <div className="h-12 w-12 rounded-full bg-white text-[#0B2A96] flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl">
+                        <Play className="w-5 h-5 fill-current ml-1" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </main>
+
+      {/* Game Detail Modal */}
+      {selectedGame && (
+        <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 lg:p-8">
+          <div className="absolute inset-0" onClick={() => setSelectedGame(null)} />
+          {(() => {
+            const game = games.find(g => g.id === selectedGame) || games[0];
+            const GameIcon = game.icon;
+            return (
+              <div className="bg-white w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl relative flex flex-col lg:flex-row animate-in zoom-in-95 duration-300 z-10">
+                <button 
+                  onClick={() => setSelectedGame(null)}
+                  className="absolute top-6 right-6 z-50 p-3 bg-white/50 hover:bg-slate-100 rounded-full text-slate-500 transition-colors backdrop-blur-md cursor-pointer border border-slate-200 shadow-sm hover:scale-110"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+                
+                {/* Left Side: Game Details */}
+                <div className="w-full lg:w-5/12 p-8 sm:p-14 bg-slate-50 border-r border-slate-200 flex flex-col">
+                  <div className="h-20 w-20 rounded-[1.5rem] bg-[#0B2A96]/10 text-[#0B2A96] flex items-center justify-center mb-8 border border-[#0B2A96]/20 shadow-inner">
+                    <GameIcon className="h-10 w-10" />
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {game.isNew && <span className="bg-emerald-500 text-white text-[10px] px-3.5 py-1.5 rounded-full font-black uppercase tracking-widest shadow-sm">NEW</span>}
+                    <span className="bg-[#0B2A96]/10 text-[#0B2A96] text-[10px] px-3.5 py-1.5 rounded-full font-black uppercase tracking-widest border border-[#0B2A96]/20">{game.difficulty}</span>
+                  </div>
+
+                  <h2 className="text-4xl sm:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-[1.1]">{game.title}</h2>
+                  <p className="text-slate-600 text-lg leading-relaxed font-medium mb-12 flex-grow">
+                    {game.description}
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                    <div className="flex-1 bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                      <div className="p-3 bg-slate-50 rounded-xl"><Clock className="w-6 h-6 text-slate-500" /></div>
+                      <div>
+                        <div className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Duration</div>
+                        <div className="font-black text-slate-800 text-lg">{game.time}</div>
+                      </div>
+                    </div>
+                    <div className="flex-1 bg-white border border-yellow-500/20 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                      <div className="p-3 bg-yellow-500/10 rounded-xl"><Award className="w-6 h-6 text-yellow-600" /></div>
+                      <div>
+                        <div className="text-[10px] uppercase font-bold text-yellow-600/70 tracking-widest mb-1">Reward</div>
+                        <div className="font-black text-yellow-600 text-lg">{game.xp}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {game.isMultiplayer ? (
+                    <Link 
+                      href={isSignedIn ? "/dashboard/arena" : "/login"}
+                      className="w-full h-16 bg-[#0B2A96] hover:bg-[#082072] text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(11,42,150,0.3)] hover:shadow-[0_15px_40px_rgba(11,42,150,0.4)] transition-all active:scale-[0.98]"
+                    >
+                      <Play className="h-5 w-5 fill-white" /> Host Match
+                    </Link>
+                  ) : (
+                    <Link 
+                      href={game.href}
+                      className="w-full h-16 bg-[#0B2A96] hover:bg-[#082072] text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(11,42,150,0.3)] hover:shadow-[0_15px_40px_rgba(11,42,150,0.4)] transition-all active:scale-[0.98]"
+                    >
+                      <Play className="h-5 w-5 fill-white" /> Play Now
+                    </Link>
+                  )}
+                </div>
+
+                {/* Right Side: Interactive UI Mockup */}
+                <div className="w-full lg:w-7/12 bg-[#0B2A96]/5 p-6 sm:p-10 flex items-center justify-center relative overflow-hidden min-h-[500px]">
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0B2A96]/5 to-transparent pointer-events-none" />
+                  <div className="w-full max-w-[400px] h-[650px] max-h-[85vh] relative z-10 flex items-center justify-center drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500">
+                    <GameMockup gameId={game.id} />
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="bg-white py-6 border-t border-[#0B2A96]/10 mt-auto font-sans">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex items-center">
+              <img src="/main_logo.png" alt="IPL Verse Logo" className="h-9 w-auto object-contain" />
+            </div>
+            <p className="text-xs text-slate-600 font-medium font-sans">
+              © {new Date().getFullYear()} IPL Verse. All rights reserved.
+            </p>
+            <div className="flex gap-4 text-xs font-semibold text-slate-600 font-sans">
+              <Link href="/terms" className="hover:text-[#0B2A96] transition-colors">Terms</Link>
+              <Link href="/privacy" className="hover:text-[#0B2A96] transition-colors">Privacy</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
