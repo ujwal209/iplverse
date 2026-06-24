@@ -39,10 +39,10 @@ export default async function DashboardLayout({
     .eq('clerk_id', user.id)
     .maybeSingle();
 
-  // Comment out onboarding redirect for easier testing
-  // if (!profile || error) {
-  //   redirect("/onboarding");
-  // }
+  // Redirect to onboarding if they haven't completed it
+  if (!profile || error) {
+    redirect("/onboarding");
+  }
 
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">

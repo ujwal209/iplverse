@@ -14,12 +14,13 @@ import {
   Star, 
   Zap, 
   Shield, 
-  Loader2 
+  Loader2,
+  CheckCircle2
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { updateUserProfile } from "@/app/actions/social";
-import { CustomSelect } from "@/components/ui/custom-select";
+import { PlayerAutocomplete } from "@/components/dashboard/player-autocomplete";
 
 const IPL_TEAMS = [
   "Chennai Super Kings",
@@ -55,9 +56,10 @@ interface ProfileClientProps {
   dbUser: any;
   email: string;
   unlockedIds: string[];
+  teamsDb: any[];
 }
 
-export function ProfileClient({ dbUser, email, unlockedIds }: ProfileClientProps) {
+export function ProfileClient({ dbUser, email, unlockedIds, teamsDb }: ProfileClientProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState(dbUser.username);
   const [favoriteTeam, setFavoriteTeam] = useState(dbUser.favorite_team || "");
@@ -155,7 +157,16 @@ export function ProfileClient({ dbUser, email, unlockedIds }: ProfileClientProps
                 <div className="w-full space-y-3.5">
                   <div className="flex justify-between items-center bg-slate-50/50 p-3.5 rounded-2xl border border-slate-100">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Favorite Team</span>
-                    <span className="font-bold text-xs text-slate-800 truncate pl-4 max-w-[200px]">{dbUser.favorite_team || "None Selected"}</span>
+                    <div className="flex items-center gap-2">
+                      {(() => {
+                        const t = teamsDb?.find(x => x.name === dbUser.favorite_team);
+                        if (t?.image_url) {
+                          return <img src={t.image_url} alt={t.name} className="h-6 w-6 object-contain" />;
+                        }
+                        return null;
+                      })()}
+                      <span className="font-bold text-xs text-slate-800 truncate max-w-[200px]">{dbUser.favorite_team || "None Selected"}</span>
+                    </div>
                   </div>
                   <div className="flex justify-between items-center bg-slate-50/50 p-3.5 rounded-2xl border border-slate-100">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Favorite Player</span>
@@ -195,26 +206,60 @@ export function ProfileClient({ dbUser, email, unlockedIds }: ProfileClientProps
                   />
                 </div>
 
-                {/* Favorite Team */}
-                <CustomSelect
-                  label="Favorite Team"
-                  placeholder="Select an IPL Team"
-                  options={iplTeamOptions}
-                  value={favoriteTeam}
-                  onChange={(val) => setFavoriteTeam(val)}
-                  className="mb-1.5"
-                />
+                {/* Favorite Team Grid */}
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Favorite Team</label>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-[300px] overflow-y-auto p-3 border border-slate-200 rounded-xl bg-slate-50/50 shadow-inner custom-scrollbar">
+                    {teamsDb && teamsDb.length > 0 ? teamsDb.map((t, idx) => {
+                      const isSelected = favoriteTeam === t.name;
+                      return (
+                        <div 
+                          key={t.id || idx} 
+                          onClick={() => setFavoriteTeam(t.name)}
+                          className={`relative cursor-pointer rounded-xl flex flex-col items-center justify-center p-3 transition-all duration-300 border-2 gap-2 min-h-[100px] ${
+                            isSelected 
+                              ? "border-[#0B2A96] bg-white shadow-md z-10 scale-[1.02]" 
+                              : "border-transparent bg-white hover:border-[#0B2A96]/30 hover:shadow-sm"
+                          }`}
+                        >
+                          {t.image_url ? (
+                            <div className="relative w-10 h-10 shrink-0">
+                              <img src={t.image_url} alt={t.name} className="absolute inset-0 w-full h-full object-contain" />
+                            </div>
+                          ) : (
+                            <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full">
+                              <span className="text-xs font-semibold text-slate-800">{t.short_name}</span>
+                            </div>
+                          )}
+                          <span className="text-[10px] font-semibold text-slate-700 text-center leading-tight line-clamp-2">
+                            {t.short_name || t.name}
+                          </span>
+                          {isSelected && (
+                            <div className="absolute -top-2 -right-2 bg-[#0B2A96] text-white rounded-full p-0.5 shadow-sm border-2 border-white">
+                              <CheckCircle2 className="w-3 h-3" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }) : (
+                      <div className="col-span-full text-center text-xs text-slate-500 py-4">No teams available</div>
+                    )}
+                  </div>
+                </div>
 
                 {/* Favorite Player */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Favorite Player</label>
-                  <input
-                    type="text"
-                    value={favoritePlayer}
-                    onChange={(e) => setFavoritePlayer(e.target.value)}
-                    placeholder="Enter favorite player"
-                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B2A96]/50 focus:border-[#0B2A96] transition-all font-semibold text-slate-800"
-                  />
+                  <div className="relative rounded-xl bg-slate-50/50 border border-slate-200 focus-within:border-[#0B2A96] focus-within:ring-2 focus-within:ring-[#0B2A96]/50 transition-all">
+                    <div className="h-11 flex items-center w-full px-1">
+                      <PlayerAutocomplete 
+                        label=""
+                        placeholder="Search for a player..." 
+                        value={favoritePlayer}
+                        onChange={(val) => setFavoritePlayer(val)}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Experience Level Picker */}

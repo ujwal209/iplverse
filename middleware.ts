@@ -10,7 +10,6 @@ const isBaseProtectedRoute = createRouteMatcher([
 ]);
 
 const isGameRoute = createRouteMatcher([
-  '/dashboard/games(.*)',
   '/games(.*)',
 ]);
 
@@ -30,7 +29,10 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   if (isBaseProtectedRoute(req) && !isGameRoute(req)) {
-    await auth.protect();
+    const authObj = await auth();
+    if (!authObj.userId) {
+      return authObj.redirectToSignIn();
+    }
   }
 });
 

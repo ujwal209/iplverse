@@ -2,7 +2,7 @@ import { generateArenaClues } from "./groq-arena";
 import fs from "fs/promises";
 import path from "path";
 import { createClient } from "@supabase/supabase-js";
-import { getRandomStatSmashQuestion } from "@/app/actions/games";
+import { getRandomStatSmashQuestion, getPlayerAIHints, getCareerPathClues, getArenaConnections, getAllSearchableMatches, getMatchClues } from "@/app/actions/games";
 
 export type RoundType = 
   | "WHO_AM_I"
@@ -38,7 +38,7 @@ export class ArenaQuestionEngine {
   static async generateRound(type: RoundType): Promise<ArenaRound> {
     switch (type) {
       case "WHO_AM_I":
-        return this.generateWhoAmI();
+        return this.generateGuessWho();
       case "MATCH_MEMORY":
         return this.generateMatchMemory();
       case "CAREER_PATH_DUEL":
@@ -58,21 +58,113 @@ export class ArenaQuestionEngine {
     }
   }
 
-  static async generateWhoAmI(): Promise<ArenaRound> {
-    const milestones = await readDataFile("milestones.json");
-    const players = Object.keys(milestones);
-    const targetPlayer = getRandom(players);
-    const facts = milestones[targetPlayer];
-    
-    // Groq transforms facts into dramatic clues
-    const clues = await generateArenaClues("WHO_AM_I", facts);
+  static async generateGuessWho(): Promise<ArenaRound> {
+    try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+      if (!supabaseUrl || !supabaseServiceKey) throw new Error("Database not configured");
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    return {
-      type: "WHO_AM_I",
-      points: 100,
-      questionData: { clues },
-      answerData: { answer: targetPlayer }
-    };
+      // Pick a random player from career stats to ensure stats always exist!
+      const { data: careerPlayers, error: careerError } = await supabase
+        .from('player_career_stats')
+        .select('player_id, matches, runs, wickets, players!inner(name, image_url)')
+        .limit(200);
+      
+      const validPlayers = (careerPlayers || [])
+        .map((p: any) => ({
+          id: p.player_id,
+          name: p.players?.name,
+          image_url: p.players?.image_url,
+          career: {
+            matches: p.matches || 0,
+            runs: p.runs || 0,
+            wickets: p.wickets || 0
+          }
+        }))
+        .filter(p => p.name && p.image_url);
+
+      if (careerError || validPlayers.length === 0) throw new Error("Could not fetch players with stats");
+      
+      const targetPlayer = getRandom(validPlayers);
+
+      // Fetch dynamic Groq + Tavily hints
+      const res = await getPlayerAIHints(targetPlayer.name);
+      const hints = res.success && res.hints ? res.hints : [
+        "This player has played in the IPL.",
+        "This player has represented a franchise.",
+        "This player is a well-known cricketer."
+      ];
+
+      // Load mapping, milestones, and career journey for this player
+      const playerMappings = await readDataFile("player-mappings.json");
+      const milestones = await readDataFile("milestones.json");
+      const careerJourneys = await readDataFile("career-journeys.json");
+
+      const mapping = playerMappings.find((p: any) => p.cricsheet_name === targetPlayer.id || p.display_name === targetPlayer.name) || { cricsheet_name: targetPlayer.id, display_name: targetPlayer.name };
+      const displayName = mapping.display_name;
+
+      // Fetch stats from Supabase
+      let career = targetPlayer.career;
+      let batting = null;
+      let bowling = null;
+      try {
+        const [batRes, bowlRes] = await Promise.all([
+          supabase.from("batter_advanced").select("*").eq("batter_id", targetPlayer.id).maybeSingle(),
+          supabase.from("bowler_advanced").select("*").eq("bowler_id", targetPlayer.id).maybeSingle()
+        ]);
+        if (batRes.data) batting = batRes.data;
+        if (bowlRes.data) bowling = bowlRes.data;
+      } catch (err) {
+        console.error("Error fetching player stats on server:", err);
+      }
+
+      const milestoneData = milestones[displayName] || null;
+      if (!career && milestoneData) {
+        career = {
+          matches: milestoneData.matches || 0,
+          runs: milestoneData.total_runs || 0,
+          wickets: milestoneData.total_wickets || 0
+        };
+      }
+
+      // Calculate teams count
+      const careerTimeline = careerJourneys[displayName] || [];
+      const teams = new Set<string>();
+      if (mapping?.team) teams.add(mapping.team);
+      if (milestoneData?.teams_played_for) {
+        milestoneData.teams_played_for.forEach((t: string) => teams.add(t));
+      }
+      if (careerTimeline) {
+        careerTimeline.forEach((item: any) => teams.add(item.team));
+      }
+      const teamsCount = teams.size || 1;
+
+      return {
+        type: "WHO_AM_I",
+        points: 100,
+        questionData: { 
+          clues: hints,
+          playerImage: targetPlayer.image_url,
+          playerId: targetPlayer.id,
+          playerName: targetPlayer.name,
+          career: career,
+          batting: batting,
+          bowling: bowling,
+          milestones: milestoneData,
+          teamsCount: teamsCount
+        },
+        answerData: { answer: targetPlayer.name }
+      };
+    } catch (err: any) {
+      console.error("generateGuessWho Error:", err);
+      return {
+        type: "WHO_AM_I",
+        points: 100,
+        questionData: { clues: ["Error generating hints"] },
+        answerData: { answer: "Unknown" }
+      };
+    }
   }
 
   static async generateMysteryPlayer(): Promise<ArenaRound> {
@@ -92,38 +184,73 @@ export class ArenaQuestionEngine {
   }
 
   static async generateMatchMemory(): Promise<ArenaRound> {
-    const matches: any[] = await readDataFile("matches.json");
-    const targetMatch = getRandom(matches);
-    
-    // Pass raw match facts to Groq for dramatic reconstruction
-    const clues = await generateArenaClues("MATCH_MEMORY", targetMatch);
+    try {
+      const matchRes = await getAllSearchableMatches();
+      if (!matchRes.success || !matchRes.matches || matchRes.matches.length === 0) {
+        throw new Error("No matches found in DB");
+      }
+      
+      const targetMatch = getRandom(matchRes.matches);
+      const res = await getMatchClues(targetMatch.id);
+      
+      if (!res.success || !res.match) {
+        throw new Error("Failed to generate match clues");
+      }
 
-    return {
-      type: "MATCH_MEMORY",
-      points: 100,
-      questionData: { clues },
-      answerData: { answer: targetMatch.searchKey }
-    };
+      return {
+        type: "MATCH_MEMORY",
+        points: 100,
+        questionData: { clues: res.match.clues.map((c: any) => c.text) },
+        answerData: { answer: `${res.match.season} ${res.match.team1} vs ${res.match.team2}` }
+      };
+    } catch (err) {
+      console.error("Match memory generation error:", err);
+      return {
+        type: "MATCH_MEMORY",
+        points: 100,
+        questionData: { clues: [
+          "Played at Wankhede Stadium", 
+          "Toss won by the team choosing to bat.",
+          "A legendary opener smashed a quick-fire 95 to post a massive total in the final.", 
+          "Player of the Match: Murali Vijay (Won by the team batting first by 58 runs)."
+        ] },
+        answerData: { answer: "2011 Chennai Super Kings vs Royal Challengers Bangalore" }
+      };
+    }
+  }
+
+  static groupConsecutiveTeams(journey: { year: string; team: string }[]) {
+    if (!journey || journey.length === 0) return [];
+    const grouped: { year: string; team: string }[] = [];
+    let current = { ...journey[0] };
+    
+    for (let i = 1; i < journey.length; i++) {
+      const entry = journey[i];
+      if (entry.team === current.team) {
+        const startYear = current.year.split(" - ")[0];
+        current.year = `${startYear} - ${entry.year}`;
+      } else {
+        grouped.push(current);
+        current = { ...entry };
+      }
+    }
+    grouped.push(current);
+    return grouped;
   }
 
   static async generateCareerPathDuel(): Promise<ArenaRound> {
-    const journeys = await readDataFile("career-journeys.json");
-    const players = Object.keys(journeys);
-    // Find a player with at least 3 teams for a good path
-    let targetPlayer = "";
-    let path = [];
-    while (path.length < 2) {
-      targetPlayer = getRandom(players);
-      path = journeys[targetPlayer];
-    }
+    const res = await getCareerPathClues();
+    if (!res.success || !res.targetPlayer) throw new Error("Failed to generate AI career path");
+
+    const groupedJourney = this.groupConsecutiveTeams(res.targetPlayer.journey);
 
     return {
       type: "CAREER_PATH_DUEL",
       points: 100,
       questionData: { 
-        teams: path.map((p: any) => p.team)
+        journey: groupedJourney
       },
-      answerData: { answer: targetPlayer }
+      answerData: { answer: res.targetPlayer.name }
     };
   }
 
@@ -177,11 +304,16 @@ export class ArenaQuestionEngine {
           question: "Who has more total IPL runs?",
           player1: p1Name,
           player2: p2Name,
+          left_player_name: p1Name,
+          right_player_name: p2Name,
+          left_player_value: p1Stats.total_runs,
+          right_player_value: p2Stats.total_runs,
           category: "Total Runs",
+          stat_display: "Total Runs",
           format: "number"
         },
         answerData: { 
-          answer: isP1Higher ? p1Name : p2Name,
+          answer: isP1Higher ? "LOWER" : "HIGHER",
           stats: {
             [p1Name]: p1Stats.total_runs,
             [p2Name]: p2Stats.total_runs
@@ -198,14 +330,21 @@ export class ArenaQuestionEngine {
       type: "STAT_SMASH",
       points: 100,
       questionData: {
-        question: `Who has a higher ${q.stat_display}?`,
+        question: `Which player has a higher ${q.stat_display}?`,
         player1: q.left_player_name,
         player2: q.right_player_name,
+        left_player_name: q.left_player_name,
+        right_player_name: q.right_player_name,
+        left_player_image: q.left_player_image,
+        right_player_image: q.right_player_image,
+        left_player_value: q.left_player_value,
+        right_player_value: q.right_player_value,
+        stat_display: q.stat_display,
         category: q.stat_display,
         format: q.stat_format
       },
       answerData: { 
-        answer: isRightHigher ? q.right_player_name : q.left_player_name,
+        answer: isRightHigher ? "HIGHER" : "LOWER",
         stats: {
           [q.left_player_name]: q.left_player_value,
           [q.right_player_name]: q.right_player_value
@@ -216,134 +355,67 @@ export class ArenaQuestionEngine {
 
   static async generateConnectionsRace(): Promise<ArenaRound> {
     try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-      
-      if (supabaseUrl && supabaseServiceKey) {
-        const supabase = createClient(supabaseUrl, supabaseServiceKey);
-        
-        // 1. Try to fetch from arena_questions first
-        const { data: dbQuestions } = await supabase
-          .from('arena_questions')
-          .select('*')
-          .in('format', ['connections', 'connections_race'])
-          .eq('is_active', true);
+      const res = await getArenaConnections();
+      if (!res.success || !res.categories) throw new Error("Failed to generate AI Connections");
 
-        if (dbQuestions && dbQuestions.length > 0) {
-          const q = dbQuestions[Math.floor(Math.random() * dbQuestions.length)];
-          const categories = q.metadata?.categories || [];
-          if (categories.length >= 2) {
-            const selectedCats = categories.slice(0, 2);
-            const tiles = [...selectedCats[0].items, ...selectedCats[1].items];
-            for (let i = tiles.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-            }
+      // Format for the UI
+      const formattedCats = res.categories.slice(0, 2).map((c: any) => ({
+        ...c,
+        items: c.items.map((i: string) => i.toUpperCase())
+      }));
 
-            return {
-              type: "CONNECTIONS_RACE",
-              points: 100,
-              questionData: {
-                question: q.question_text || "Create two groups of four connections!",
-                tiles,
-                categories: selectedCats,
-                difficulty: q.difficulty || "Medium",
-                era: q.era || "Modern Era",
-                tags: q.tags || []
-              },
-              answerData: {
-                answer: "2",
-                categories: selectedCats
-              }
-            };
-          }
+      const tiles = [...formattedCats[0].items, ...formattedCats[1].items];
+      for (let i = tiles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+      }
+
+      return {
+        type: "CONNECTIONS_RACE",
+        points: 100,
+        questionData: {
+          question: "Create two groups of four connections!",
+          tiles,
+          categories: formattedCats,
+          difficulty: "AI Generated",
+          era: "Modern Era",
+          tags: ["AI", "Groq"]
+        },
+        answerData: {
+          answer: "2",
+          categories: formattedCats
         }
-
-        // 2. Fallback: Fetch a random puzzle from connections_puzzles
-        const { data: puzzles } = await supabase
-          .from('connections_puzzles')
-          .select('*');
-        
-        if (puzzles && puzzles.length > 0) {
-          const puzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
-          const categories = puzzle.categories || [];
-          if (categories.length >= 2) {
-            const shuffledCats = [...categories].sort(() => Math.random() - 0.5);
-            const selectedCats = shuffledCats.slice(0, 2);
-            // Capitalize items to keep UI uniform
-            const formattedCats = selectedCats.map(c => ({
-              ...c,
-              items: c.items.map((it: string) => it.toUpperCase())
-            }));
-            
-            const tiles = [...formattedCats[0].items, ...formattedCats[1].items];
-            for (let i = tiles.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-            }
-
-            return {
-              type: "CONNECTIONS_RACE",
-              points: 100,
-              questionData: {
-                question: "Create two groups of four connections!",
-                tiles,
-                categories: formattedCats,
-                difficulty: "Medium",
-                era: "Modern Era",
-                tags: ["connections"]
-              },
-              answerData: {
-                answer: "2",
-                categories: formattedCats
-              }
-            };
-          }
+      };
+    } catch (err: any) {
+      console.error("Connections AI error:", err);
+      // Fallback
+      const seedBoards = [
+        {
+          categories: [
+            { title: "MI CAPTAINS", items: ["ROHIT", "SACHIN", "HARBHAJAN", "POLLARD"], difficulty: 1 },
+            { title: "RCB CENTURIONS", items: ["KOHLI", "GAYLE", "DE VILLIERS", "PADIKKAL"], difficulty: 2 }
+          ]
         }
-      }
-    } catch (err) {
-      console.error("Failed to generate Connections Race from DB:", err);
+      ];
+      const board = seedBoards[0];
+      const tiles = [...board.categories[0].items, ...board.categories[1].items];
+      return {
+        type: "CONNECTIONS_RACE",
+        points: 100,
+        questionData: {
+          question: "Create two groups of four connections!",
+          tiles,
+          categories: board.categories,
+          difficulty: "Medium",
+          era: "Modern Era",
+          tags: ["connections"]
+        },
+        answerData: {
+          answer: "2",
+          categories: board.categories
+        }
+      };
     }
-
-    // Static fallback if all else fails
-    const seedBoards = [
-      {
-        categories: [
-          { title: "MI CAPTAINS", items: ["ROHIT", "SACHIN", "HARBHAJAN", "POLLARD"], difficulty: 1 },
-          { title: "RCB CENTURIONS", items: ["KOHLI", "GAYLE", "DE VILLIERS", "PADIKKAL"], difficulty: 2 }
-        ]
-      },
-      {
-        categories: [
-          { title: "CSK LEGENDS", items: ["DHONI", "RAINA", "JADEJA", "BRAVO"], difficulty: 1 },
-          { title: "PURPLE CAP WINNERS", items: ["BUMRAH", "CHAHAL", "MALINGA", "HARSHAL"], difficulty: 2 }
-        ]
-      }
-    ];
-
-    const board = getRandom(seedBoards);
-    const tiles = [...board.categories[0].items, ...board.categories[1].items];
-    for (let i = tiles.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-    }
-
-    return {
-      type: "CONNECTIONS_RACE",
-      points: 100,
-      questionData: {
-        question: "Create two groups of four connections!",
-        tiles,
-        categories: board.categories,
-        difficulty: "Medium",
-        era: "Modern Era",
-        tags: ["connections"]
-      },
-      answerData: {
-        answer: "2",
-        categories: board.categories
-      }
-    };
   }
 
   static async generateArenaQuiz(): Promise<ArenaRound> {

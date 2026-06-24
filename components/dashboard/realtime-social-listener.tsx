@@ -94,8 +94,9 @@ export function RealtimeSocialListener() {
       activeUserRef.current = dbUser;
 
       // 2. Subscribe to game_challenges postgres changes
+      const uniqueId = Math.random().toString(36).substring(7);
       challengesChannel = supabase
-        .channel("social_challenges")
+        .channel(`social_challenges_${uniqueId}`)
         .on(
           "postgres_changes",
           {
@@ -189,7 +190,7 @@ export function RealtimeSocialListener() {
 
       // 3. Subscribe to direct_messages postgres insertions (for background notifications)
       messagesChannel = supabase
-        .channel("social_messages")
+        .channel(`social_messages_${uniqueId}`)
         .on(
           "postgres_changes",
           {
@@ -235,7 +236,7 @@ export function RealtimeSocialListener() {
 
       // 4. Subscribe to friendships postgres changes (for background notifications)
       friendshipsChannel = supabase
-        .channel("social_friendships")
+        .channel(`social_friendships_${uniqueId}`)
         .on(
           "postgres_changes",
           {

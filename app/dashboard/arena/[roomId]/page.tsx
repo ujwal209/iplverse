@@ -11,8 +11,10 @@ import {
   generateNextArenaRound, 
   saveMatchHistory,
   sendArenaChatMessage,
-  getArenaChatHistory
+  getArenaChatHistory,
+  requestRematch
 } from "@/app/actions/arena";
+import { getAllTeams } from "@/app/actions/games";
 import { getUserProfile } from "@/app/actions/social";
 import { 
   Users, 
@@ -115,6 +117,8 @@ export default function ArenaRoom() {
   const channelRef = useRef<any>(null);
   const isRevealingRef = useRef(false);
   const isGeneratingRef = useRef(false);
+  const clockSkewRef = useRef(0);
+  const countdownIntervalRef = useRef<any>(null);
   
   // Custom configurations
   const [timeLimit, setTimeLimit] = useState(30);
@@ -133,6 +137,9 @@ export default function ArenaRoom() {
   const [chatInput, setChatInput] = useState("");
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Teams DB for branding
+  const [teamsDb, setTeamsDb] = useState<any[]>([]);
+
   const myDbUserId = matchRecord ? (isHost ? matchRecord.host_id : matchRecord.guest_id) : "";
 
   // 1. Join Room & Fetch DB State
@@ -148,6 +155,9 @@ export default function ArenaRoom() {
         setError(res.error);
         return;
       }
+      if (res.serverTime) {
+        clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+      }
       setMatchRecord(res.match);
       setIsHost(!!res.isHost);
       setGameState(res.match.current_state || "waiting");
@@ -160,6 +170,18 @@ export default function ArenaRoom() {
       setGuestAnswer(res.match.guest_answer);
       setRoundNumber(res.match.round_number || 1);
       
+      // Initialize ready/rematch states from database fields
+      if (res.match.current_state === "ready") {
+        setHostReady(res.match.host_answer === "READY");
+        setGuestReady(res.match.guest_answer === "READY");
+      } else if (res.match.current_state === "match_complete") {
+        setHostReady(res.match.host_answer === "REMATCH");
+        setGuestReady(res.match.guest_answer === "REMATCH");
+      } else {
+        setHostReady(false);
+        setGuestReady(false);
+      }
+      
       // Load configurations
       setTimeLimit(res.match.time_limit !== undefined ? res.match.time_limit : 30);
       setGameFormat(res.match.game_format || "mixed");
@@ -170,6 +192,12 @@ export default function ArenaRoom() {
       const chatRes = await getArenaChatHistory(res.match.id);
       if (chatRes.success && chatRes.messages) {
         setChatMessages(chatRes.messages);
+      }
+
+      // Load teams DB for branding
+      const teamsRes = await getAllTeams();
+      if (teamsRes.success && teamsRes.teams) {
+        setTeamsDb(teamsRes.teams);
       }
 
       // If guest joined, and state is waiting, advance to ready
@@ -208,7 +236,15 @@ export default function ArenaRoom() {
 
     channel
       .on("broadcast", { event: "sync_state" }, ({ payload }) => {
-        if (payload.state) setGameState(payload.state);
+        if (payload.state) {
+          setGameState(payload.state);
+          if (payload.state === "countdown" || payload.state === "generating_round" || payload.state === "ready" || payload.state === "waiting") {
+            setQuestion(null);
+            setRoundData(null);
+            setHostAnswer(null);
+            setGuestAnswer(null);
+          }
+        }
         if (payload.hostScore !== undefined) setHostScore(payload.hostScore);
         if (payload.guestScore !== undefined) setGuestScore(payload.guestScore);
         if (payload.hostReady !== undefined) setHostReady(payload.hostReady);
@@ -220,6 +256,11 @@ export default function ArenaRoom() {
         if (payload.guestAnswer !== undefined) setGuestAnswer(payload.guestAnswer);
         if (payload.countdown !== undefined) setCountdown(payload.countdown);
         if (payload.roundNumber !== undefined) setRoundNumber(payload.roundNumber);
+        
+        // Handle roundExpiresAt in broadcast payload
+        if (payload.roundExpiresAt !== undefined) {
+          setMatchRecord((prev: any) => prev ? { ...prev, round_expires_at: payload.roundExpiresAt } : null);
+        }
         
         // Sync configuration adjustments
         if (payload.timeLimit !== undefined) setTimeLimit(payload.timeLimit);
@@ -236,6 +277,52 @@ export default function ArenaRoom() {
         setChatMessages(prev => [...prev, payload.message]);
         setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
       })
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "arena_matches",
+          filter: `id=eq.${matchRecord.id}`,
+        },
+        (payload) => {
+          const updatedMatch = payload.new;
+          if (!updatedMatch) return;
+          
+          setMatchRecord(updatedMatch);
+          if (updatedMatch.current_state) {
+            setGameState(updatedMatch.current_state);
+            if (updatedMatch.current_state === "countdown" || updatedMatch.current_state === "generating_round" || updatedMatch.current_state === "ready" || updatedMatch.current_state === "waiting") {
+              setQuestion(null);
+              setRoundData(null);
+              setHostAnswer(null);
+              setGuestAnswer(null);
+            }
+          }
+          if (updatedMatch.host_score !== undefined) setHostScore(updatedMatch.host_score);
+          if (updatedMatch.guest_score !== undefined) setGuestScore(updatedMatch.guest_score);
+          
+          // Map host_answer/guest_answer to ready states for lobby and rematch
+          if (updatedMatch.current_state === "ready") {
+            setHostReady(updatedMatch.host_answer === "READY");
+            setGuestReady(updatedMatch.guest_answer === "READY");
+          } else if (updatedMatch.current_state === "match_complete") {
+            setHostReady(updatedMatch.host_answer === "REMATCH");
+            setGuestReady(updatedMatch.guest_answer === "REMATCH");
+          }
+          if (updatedMatch.current_question !== undefined) setQuestion(updatedMatch.current_question);
+          if (updatedMatch.round_type !== undefined) setRoundType(updatedMatch.round_type);
+          if (updatedMatch.current_round_data !== undefined) setRoundData(updatedMatch.current_round_data);
+          if (updatedMatch.host_answer !== undefined) setHostAnswer(updatedMatch.host_answer);
+          if (updatedMatch.guest_answer !== undefined) setGuestAnswer(updatedMatch.guest_answer);
+          if (updatedMatch.round_number !== undefined) setRoundNumber(updatedMatch.round_number);
+          
+          if (updatedMatch.time_limit !== undefined) setTimeLimit(updatedMatch.time_limit);
+          if (updatedMatch.game_format !== undefined) setGameFormat(updatedMatch.game_format);
+          if (updatedMatch.difficulty !== undefined) setDifficulty(updatedMatch.difficulty);
+          if (updatedMatch.max_rounds !== undefined) setMaxRounds(updatedMatch.max_rounds);
+        }
+      )
       .subscribe();
 
     return () => {
@@ -266,65 +353,170 @@ export default function ArenaRoom() {
   useEffect(() => {
     if (!isHost || !matchRecord) return;
 
-    if (gameState === "ready") {
-      if (hostReady && guestReady) {
-        startCountdown();
+    if (gameState === "question") {
+      // Check if both have locked answers (e.g. they both failed or both played 1-guess games)
+      if (hostAnswer && guestAnswer) {
+        triggerAnswerReveal();
+      } else if (roundData) {
+        // RACE CONDITION: If anyone gets it right, immediately reveal!
+        const hostCorrect = checkCorrectness(hostAnswer, roundData.answer, roundType);
+        const guestCorrect = checkCorrectness(guestAnswer, roundData.answer, roundType);
+        
+        if (hostCorrect || guestCorrect) {
+          triggerAnswerReveal();
+        }
       }
     }
 
-    if (gameState === "question") {
-      // Check if both answered
-      if (hostAnswer && guestAnswer) {
-        triggerAnswerReveal();
+    // Self-healing & transition driver on page refreshes or updates
+    if (gameState === "answer_reveal") {
+      isRevealingRef.current = true;
+      const timer = setTimeout(async () => {
+        const res = await advanceArenaState(matchRecord.id, "scoreboard");
+        if (res?.serverTime) {
+          clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+        }
+        broadcastState("scoreboard");
+        
+        // Save round history (ensure only once)
+        const correctAnswer = roundData?.answer;
+        const hostCorrect = checkCorrectness(hostAnswer, correctAnswer, roundType);
+        const guestCorrect = checkCorrectness(guestAnswer, correctAnswer, roundType);
+        
+        const alreadySaved = matchRecord.match_history?.some((h: any) => h.round === roundNumber);
+        if (!alreadySaved) {
+          await saveMatchHistory(matchRecord.id, {
+            round: roundNumber,
+            type: roundType,
+            question: question,
+            correct_answer: correctAnswer,
+            host_answer: hostAnswer,
+            guest_answer: guestAnswer,
+            winner: hostCorrect && guestCorrect ? "TIE" : hostCorrect ? matchRecord.host_id : guestCorrect ? matchRecord.guest_id : "NONE"
+          });
+        }
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+
+    if (gameState === "scoreboard") {
+      const timer = setTimeout(async () => {
+        if (roundNumber >= maxRounds) {
+          const winnerId = hostScore > guestScore ? matchRecord.host_id : hostScore < guestScore ? matchRecord.guest_id : null;
+          const res = await advanceArenaState(matchRecord.id, "match_complete", { 
+            winner_id: winnerId, 
+            status: 'finished',
+            host_answer: null,
+            guest_answer: null
+          });
+          if (res?.serverTime) {
+            clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+          }
+          broadcastState("match_complete", { hostScore, guestScore });
+          confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        } else {
+          const res = await advanceArenaState(matchRecord.id, "next_round");
+          if (res?.serverTime) {
+            clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+          }
+          broadcastState("next_round");
+        }
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+
+    if (gameState === "next_round") {
+      const timer = setTimeout(() => {
+        startCountdown();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+
+    if (gameState === "countdown" || gameState === "generating_round") {
+      // If we are host and got stuck here on reload, auto-trigger next question setup
+      if (!isGeneratingRef.current) {
+        isGeneratingRef.current = true;
+        if (gameState !== "generating_round") {
+          advanceArenaState(matchRecord.id, "generating_round").then((res) => {
+            if (res?.serverTime) {
+              clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+            }
+            generateNextQuestion();
+          });
+        } else {
+          generateNextQuestion();
+        }
       }
     }
-  }, [gameState, hostReady, guestReady, hostAnswer, guestAnswer, isHost]);
+  }, [gameState, hostReady, guestReady, hostAnswer, guestAnswer, isHost, roundData, roundType, roundNumber, maxRounds, hostScore, guestScore, matchRecord]);
 
   // 4. Turn Countdown Timer (Autosubmits TIMEOUT if time expires)
   const [turnTimeLeft, setTurnTimeLeft] = useState<number | null>(null);
   
   useEffect(() => {
     const answered = isHost ? !!hostAnswer : !!guestAnswer;
-    if (gameState !== "question" || timeLimit <= 0 || answered) {
+    if (gameState !== "question" || timeLimit <= 0 || answered || !matchRecord?.round_expires_at) {
       setTurnTimeLeft(null);
       return;
     }
 
-    setTurnTimeLeft(timeLimit);
+    const calculateRemaining = () => {
+      const expiresAt = new Date(matchRecord.round_expires_at).getTime();
+      const now = Date.now() + clockSkewRef.current;
+      const remaining = Math.max(0, Math.ceil((expiresAt - now) / 1000));
+      return Math.min(timeLimit, remaining);
+    };
+
+    setTurnTimeLeft(calculateRemaining());
 
     const timer = setInterval(() => {
-      setTurnTimeLeft(prev => {
-        if (prev === null) return null;
-        if (prev <= 1) {
-          clearInterval(timer);
-          handleAnswer("TIMEOUT");
-          return 0;
-        }
-        return prev - 1;
-      });
+      const remaining = calculateRemaining();
+      setTurnTimeLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(timer);
+        handleAnswer("TIMEOUT");
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [gameState, timeLimit, isHost, hostAnswer, guestAnswer]);
+  }, [gameState, timeLimit, isHost, hostAnswer, guestAnswer, matchRecord?.round_expires_at]);
 
   const startCountdown = async () => {
     isGeneratingRef.current = false; // Reset lock
     isRevealingRef.current = false; // Reset lock
-    await advanceArenaState(matchRecord.id, "countdown");
+    // Clear old question/answers to avoid rendering stale data during countdown/generating state!
+    setQuestion(null);
+    setRoundData(null);
+    setHostAnswer(null);
+    setGuestAnswer(null);
+
+    const res = await advanceArenaState(matchRecord.id, "countdown");
+    if (res?.serverTime) {
+      clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+    }
     broadcastState("countdown", { countdown: 3 });
     
     let c = 3;
-    const iv = setInterval(() => {
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
+    }
+    countdownIntervalRef.current = setInterval(() => {
       c--;
       syncPartialState({ countdown: c });
       setCountdown(c);
       if (c <= 0) {
-        clearInterval(iv);
+        if (countdownIntervalRef.current) {
+          clearInterval(countdownIntervalRef.current);
+          countdownIntervalRef.current = null;
+        }
         if (!isGeneratingRef.current) {
           isGeneratingRef.current = true;
           // Set to generating UI state while we fetch Groq API
           broadcastState("generating_round");
-          advanceArenaState(matchRecord.id, "generating_round").then(() => {
+          advanceArenaState(matchRecord.id, "generating_round").then((advRes) => {
+            if (advRes?.serverTime) {
+              clockSkewRef.current = new Date(advRes.serverTime).getTime() - Date.now();
+            }
             generateNextQuestion();
           });
         }
@@ -336,10 +528,15 @@ export default function ArenaRoom() {
     const res = await generateNextArenaRound(matchRecord.id);
     if (!res || res.error || !res.round || !res.match) {
       console.error(res?.error || "Failed to generate round");
+      toast.error(res?.error || "Failed to generate round. You can retry.");
       // Fallback: reset generator lock so it can be retried or debugged
       isGeneratingRef.current = false;
       return;
     }
+    if (res.serverTime) {
+      clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+    }
+    setMatchRecord(res.match);
 
     setHostAnswer(null);
     setGuestAnswer(null);
@@ -353,6 +550,7 @@ export default function ArenaRoom() {
       roundType: res.round.type,
       roundData: res.round.answerData,
       roundNumber: res.match.round_number,
+      roundExpiresAt: res.match.round_expires_at,
       hostAnswer: null, 
       guestAnswer: null 
     });
@@ -360,30 +558,32 @@ export default function ArenaRoom() {
     isGeneratingRef.current = false;
   };
 
-  const checkCorrectness = (answer: any, correctAnswer: any, type: string) => {
+  function checkCorrectness(answer: any, correctAnswer: any, type: string) {
     if (!answer || answer === "TIMEOUT") return false;
     
     const ansLower = answer.toString().toLowerCase().trim();
     const correctLower = correctAnswer.toString().toLowerCase().trim();
     
-    if (type === "WHO_AM_I" || type === "MATCH_MEMORY" || type === "MYSTERY_PLAYER" || type === "ARENA_QUIZ" || type === "CAREER_PATH_DUEL") {
+    if (type === "MATCH_MEMORY") {
+      return ansLower === correctLower;
+    }
+
+    if (type === "WHO_AM_I" || type === "MYSTERY_PLAYER" || type === "ARENA_QUIZ" || type === "CAREER_PATH_DUEL") {
       // Basic fuzzy matching for text inputs / choices
       if (ansLower.includes(correctLower) || correctLower.includes(ansLower)) return true;
       
       // Check aliases for player guessing games
-      if (type === "WHO_AM_I" || type === "MYSTERY_PLAYER" || type === "CAREER_PATH_DUEL") {
-        try {
-          const mappings = require("@/lib/data/player-mappings.json");
-          const mapped = mappings.find((m: any) => 
-            m.cricsheet_name.toLowerCase() === correctLower || 
-            m.display_name.toLowerCase() === correctLower
-          );
-          if (mapped && mapped.aliases) {
-            return mapped.aliases.some((a: string) => a.toLowerCase() === ansLower || ansLower.includes(a.toLowerCase()));
-          }
-        } catch (e) {
-          console.error("Alias check failed", e);
+      try {
+        const mappings = require("@/lib/data/player-mappings.json");
+        const mapped = mappings.find((m: any) => 
+          m.cricsheet_name.toLowerCase() === correctLower || 
+          m.display_name.toLowerCase() === correctLower
+        );
+        if (mapped && mapped.aliases) {
+          return mapped.aliases.some((a: string) => a.toLowerCase() === ansLower || ansLower.includes(a.toLowerCase()));
         }
+      } catch (e) {
+        console.error("Alias check failed", e);
       }
       return false;
     }
@@ -391,87 +591,188 @@ export default function ArenaRoom() {
     return answer === correctAnswer;
   };
 
-  const triggerAnswerReveal = async () => {
+  async function triggerAnswerReveal() {
     if (isRevealingRef.current) return;
     isRevealingRef.current = true;
 
-    const correctAnswer = roundData.answer;
+    const correctAnswer = roundData?.answer;
     
     const hostCorrect = checkCorrectness(hostAnswer, correctAnswer, roundType);
     const guestCorrect = checkCorrectness(guestAnswer, correctAnswer, roundType);
 
-    // Scoring system: +100 correct, -25 incorrect
-    let newHostScore = hostScore + (hostCorrect ? 100 : -25);
-    let newGuestScore = guestScore + (guestCorrect ? 100 : -25);
+    // Scoring system: +100 correct, -25 incorrect (0 if skipped or timed out)
+    const getPoints = (ans: any, isCorrect: boolean) => {
+      if (!ans || ans === "SKIPPED" || ans === "TIMEOUT") return 0;
+      return isCorrect ? 100 : -25;
+    };
+
+    let newHostScore = hostScore + getPoints(hostAnswer, hostCorrect);
+    let newGuestScore = guestScore + getPoints(guestAnswer, guestCorrect);
 
     setHostScore(newHostScore);
     setGuestScore(newGuestScore);
 
-    await advanceArenaState(matchRecord.id, "answer_reveal", {
+    const res = await advanceArenaState(matchRecord.id, "answer_reveal", {
       host_score: newHostScore,
       guest_score: newGuestScore
     });
+    if (res?.serverTime) {
+      clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+    }
 
     broadcastState("answer_reveal", { hostScore: newHostScore, guestScore: newGuestScore });
-
-    // Wait 4 seconds, show scoreboard
-    setTimeout(async () => {
-      await advanceArenaState(matchRecord.id, "scoreboard");
-      broadcastState("scoreboard");
-      
-      // Save round history
-      await saveMatchHistory(matchRecord.id, {
-        round: roundNumber,
-        type: roundType,
-        question: question,
-        correct_answer: correctAnswer,
-        host_answer: hostAnswer,
-        guest_answer: guestAnswer,
-        winner: hostCorrect && guestCorrect ? "TIE" : hostCorrect ? matchRecord.host_id : guestCorrect ? matchRecord.guest_id : "NONE"
-      });
-
-      // Wait 4 seconds on scoreboard
-      setTimeout(async () => {
-        if (roundNumber >= maxRounds) {
-          const winnerId = newHostScore > newGuestScore ? matchRecord.host_id : newHostScore < newGuestScore ? matchRecord.guest_id : null;
-          await advanceArenaState(matchRecord.id, "match_complete", { winner_id: winnerId, status: 'finished' });
-          broadcastState("match_complete", { hostScore: newHostScore, guestScore: newGuestScore });
-          confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
-        } else {
-          await advanceArenaState(matchRecord.id, "next_round");
-          broadcastState("next_round");
-          
-          setTimeout(() => {
-            startCountdown();
-          }, 2000);
-        }
-      }, 4000);
-
-    }, 4000);
   };
 
   // Actions
-  const toggleReady = () => {
+  const toggleReady = async () => {
     if (isHost) {
       setHostReady(true);
-      syncPartialState({ hostReady: true });
+      broadcastState(gameState, { hostReady: true });
+      await updateMatchState(matchRecord.id, { host_answer: "READY" });
     } else {
       setGuestReady(true);
-      syncPartialState({ guestReady: true });
+      broadcastState(gameState, { guestReady: true });
+      await updateMatchState(matchRecord.id, { guest_answer: "READY" });
     }
   };
 
+  const handleSkipRound = async () => {
+    if (!isHost || gameState !== "question" || isRevealingRef.current || !matchRecord) return;
+    
+    // Set both answers to "SKIPPED" in database
+    const res = await updateMatchState(matchRecord.id, {
+      host_answer: "SKIPPED",
+      guest_answer: "SKIPPED"
+    });
+    if (res?.serverTime) {
+      clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+    }
+    
+    // Set locally so triggerAnswerReveal uses them
+    setHostAnswer("SKIPPED");
+    setGuestAnswer("SKIPPED");
+    
+    // Broadcast the skipped answers so guest clears their UI locks
+    syncPartialState({ hostAnswer: "SKIPPED", guestAnswer: "SKIPPED" });
+    
+    // Wait a brief moment for state to settle, then reveal
+    setTimeout(() => {
+      triggerAnswerReveal();
+    }, 100);
+  };
+
   const handleAnswer = async (ans: any) => {
+    if (!matchRecord) return;
+    if (ans === "FAILED" || ans === "TIMEOUT") {
+      if (isHost && !hostAnswer) {
+        setHostAnswer(ans);
+        syncPartialState({ hostAnswer: ans });
+        const res = await updateMatchState(matchRecord.id, { host_answer: ans });
+        if (res?.serverTime) {
+          clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+        }
+      } else if (!isHost && !guestAnswer) {
+        setGuestAnswer(ans);
+        syncPartialState({ guestAnswer: ans });
+        const res = await updateMatchState(matchRecord.id, { guest_answer: ans });
+        if (res?.serverTime) {
+          clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+        }
+      }
+      return;
+    }
+
+    const isCorrect = checkCorrectness(ans, roundData.answer, roundType);
+
     if (isHost) {
-      if (hostAnswer) return; // Prevent double answer submission
-      setHostAnswer(ans);
-      syncPartialState({ hostAnswer: ans });
-      await updateMatchState(matchRecord.id, { host_answer: ans });
+      if (hostAnswer) return; 
+      // If it's a multi-guess game, only lock in the correct answer or FAILED.
+      // If it's a 1-guess game (like PLAYER_VS_PLAYER), lock it in regardless.
+      if (isCorrect || roundType === "PLAYER_VS_PLAYER" || roundType === "STAT_SMASH") {
+        setHostAnswer(ans);
+        syncPartialState({ hostAnswer: ans });
+        const res = await updateMatchState(matchRecord.id, { host_answer: ans });
+        if (res?.serverTime) {
+          clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+        }
+      } else {
+        // Send a wrong guess state (optional, just for opponent to see)
+        syncPartialState({ latestHostGuess: ans });
+      }
     } else {
       if (guestAnswer) return;
-      setGuestAnswer(ans);
-      syncPartialState({ guestAnswer: ans });
-      await updateMatchState(matchRecord.id, { guest_answer: ans });
+      if (isCorrect || roundType === "PLAYER_VS_PLAYER" || roundType === "STAT_SMASH") {
+        setGuestAnswer(ans);
+        syncPartialState({ guestAnswer: ans });
+        const res = await updateMatchState(matchRecord.id, { guest_answer: ans });
+        if (res?.serverTime) {
+          clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+        }
+      } else {
+        syncPartialState({ latestGuestGuess: ans });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (gameState === "ready" || gameState === "waiting") {
+      isRevealingRef.current = false;
+      isGeneratingRef.current = false;
+    }
+  }, [gameState]);
+
+  const handleRequestRematch = async () => {
+    if (!matchRecord) return;
+    
+    const res = await requestRematch(matchRecord.id, isHost);
+    
+    if (res?.error) {
+      toast.error(res.error);
+      return;
+    }
+
+    if (res?.serverTime) {
+      clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
+    }
+
+    // Set local ready state
+    if (isHost) {
+      setHostReady(true);
+      broadcastState(gameState, { hostReady: true });
+    } else {
+      setGuestReady(true);
+      broadcastState(gameState, { guestReady: true });
+    }
+
+    if (res?.reset) {
+      toast.success("Rematch accepted! Starting new match...");
+      
+      // Broadcast the lobby reset to opponent
+      broadcastState("ready", { 
+        hostScore: 0, 
+        guestScore: 0, 
+        roundNumber: 1,
+        hostReady: false,
+        guestReady: false,
+        question: null,
+        roundData: null,
+        hostAnswer: null,
+        guestAnswer: null
+      });
+      
+      // Update local states
+      setGameState("ready");
+      setHostScore(0);
+      setGuestScore(0);
+      setRoundNumber(1);
+      setHostReady(false);
+      setGuestReady(false);
+      setQuestion(null);
+      setRoundData(null);
+      setHostAnswer(null);
+      setGuestAnswer(null);
+    } else {
+      toast.success("Rematch request sent!");
     }
   };
 
@@ -732,22 +1033,75 @@ export default function ArenaRoom() {
           )}
 
           {gameState === "ready" && (
-            <div className="text-center animate-in zoom-in duration-500 w-full">
-              <Swords className="h-16 w-16 text-[#0B2A96] mx-auto mb-5 animate-bounce" />
-              <h2 className="text-3xl font-black outfit-bold text-slate-800 mb-6">Match Found!</h2>
+            <div className="text-center animate-in zoom-in duration-500 w-full max-w-xl mx-auto p-8 bg-white border border-slate-200/80 rounded-3xl shadow-lg">
+              <Swords className="h-16 w-16 text-[#0B2A96] mx-auto mb-5 animate-pulse" />
+              <h2 className="text-3xl font-black outfit-bold text-slate-800 mb-2">Match Found!</h2>
+              <p className="text-xs text-slate-400 mb-8 uppercase tracking-widest font-bold">Lobby ready check</p>
               
-              <div className="flex gap-4 justify-center">
-                <button 
-                  onClick={toggleReady}
-                  disabled={isHost ? hostReady : guestReady}
-                  className="px-8 py-3 bg-[#0B2A96] hover:bg-[#0f3a63] text-white text-sm font-bold rounded-2xl disabled:opacity-50 transition-all cursor-pointer shadow-md shadow-blue-900/10 active:scale-95"
-                >
-                  {(isHost ? hostReady : guestReady) ? "Ready!" : "Lock in Ready"}
-                </button>
+              {/* Ready Status Grid */}
+              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+                <div className={`p-4 rounded-2xl border transition-all ${hostReady ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+                  <p className="text-[10px] uppercase font-bold tracking-widest opacity-80 mb-1">Host</p>
+                  <p className="font-extrabold text-sm outfit-bold truncate mb-2">{hostUsername}</p>
+                  <div className="flex justify-center">
+                    {hostReady ? (
+                      <span className="flex items-center gap-1 text-xs font-bold"><CheckCircle2 className="h-4 w-4 text-emerald-600" /> Accepted</span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-xs font-semibold opacity-60"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Deciding...</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className={`p-4 rounded-2xl border transition-all ${guestReady ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+                  <p className="text-[10px] uppercase font-bold tracking-widest opacity-80 mb-1">Opponent</p>
+                  <p className="font-extrabold text-sm outfit-bold truncate mb-2">{guestUsername}</p>
+                  <div className="flex justify-center">
+                    {guestReady ? (
+                      <span className="flex items-center gap-1 text-xs font-bold"><CheckCircle2 className="h-4 w-4 text-emerald-600" /> Accepted</span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-xs font-semibold opacity-60"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Deciding...</span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <p className="text-xs font-semibold text-slate-400 mt-4 leading-normal">
-                {hostReady && guestReady ? "Starting..." : "Waiting for both players to lock in ready status..."}
-              </p>
+
+              <div className="flex flex-col items-center justify-center gap-4">
+                {!(isHost ? hostReady : guestReady) && (
+                  <button 
+                    onClick={toggleReady}
+                    className="w-full max-w-xs px-8 py-3.5 bg-[#0B2A96] hover:bg-[#0f3a63] text-white text-sm font-bold rounded-2xl transition-all cursor-pointer shadow-md shadow-blue-900/10 active:scale-95"
+                  >
+                    Accept Match & Ready Up
+                  </button>
+                )}
+
+                {(isHost ? hostReady : guestReady) && !(hostReady && guestReady) && (
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="px-4 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full flex items-center gap-1.5 shadow-sm">
+                      <Check className="h-3.5 w-3.5" /> You are Ready
+                    </span>
+                    <p className="text-xs text-slate-400 mt-2">Waiting for opponent to accept the match...</p>
+                  </div>
+                )}
+
+                {hostReady && guestReady && (
+                  isHost ? (
+                    <button
+                      onClick={startCountdown}
+                      className="w-full max-w-xs px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-black outfit-bold rounded-2xl transition-all cursor-pointer shadow-lg shadow-emerald-700/20 active:scale-95 animate-pulse"
+                    >
+                      Start First Round
+                    </button>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2.5">
+                      <span className="px-4 py-2 bg-[#0B2A96]/10 text-[#0B2A96] text-xs font-bold rounded-full flex items-center gap-2 shadow-sm animate-pulse">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> All Ready! Host is starting...
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
+              
               {renderSettingsPanel()}
             </div>
           )}
@@ -764,13 +1118,36 @@ export default function ArenaRoom() {
                 <div className="absolute inset-0 border-4 border-blue-200 rounded-full animate-ping opacity-20"></div>
                 <Loader2 className="h-20 w-20 text-[#0B2A96] animate-spin relative z-10" />
               </div>
-              <h2 className="text-2xl font-black outfit-bold text-slate-800 mt-6 mb-2">Generating Round...</h2>
-              <p className="text-xs text-slate-400 inter-medium animate-pulse">Our AI engine is preparing the next challenge.</p>
+              <h2 className="text-2xl font-black outfit-bold text-slate-800 mt-6 mb-2">Preparing Challenge...</h2>
+              <p className="text-xs text-slate-400 inter-medium animate-pulse mb-6">Setting up the next round.</p>
+              
+              {isHost && (
+                <button 
+                  onClick={() => {
+                    isGeneratingRef.current = true;
+                    toast.info("Retrying round setup...");
+                    generateNextQuestion();
+                  }}
+                  className="mt-4 px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all shadow-sm"
+                >
+                  Retry Loading
+                </button>
+              )}
             </div>
           )}
 
           {(gameState === "question" || gameState === "answer_reveal") && question && (
             <div className="w-full">
+              {isHost && gameState === "question" && (
+                <div className="flex justify-end w-full max-w-6xl mx-auto mb-4">
+                  <button
+                    onClick={handleSkipRound}
+                    className="px-4 py-2 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 hover:border-rose-200 text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5"
+                  >
+                    Skip Round
+                  </button>
+                </div>
+              )}
               <RoundRenderer 
                 roundType={roundType}
                 questionData={question}
@@ -820,7 +1197,7 @@ export default function ArenaRoom() {
           )}
 
           {gameState === "match_complete" && (
-            <div className="text-center animate-in zoom-in fade-in w-full max-w-sm mx-auto">
+            <div className="text-center animate-in zoom-in fade-in w-full max-w-md mx-auto p-8 bg-white border border-slate-200/80 rounded-3xl shadow-lg">
               <Trophy className="h-20 w-20 text-amber-500 fill-amber-500/10 mx-auto mb-6 animate-bounce" />
               
               <h2 className="text-4xl font-black outfit-bold text-slate-800 mb-3">
@@ -830,16 +1207,61 @@ export default function ArenaRoom() {
                  "You Lost!"}
               </h2>
               
-              <p className="text-sm font-bold text-slate-500 mb-8 leading-normal">
-                Final Scoreboard: <span className="font-extrabold text-slate-800">{isHost ? hostScore : guestScore}</span> vs <span className="font-extrabold text-slate-850">{isHost ? guestScore : hostScore}</span>
+              <p className="text-sm font-bold text-slate-500 mb-6 leading-normal">
+                Final Scoreboard: <span className="font-extrabold text-slate-800">{isHost ? hostScore : guestScore}</span> vs <span className="font-extrabold text-slate-500">{isHost ? guestScore : hostScore}</span>
               </p>
-              
-              <button 
-                onClick={() => router.push('/dashboard/arena')}
-                className="w-full px-8 py-3.5 bg-[#0B2A96] hover:bg-[#0f3a63] text-white text-sm font-bold rounded-2xl hover:scale-102 active:scale-98 transition-all cursor-pointer shadow-md shadow-blue-900/10"
-              >
-                Return to Arena Lobby
-              </button>
+
+              {/* Rematch Status Cards */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className={`p-3.5 rounded-2xl border transition-all ${hostReady ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+                  <p className="text-[9px] uppercase font-bold tracking-widest opacity-80 mb-0.5">Host</p>
+                  <p className="font-bold text-xs truncate mb-1">{hostUsername}</p>
+                  <div className="flex justify-center text-[11px] font-bold">
+                    {hostReady ? (
+                      <span className="text-emerald-600 flex items-center gap-0.5"><Check className="h-3.5 w-3.5" /> Wants Rematch</span>
+                    ) : (
+                      <span className="opacity-50">Undecided</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className={`p-3.5 rounded-2xl border transition-all ${guestReady ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+                  <p className="text-[9px] uppercase font-bold tracking-widest opacity-80 mb-0.5">Opponent</p>
+                  <p className="font-bold text-xs truncate mb-1">{guestUsername}</p>
+                  <div className="flex justify-center text-[11px] font-bold">
+                    {guestReady ? (
+                      <span className="text-emerald-600 flex items-center gap-0.5"><Check className="h-3.5 w-3.5" /> Wants Rematch</span>
+                    ) : (
+                      <span className="opacity-50">Undecided</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {!(isHost ? hostReady : guestReady) ? (
+                  <button 
+                    onClick={handleRequestRematch}
+                    className="w-full px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-black outfit-bold rounded-2xl transition-all cursor-pointer shadow-lg shadow-emerald-700/10 active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    <Swords className="h-4 w-4" /> Request Rematch
+                  </button>
+                ) : (
+                  <button 
+                    disabled
+                    className="w-full px-8 py-4 bg-emerald-100 text-emerald-800 text-sm font-bold rounded-2xl transition-all opacity-85 flex items-center justify-center gap-2"
+                  >
+                    <Loader2 className="h-4 w-4 animate-spin" /> Waiting for Opponent...
+                  </button>
+                )}
+
+                <button 
+                  onClick={() => router.push('/dashboard/arena')}
+                  className="w-full px-8 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-2xl transition-all cursor-pointer shadow-xs active:scale-95"
+                >
+                  Return to Arena Lobby
+                </button>
+              </div>
             </div>
           )}
 
@@ -874,9 +1296,18 @@ export default function ArenaRoom() {
               {chatMessages.length > 0 ? (
                 chatMessages.map((msg) => {
                   const isMe = msg.sender_id === myDbUserId;
+                  const senderTeamName = msg.sender?.favorite_team;
+                  const teamData = teamsDb.find(t => t.name === senderTeamName);
+                  const teamLogo = teamData?.image_url;
+
                   return (
-                    <div key={msg.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"} animate-in fade-in duration-205`}>
-                      <span className="text-[8px] font-bold text-slate-400 mb-0.5 px-1">{msg.sender?.username || "Player"}</span>
+                    <div key={msg.id} className={`flex flex-col mb-4 ${isMe ? "items-end" : "items-start"} animate-in fade-in duration-205`}>
+                      <div className={`flex items-center gap-1.5 mb-1 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
+                        {teamLogo && (
+                          <img src={teamLogo} alt="team" className="w-4 h-4 object-contain rounded-full" />
+                        )}
+                        <span className="text-[10px] font-bold text-slate-500">{msg.sender?.username || "Player"}</span>
+                      </div>
                       <div className={`p-3 rounded-2xl text-xs max-w-[85%] leading-relaxed ${
                         isMe 
                           ? "bg-[#0B2A96] text-white rounded-tr-none font-medium" 

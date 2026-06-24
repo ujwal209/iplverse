@@ -1,24 +1,15 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import { Trophy, Star, Shield, Zap, ChevronDown } from "lucide-react";
+import { Trophy, Star, Shield, Zap, ChevronDown, CheckCircle2, ChevronRight, User, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import { useAuth } from "@clerk/nextjs";
 import { completeOnboarding } from "./actions";
 
-const IPL_TEAMS = [
-  "Chennai Super Kings",
-  "Mumbai Indians",
-  "Royal Challengers Bangalore",
-  "Kolkata Knight Riders",
-  "Sunrisers Hyderabad",
-  "Rajasthan Royals",
-  "Delhi Capitals",
-  "Punjab Kings",
-  "Gujarat Titans",
-  "Lucknow Super Giants"
-];
+import { getAllTeams } from "@/app/actions/games";
+import { PlayerAutocomplete } from "@/components/dashboard/player-autocomplete";
 
 const EXPERIENCE_LEVELS = [
   { value: "rookie", label: "Rookie (New to Cricket)", icon: Star },
@@ -37,6 +28,21 @@ export default function OnboardingPage() {
   const [experience, setExperience] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [teamsDb, setTeamsDb] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchTeams() {
+      try {
+        const res = await getAllTeams();
+        if (res.success && res.teams) {
+          setTeamsDb(res.teams);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchTeams();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,99 +81,158 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-background">
-      {/* Left Branding Side */}
-      <div className="hidden lg:flex w-1/2 bg-primary flex-col justify-between p-12 text-primary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 bg-primary/20 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-primary/40 via-transparent to-transparent"></div>
-        <div className="relative z-10 flex items-center">
-          <img src="/main_logo.png" alt="IPL Verse Logo" className="h-20 w-auto object-contain animate-pulse" />
-        </div>
-        <div className="relative z-10 space-y-6 max-w-lg mt-auto mb-auto">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-secondary/20 text-secondary text-caption font-bold tracking-wide uppercase mb-4">
-            Account Verified
-          </div>
-          <h1 className="text-display text-4xl lg:text-6xl leading-tight">
-            Build your legacy.
-          </h1>
-          <p className="text-body text-lg opacity-90 leading-relaxed">
-            Welcome to the ultimate cricket platform. Tell us a bit about your fandom to personalize your leaderboard and auction experience.
-          </p>
-        </div>
-        <div className="relative z-10 text-caption opacity-75">
-          © {new Date().getFullYear()} IPL Verse. All rights reserved.
-        </div>
-        
-        {/* Aesthetic Background Elements */}
-        <div className="absolute -bottom-32 -right-32 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-3xl"></div>
-        <Trophy className="absolute top-32 -right-24 h-96 w-96 text-primary-foreground/5 rotate-12" />
-      </div>
-
-      {/* Right Form Side */}
-      <div className="flex-1 flex flex-col p-4 sm:p-8 lg:p-12 overflow-y-auto relative">
-        <div className="lg:hidden w-full flex items-center justify-center mb-8">
-          <img src="/main_logo.png" alt="IPL Verse Logo" className="h-16 w-auto object-contain" />
+    <div className="min-h-screen w-full flex flex-col bg-slate-50/50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
+        <div className="w-full flex items-center justify-center mb-10">
+          <img src="/main_logo.png" alt="IPL Verse Logo" className="h-28 w-auto object-contain" />
         </div>
 
-        <div className="w-full max-w-xl mx-auto my-auto flex flex-col justify-center space-y-8">
-          <div className="space-y-3 text-center lg:text-left">
-            <h2 className="text-display text-3xl tracking-tight">Complete your profile</h2>
-            <p className="text-muted-foreground text-body text-lg">
+        <div className="w-full bg-white rounded-3xl shadow-xl shadow-[#0B2A96]/5 border border-slate-100 p-8 sm:p-14">
+          <div className="space-y-3 text-center mb-12">
+            <h2 className="text-display text-4xl lg:text-5xl tracking-tight text-[#0B2A96] font-semibold">Complete your profile</h2>
+            <p className="text-slate-500 text-body text-lg font-medium">
               Set up your identity to start climbing the global ranks.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <motion.form 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            onSubmit={handleSubmit} 
+            className="space-y-8"
+          >
             {error && (
-              <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 text-sm font-bold flex items-center gap-3"
+              >
+                <div className="h-8 w-8 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+                  <span className="text-rose-500 font-black">!</span>
+                </div>
                 {error}
-              </div>
+              </motion.div>
             )}
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2 flex flex-col">
-                <label htmlFor="username" className="font-heading text-foreground text-sm">Username</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-3 flex flex-col relative group"
+              >
+                <label htmlFor="username" className="font-semibold text-slate-700 text-sm uppercase tracking-wider flex items-center gap-2">
+                  <User className="w-4 h-4 text-[#0B2A96]" />
+                  Username
+                </label>
                 <input 
                   id="username" 
-                  placeholder="msd_fan_07" 
+                  placeholder="e.g. msd_fan_07" 
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full h-12 px-4 rounded-md bg-muted/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body" 
+                  className="w-full h-16 px-6 rounded-2xl bg-white border-2 border-slate-100 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0B2A96] focus:ring-4 focus:ring-[#0B2A96]/10 transition-all font-medium text-lg shadow-sm" 
                 />
-              </div>
+              </motion.div>
 
-              <div className="space-y-2 flex flex-col">
-                <label htmlFor="favoritePlayer" className="font-heading text-foreground text-sm">Favorite Player</label>
-                <input 
-                  id="favoritePlayer" 
-                  placeholder="e.g. Virat Kohli" 
-                  value={favoritePlayer}
-                  onChange={(e) => setFavoritePlayer(e.target.value)}
-                  className="w-full h-12 px-4 rounded-md bg-muted/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body" 
-                />
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-3 flex flex-col"
+              >
+                <label htmlFor="favoritePlayer" className="font-semibold text-slate-700 text-sm uppercase tracking-wider flex items-center gap-2">
+                  <Star className="w-4 h-4 text-[#0B2A96]" />
+                  Favorite Player
+                </label>
+                {/* The Autocomplete component usually has its own styling, so we wrap it beautifully */}
+                <div className="relative rounded-2xl bg-white border-2 border-slate-100 shadow-sm focus-within:border-[#0B2A96] focus-within:ring-4 focus-within:ring-[#0B2A96]/10 transition-all">
+                  <div className="h-16 flex items-center w-full px-2">
+                    <PlayerAutocomplete 
+                      label=""
+                      placeholder="Search for a player..." 
+                      value={favoritePlayer}
+                      onChange={(val) => setFavoritePlayer(val)}
+                    />
+                  </div>
+                </div>
+              </motion.div>
             </div>
             
-            <div className="space-y-2 flex flex-col">
-              <label htmlFor="team" className="font-heading text-foreground text-sm">Favorite IPL Team</label>
-              <div className="relative">
-                <select 
-                  id="team"
-                  value={team} 
-                  onChange={(e) => setTeam(e.target.value)}
-                  className="appearance-none w-full h-12 px-4 rounded-md bg-muted/50 border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body cursor-pointer"
-                >
-                  <option value="" disabled>Select your team</option>
-                  {IPL_TEAMS.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="space-y-4 pt-6"
+            >
+              <label className="font-semibold text-slate-700 text-sm uppercase tracking-wider flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-[#0B2A96]" />
+                  <span>Favorite IPL Team</span>
+                </div>
+                {team && <span className="text-xs bg-[#0B2A96]/10 text-[#0B2A96] px-3 py-1 rounded-full font-semibold">{team}</span>}
+              </label>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-h-[400px] overflow-y-auto p-4 border-2 border-slate-100 rounded-3xl bg-slate-50/50 shadow-inner custom-scrollbar">
+                {teamsDb.length > 0 ? teamsDb.map((t, idx) => {
+                  const isSelected = team === t.name;
+                  return (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5 + (idx * 0.05) }}
+                      key={t.id} 
+                      onClick={() => setTeam(t.name)}
+                      className={`relative cursor-pointer rounded-2xl flex flex-col items-center justify-center p-4 transition-all duration-300 border-2 gap-3 min-h-[140px] ${
+                        isSelected 
+                          ? "border-[#0B2A96] bg-white shadow-lg shadow-[#0B2A96]/20 scale-[1.02] z-10" 
+                          : "border-transparent bg-white hover:border-[#0B2A96]/30 hover:shadow-md hover:-translate-y-1"
+                      }`}
+                    >
+                      {t.image_url ? (
+                        <div className="relative w-16 h-16 shrink-0">
+                          <img src={t.image_url} alt={t.name} className="absolute inset-0 w-full h-full object-contain drop-shadow-sm" />
+                        </div>
+                      ) : (
+                        <div className="w-16 h-16 shrink-0 flex items-center justify-center bg-slate-100 rounded-full">
+                          <span className="text-sm font-semibold text-slate-800">{t.short_name}</span>
+                        </div>
+                      )}
+                      
+                      <span className="text-xs font-semibold text-slate-700 text-center leading-tight line-clamp-2">
+                        {t.name}
+                      </span>
+                      
+                      {isSelected && (
+                        <motion.div 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute -top-3 -right-3 bg-[#0B2A96] text-white rounded-full p-1 shadow-md border-2 border-white"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  );
+                }) : (
+                  <div className="col-span-full flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0B2A96]"></div>
+                  </div>
+                )}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="space-y-3 pt-2">
-              <label className="font-heading text-foreground text-sm">Cricket Experience Level</label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="space-y-4 pt-6"
+            >
+              <label className="font-semibold text-slate-700 text-sm uppercase tracking-wider flex items-center gap-2">
+                <Trophy className="w-4 h-4 text-[#0B2A96]" />
+                Cricket Experience Level
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {EXPERIENCE_LEVELS.map((level) => {
                   const Icon = level.icon;
                   const isSelected = experience === level.value;
@@ -176,33 +241,55 @@ export default function OnboardingPage() {
                       key={level.value}
                       type="button"
                       onClick={() => setExperience(level.value)}
-                      className={`flex flex-col items-center justify-center p-4 rounded-md border-2 transition-all duration-200 ${
+                      className={`relative flex flex-col items-center justify-center p-6 rounded-3xl border-2 transition-all duration-300 overflow-hidden group ${
                         isSelected 
-                          ? "border-primary bg-primary/5 text-primary" 
-                          : "border-border bg-card hover:border-primary/30 text-muted-foreground hover:bg-muted/50"
+                          ? "border-transparent text-white shadow-xl shadow-[#0B2A96]/20 scale-[1.02]" 
+                          : "border-slate-100 bg-white hover:border-[#0B2A96]/30 text-slate-500 hover:shadow-md hover:-translate-y-1"
                       }`}
                     >
-                      <Icon className={`w-6 h-6 mb-2 ${isSelected ? "text-primary" : "opacity-70"}`} />
-                      <span className="text-caption font-bold text-center leading-tight">
+                      {isSelected && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#0B2A96] to-[#1a3db5] -z-10"></div>
+                      )}
+                      
+                      <Icon className={`w-8 h-8 mb-3 transition-transform duration-300 group-hover:scale-110 ${isSelected ? "text-white drop-shadow-md" : "text-slate-400"}`} />
+                      <span className={`text-base font-semibold text-center leading-tight ${isSelected ? "text-white" : "text-slate-800"}`}>
                         {level.label.split(' (')[0]}
                       </span>
-                      <span className="text-[10px] text-center opacity-70 mt-1">
+                      <span className={`text-xs text-center mt-2 font-medium ${isSelected ? "text-white/80" : "text-slate-400"}`}>
                         ({level.label.split('(')[1]}
                       </span>
                     </button>
                   );
                 })}
               </div>
-            </div>
+            </motion.div>
             
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full h-12 bg-primary text-primary-foreground text-lg rounded-md mt-8 font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 }}
+              className="pt-8"
             >
-              {loading ? "Saving Profile..." : "Enter The Arena"}
-            </button>
-          </form>
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="group relative w-full h-16 bg-[#0B2A96] text-white text-xl rounded-2xl font-semibold hover:bg-[#081e6e] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl shadow-[#0B2A96]/30 hover:shadow-[#0B2A96]/50 hover:-translate-y-1 overflow-hidden"
+              >
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                <div className="flex items-center justify-center gap-3">
+                  {loading ? (
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-b-transparent"></div>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 text-blue-200" />
+                      <span>Enter The Arena</span>
+                      <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </div>
+              </button>
+            </motion.div>
+          </motion.form>
         </div>
       </div>
     </div>

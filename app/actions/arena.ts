@@ -90,11 +90,11 @@ export async function createOrJoinMatch(
       .single();
     
     if (error) return { error: error.message };
-    return { match: newMatch, isHost: true };
+    return { match: newMatch, isHost: true, serverTime: new Date().toISOString() };
   } else {
     // Join existing room
     if (existingMatch.host_id === dbUser.id) {
-      return { match: existingMatch, isHost: true };
+      return { match: existingMatch, isHost: true, serverTime: new Date().toISOString() };
     }
     
     if (existingMatch.guest_id && existingMatch.guest_id !== dbUser.id) {
@@ -111,10 +111,10 @@ export async function createOrJoinMatch(
         .single();
         
       if (error) return { error: error.message };
-      return { match: updatedMatch, isHost: false };
+      return { match: updatedMatch, isHost: false, serverTime: new Date().toISOString() };
     }
 
-    return { match: existingMatch, isHost: false };
+    return { match: existingMatch, isHost: false, serverTime: new Date().toISOString() };
   }
 }
 
@@ -122,7 +122,7 @@ export async function updateMatchState(matchId: string, updates: any) {
   const supabase = getSupabase();
   if (!supabase) return;
   const { data } = await supabase.from('arena_matches').update(updates).eq('id', matchId).select().single();
-  return data;
+  return { match: data, serverTime: new Date().toISOString() };
 }
 
 export async function advanceArenaState(matchId: string, newState: string, extraPayload: any = {}) {
@@ -137,41 +137,50 @@ export async function advanceArenaState(matchId: string, newState: string, extra
   }
 
   const { data } = await supabase.from('arena_matches').update(updates).eq('id', matchId).select().single();
-  return data;
+  return { match: data, serverTime: new Date().toISOString() };
 }
 
 export async function generateNextArenaRound(matchId: string) {
-  const supabase = getSupabase();
-  if (!supabase) return { error: "DB not configured" };
+  try {
+    const supabase = getSupabase();
+    if (!supabase) return { error: "DB not configured" };
 
-  const { data: match } = await supabase.from('arena_matches').select('*').eq('id', matchId).single();
-  if (!match) return { error: "Match not found" };
+    const { data: match } = await supabase.from('arena_matches').select('*').eq('id', matchId).single();
+    if (!match) return { error: "Match not found" };
 
-  const format = match.game_format || 'mixed';
-  const difficulty = match.difficulty || 'medium';
-  const historyTypes = match.match_history?.map((h: any) => h.type) || [];
-  
-  const round = await ArenaQuestionEngine.generateRoundForFormat(format, difficulty, historyTypes);
+    const format = match.game_format || 'mixed';
+    const difficulty = match.difficulty || 'medium';
+    const historyTypes = match.match_history?.map((h: any) => h.type) || [];
+    
+    const round = await ArenaQuestionEngine.generateRoundForFormat(format, difficulty, historyTypes);
 
-  const updates = {
-    current_state: "question",
-    current_question: round.questionData,
-    current_round_data: round.answerData,
-    round_type: round.type,
-    host_answer: null,
-    guest_answer: null,
-    round_number: (match.round_number || 0) + 1
-  };
+    const timeLimit = match.time_limit !== undefined ? match.time_limit : 30;
+    const expiresAt = new Date(Date.now() + timeLimit * 1000).toISOString();
 
-  const { data: updatedMatch, error } = await supabase
-    .from('arena_matches')
-    .update(updates)
-    .eq('id', matchId)
-    .select()
-    .single();
+    const updates = {
+      current_state: "question",
+      current_question: round.questionData,
+      current_round_data: round.answerData,
+      round_type: round.type,
+      host_answer: null,
+      guest_answer: null,
+      round_number: (match.round_number || 0) + 1,
+      round_expires_at: expiresAt
+    };
 
-  if (error) return { error: error.message };
-  return { match: updatedMatch, round };
+    const { data: updatedMatch, error } = await supabase
+      .from('arena_matches')
+      .update(updates)
+      .eq('id', matchId)
+      .select()
+      .single();
+
+    if (error) return { error: error.message };
+    return { match: updatedMatch, round, serverTime: new Date().toISOString() };
+  } catch (err: any) {
+    console.error("Generate round error:", err);
+    return { error: err.message || "Failed to generate round due to server error." };
+  }
 }
 
 export async function saveMatchHistory(matchId: string, roundResult: any) {
@@ -216,7 +225,7 @@ export async function sendArenaChatMessage(matchId: string, text: string) {
         sender_id,
         message_text,
         created_at,
-        sender:sender_id (username)
+        sender:sender_id (username, favorite_team)
       `)
       .single();
 
@@ -241,7 +250,7 @@ export async function getArenaChatHistory(matchId: string) {
         sender_id,
         message_text,
         created_at,
-        sender:sender_id (username)
+        sender:sender_id (username, favorite_team)
       `)
       .eq('match_id', matchId)
       .order('created_at', { ascending: true });
@@ -297,6 +306,68 @@ export async function getMatchHistory() {
   } catch (err: any) {
     console.error("Get match history error:", err);
     return { success: false, error: err.message };
+  }
+}
+
+export async function requestRematch(matchId: string, isHost: boolean) {
+  try {
+    const supabase = getSupabase();
+    if (!supabase) return { error: "DB not configured" };
+
+    const { data: match, error: fetchErr } = await supabase
+      .from('arena_matches')
+      .select('*')
+      .eq('id', matchId)
+      .single();
+
+    if (fetchErr || !match) return { error: "Match not found" };
+
+    const updates: any = {};
+    if (isHost) {
+      updates.host_answer = "REMATCH";
+    } else {
+      updates.guest_answer = "REMATCH";
+    }
+
+    const { data: updatedMatch, error: updateErr } = await supabase
+      .from('arena_matches')
+      .update(updates)
+      .eq('id', matchId)
+      .select()
+      .single();
+
+    if (updateErr || !updatedMatch) return { error: "Failed to update rematch status" };
+
+    if (updatedMatch.host_answer === "REMATCH" && updatedMatch.guest_answer === "REMATCH") {
+      const resetUpdates = {
+        current_state: "ready",
+        host_score: 0,
+        guest_score: 0,
+        round_number: 1,
+        match_history: [],
+        host_answer: null,
+        guest_answer: null,
+        current_question: null,
+        current_round_data: null,
+        round_type: null,
+        round_expires_at: null
+      };
+
+      const { data: finalMatch, error: resetErr } = await supabase
+        .from('arena_matches')
+        .update(resetUpdates)
+        .eq('id', matchId)
+        .select()
+        .single();
+
+      if (resetErr) return { error: resetErr.message };
+      return { match: finalMatch, reset: true, serverTime: new Date().toISOString() };
+    }
+
+    return { match: updatedMatch, reset: false, serverTime: new Date().toISOString() };
+  } catch (err: any) {
+    console.error("requestRematch error:", err);
+    return { error: err.message || "Failed to request rematch" };
   }
 }
 
