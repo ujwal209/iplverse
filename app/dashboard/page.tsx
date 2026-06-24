@@ -526,7 +526,7 @@ export default function DashboardGamesPage() {
                 case "guess-who": imgSrc = "/guess_the_player.jpeg"; break;
                 case "stat-smash": imgSrc = "/stat_smash.png"; break;
                 case "guess-match": imgSrc = "/guess_match.png"; break;
-                case "career-path": imgSrc = "/career_journey.jpeg"; break;
+                case "career-path": imgSrc = "/career-journey.jpeg"; break;
                 case "connections": imgSrc = "/connections.png"; break;
                 case "arena-quiz": imgSrc = "/arena_quiz.png"; break;
                 default: imgSrc = "/guess_the_player.jpeg";

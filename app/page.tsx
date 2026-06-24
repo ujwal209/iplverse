@@ -19,7 +19,13 @@ import {
   ArrowRight,
   Swords,
   ChevronLeft,
-  X
+  X,
+  Shield,
+  Flag,
+  BarChart3,
+  Users,
+  History,
+  User
 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import { GlobalNav } from "@/components/global-nav";
@@ -208,44 +214,54 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {games.map(game => {
               let imgSrc = "";
+              let themeColor = "";
+              let gradientFrom = "";
               switch (game.id) {
-                case "guess-who": imgSrc = "/guess_the_player.jpeg"; break;
-                case "stat-smash": imgSrc = "/stat_smash.png"; break;
-                case "guess-match": imgSrc = "/guess_match.png"; break;
-                case "career-path": imgSrc = "/career_journey.jpeg"; break;
-                case "connections": imgSrc = "/connections.png"; break;
-                case "arena-quiz": imgSrc = "/arena_quiz.png"; break;
-                case "battle-arena": imgSrc = "/1v1_logo.png"; break;
-                default: imgSrc = "/guess_the_player.jpeg";
+                case "guess-who": imgSrc = "/guess_the_player.jpeg"; themeColor = "text-emerald-400"; gradientFrom = "from-emerald-950/60"; break;
+                case "stat-smash": imgSrc = "/stat_smash.png"; themeColor = "text-rose-400"; gradientFrom = "from-rose-950/60"; break;
+                case "guess-match": imgSrc = "/guess_match.png"; themeColor = "text-sky-400"; gradientFrom = "from-sky-950/60"; break;
+                case "career-path": imgSrc = "/career-journey.jpeg"; themeColor = "text-amber-400"; gradientFrom = "from-amber-950/60"; break;
+                case "connections": imgSrc = "/connections.png"; themeColor = "text-purple-400"; gradientFrom = "from-purple-950/60"; break;
+                case "arena-quiz": imgSrc = "/arena_quiz.png"; themeColor = "text-cyan-400"; gradientFrom = "from-cyan-950/60"; break;
+                case "battle-arena": imgSrc = "/1v1_logo.png"; themeColor = "text-orange-400"; gradientFrom = "from-orange-950/60"; break;
+                default: imgSrc = "/guess_the_player.jpeg"; themeColor = "text-blue-400"; gradientFrom = "from-slate-950/60";
               }
 
               return (
                 <div 
                   key={game.id}
                   onClick={() => setSelectedGame(game.id)}
-                  className="group relative h-[420px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-[#0B2A96]/30 transition-all duration-500 hover:-translate-y-2 border border-[#0B2A96]/10 bg-slate-950"
+                  className="group relative h-[500px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-[#0B2A96]/30 transition-all duration-500 hover:-translate-y-2 border border-[#0B2A96]/10 bg-slate-950"
                 >
-                  {/* Blurred Background Layer */}
-                  <img src={imgSrc} className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 transition-transform duration-700 group-hover:scale-110" />
+                  {/* Blurred Background Layer (Fills empty space beautifully) */}
+                  <img src={imgSrc} className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 transition-transform duration-700 group-hover:scale-110 z-0" />
                   
-                  {/* Sharp Contain Layer */}
-                  <div className="absolute inset-0 p-2 pb-28 flex items-center justify-center pointer-events-none z-0">
-                    <img src={imgSrc} className="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-transform duration-700 group-hover:scale-[1.02]" />
+                  {/* Sharp Contain Layer (100% visible, zero slicing) */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                    <img src={imgSrc} className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-105" />
                   </div>
                   
-                  {/* Stronger Gradient Overlay for Text Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pointer-events-none transition-all duration-500 group-hover:bg-slate-950/40" />
+                  {/* Thematic color tint for distinct identity */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${gradientFrom} to-transparent opacity-80 pointer-events-none z-0 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-100`} />
                   
-                  <div className="absolute inset-0 p-8 flex flex-col justify-end pointer-events-none z-10">
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {game.isNew && <span className="bg-emerald-500 text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg">NEW</span>}
-                      <span className="bg-[#0B2A96] text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg border border-white/10">{game.difficulty}</span>
+                  {/* Horizontal text protection gradient (limited width to preserve artwork on right) */}
+                  <div className="absolute inset-y-0 left-0 w-[80%] bg-gradient-to-r from-slate-950/95 via-slate-950/50 to-transparent pointer-events-none z-0" />
+                  
+                  {/* Bottom footer protection gradient */}
+                  <div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent pointer-events-none z-0" />
+                  
+                  <div className="absolute inset-0 p-8 sm:p-10 flex flex-col justify-end pointer-events-none z-10">
+                    <div className="flex flex-col items-start max-w-[45%] mb-10">
+                      <div className="flex flex-wrap gap-2 mb-5">
+                        {game.isNew && <span className="bg-emerald-500 text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg">NEW</span>}
+                        <span className="bg-[#0B2A96] text-white text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg border border-white/10">{game.difficulty}</span>
+                      </div>
+                      
+                      <h3 className={`text-4xl sm:text-5xl font-black tracking-tight mb-4 text-white drop-shadow-xl transition-colors ${themeColor.replace('text-', 'group-hover:text-')}`}>{game.title}</h3>
+                      <p className="text-base font-medium text-slate-300/85 line-clamp-4 leading-relaxed drop-shadow-md">{game.description}</p>
                     </div>
                     
-                    <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3 group-hover:text-blue-200 transition-colors">{game.title}</h3>
-                    <p className="text-sm font-medium text-slate-300 line-clamp-2 leading-relaxed mb-8 max-w-md">{game.description}</p>
-                    
-                    <div className="flex items-center justify-between mt-auto">
+                    <div className="flex items-center justify-between w-full mt-auto">
                       <div className="flex gap-3">
                         <span className="flex items-center gap-2 text-xs font-bold text-white/90 bg-white/10 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
                           <Clock className="w-3.5 h-3.5" /> {game.time}
@@ -264,6 +280,66 @@ export default function Home() {
             })}
           </div>
         </section>
+
+        {/* SECTION 3: Stats Warehouse & Analytics Hub */}
+        <section className="w-full bg-muted/30 border-y border-border/50 py-20 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+              <div>
+                <div className="flex items-center gap-2 text-primary font-bold tracking-widest uppercase text-sm mb-2">
+                  <Network className="h-5 w-5" /> Analytics Hub
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-heading text-foreground">Stat Warehouse</h2>
+                <p className="text-muted-foreground mt-3 font-medium max-w-2xl">Dive deep into historical IPL data. Compare players, analyze venues, and scout teams with our comprehensive intelligence center.</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { name: "Player Search", icon: Search, href: "/dashboard/analytics/players", desc: "Find detailed stats for any IPL player." },
+                { name: "Head to Head", icon: Swords, href: "/dashboard/analytics/matchups/h2h", desc: "Compare two players directly." },
+                { name: "Player vs Team", icon: Shield, href: "/dashboard/analytics/matchups/pvt", desc: "Analyze player performance against specific teams." },
+                { name: "Venues", icon: MapPin, href: "/dashboard/analytics/venues", desc: "Stadium statistics and historical data." },
+                { name: "Teams", icon: Flag, href: "/dashboard/analytics/teams", desc: "Franchise records and team histories." },
+                { name: "Leaderboards", icon: BarChart3, href: "/dashboard/analytics/leaderboards", desc: "All-time top run scorers, wicket takers, and more." }
+              ].map((item, i) => (
+                <Link href={item.href} key={i} className="group bg-card border border-border hover:border-primary/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg flex flex-col">
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <item.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold font-heading mb-2 text-foreground group-hover:text-primary transition-colors">{item.name}</h3>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 4: Social Section */}
+        <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="bg-card border border-border rounded-3xl p-8 sm:p-12 overflow-hidden relative shadow-xl">
+            <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+              <Users className="w-64 h-64" />
+            </div>
+            <div className="relative z-10 max-w-2xl">
+              <h2 className="text-4xl font-black tracking-tight font-heading text-foreground mb-4">Join the Community</h2>
+              <p className="text-lg text-muted-foreground mb-8">Connect with other cricket fanatics, review your match history, and update your profile in the social hub.</p>
+              
+              <div className="flex flex-wrap gap-4">
+                <Link href="/dashboard/community" className="px-6 py-3 bg-foreground text-background font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center gap-2">
+                  <Users className="h-5 w-5" /> View Community
+                </Link>
+                <Link href="/dashboard/arena/history" className="px-6 py-3 bg-muted text-foreground border border-border font-bold rounded-xl hover:bg-muted/80 transition-colors flex items-center gap-2">
+                  <History className="h-5 w-5" /> Match History
+                </Link>
+                <Link href="/dashboard/profile" className="px-6 py-3 bg-muted text-foreground border border-border font-bold rounded-xl hover:bg-muted/80 transition-colors flex items-center gap-2">
+                  <User className="h-5 w-5" /> My Profile
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* Game Detail Modal */}
