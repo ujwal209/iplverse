@@ -28,7 +28,9 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(newUrl);
   }
 
-  if (isBaseProtectedRoute(req) && !isGameRoute(req)) {
+  const isAnalytics = pathname.startsWith('/dashboard/analytics') || pathname.startsWith('/analytics');
+
+  if (isBaseProtectedRoute(req) && !isGameRoute(req) && !isAnalytics) {
     const authObj = await auth();
     if (!authObj.userId) {
       return authObj.redirectToSignIn();

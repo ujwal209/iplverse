@@ -39,8 +39,8 @@ export default async function DashboardLayout({
     .eq('clerk_id', user.id)
     .maybeSingle();
 
-  // Redirect to onboarding if they haven't completed it
-  if (!profile || error) {
+  // Redirect to onboarding if they haven't completed it (skip for Guest users viewing public dashboard routes)
+  if ((!profile || error) && user.id !== "mock_user_id") {
     redirect("/onboarding");
   }
 
