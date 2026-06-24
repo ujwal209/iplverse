@@ -291,10 +291,10 @@ export default function ConnectionsGame() {
   const unsolvedTiles = tiles.filter(t => !solvedCategoryIds.includes(t.categoryId));
   
   return (
-    <div className="flex flex-col h-[calc(100vh-5rem)] lg:h-screen overflow-hidden bg-background text-foreground font-sans selection:bg-transparent">
+    <div className="flex flex-col min-h-[85vh] bg-background text-foreground font-sans selection:bg-transparent pb-10">
       
       {/* Header */}
-      <header className="w-full flex flex-col items-center py-2 sm:py-4 border-b border-border/50 bg-background/95 backdrop-blur shrink-0">
+      <header className="w-full flex flex-col items-center py-4 border-b border-border/50 bg-background/95 backdrop-blur shrink-0">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2 font-heading">Connections</h1>
         <div className="flex items-center gap-2">
           <div className="flex bg-muted p-1 rounded-md">
@@ -315,17 +315,17 @@ export default function ConnectionsGame() {
       </header>
 
       {!puzzleData ? (
-        <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 p-4">
+        <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 p-4 mt-12">
           <AlertCircle className="h-12 w-12 text-muted-foreground" />
           <h2 className="text-2xl font-bold">Puzzle Not Available</h2>
           <p className="text-muted-foreground">Come back tomorrow for a new puzzle!</p>
         </div>
       ) : (
-        <main className="flex-1 flex flex-col items-center w-full max-w-2xl mx-auto px-4 py-2 overflow-hidden">
+        <main className="flex-1 flex flex-col items-center w-full max-w-2xl mx-auto px-4 py-4">
           
-          <p className="text-sm font-medium text-foreground mb-2 sm:mb-4">Create four groups of four!</p>
+          <p className="text-sm font-medium text-foreground mb-4">Create four groups of four!</p>
 
-          <div className="w-full relative flex-1 flex flex-col justify-center min-h-0">
+          <div className="w-full relative flex-1 flex flex-col gap-6 py-2">
             {/* Framer Motion Toast Container */}
             <AnimatePresence>
               {toastMessage && (
@@ -353,7 +353,7 @@ export default function ConnectionsGame() {
                       animate={{ scale: 1, opacity: 1, y: 0 }}
                       transition={springConfig}
                       key={cat.id} 
-                      className={`w-full p-4 sm:p-5 rounded-[6px] flex flex-col items-center justify-center text-center ${DIFFICULTY_COLORS[cat.difficulty]}`}
+                      className={`w-full p-4 sm:p-5 rounded-[8px] flex flex-col items-center justify-center text-center shadow-sm ${DIFFICULTY_COLORS[cat.difficulty]}`}
                     >
                       <span className="font-bold uppercase tracking-[0.2em] text-[13px] sm:text-[15px] mb-1">{cat.title}</span>
                       <span className="font-medium text-[12px] sm:text-[13px]">{cat.items.join(", ")}</span>
@@ -383,14 +383,14 @@ export default function ConnectionsGame() {
                               scale: bounceConfig,
                               layout: springConfig,
                               y: isJumping 
-                                ? { duration: 0.5, delay: selectedIndex * 0.1, times: [0, 0.5, 1], ease: "easeInOut" } 
-                                : (isShaking ? { duration: 0.4 } : {})
+                                  ? { duration: 0.5, delay: selectedIndex * 0.1, times: [0, 0.5, 1], ease: "easeInOut" } 
+                                  : (isShaking ? { duration: 0.4 } : {})
                             }}
                             key={tile.id}
                             onClick={() => handleTileClick(tile.id)}
                             className={`
-                              aspect-[4/3] sm:aspect-[2.5/1] rounded-[6px] flex items-center justify-center text-center p-1 sm:p-2
-                              font-bold uppercase text-[10px] sm:text-xs select-none break-words leading-tight shadow-sm transition-all duration-200
+                              min-h-[64px] sm:min-h-[76px] rounded-[8px] flex items-center justify-center text-center p-2
+                              font-bold uppercase text-[9px] sm:text-xs select-none break-words leading-tight shadow-sm transition-all duration-200
                               ${isSelected 
                                 ? 'bg-primary text-primary-foreground' 
                                 : 'bg-card text-foreground border border-border hover:bg-muted'}
@@ -407,7 +407,7 @@ export default function ConnectionsGame() {
             </motion.div>
           </div>
 
-          <div className="flex flex-col items-center w-full mt-auto pt-4 gap-3 sm:gap-4 shrink-0 pb-4 sm:pb-8">
+          <div className="flex flex-col items-center w-full mt-6 gap-4 shrink-0">
             {!gameOver && (
               <div className="flex items-center gap-3 h-6">
                 <span className="text-sm font-semibold text-foreground">Mistakes remaining:</span>
@@ -432,20 +432,20 @@ export default function ConnectionsGame() {
             {/* Bottom Status Bar */}
             <div className="w-full">
               {!gameOver ? (
-                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full max-w-[90%] mx-auto bg-background/90 backdrop-blur py-2 px-2 rounded-full">
-                  <div className="flex items-center justify-center font-mono font-bold text-lg bg-muted px-4 py-3 rounded-full mr-1">
+                <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full max-w-lg mx-auto py-2">
+                  <div className="flex items-center justify-center font-mono font-bold text-base bg-muted px-4 py-2.5 rounded-full mr-1 shadow-sm">
                     {formatTime(timeTaken)}
                   </div>
                   <button 
                     onClick={handleShuffle} 
-                    className="px-5 py-3 sm:px-6 rounded-full border border-foreground/20 font-semibold text-sm hover:bg-muted transition-colors"
+                    className="px-5 py-2.5 sm:px-6 rounded-full border border-border font-semibold text-sm hover:bg-muted bg-card text-foreground transition-colors shadow-sm"
                   >
                     Shuffle
                   </button>
                   <button 
                     onClick={handleDeselect} 
                     disabled={selectedIds.length === 0} 
-                    className="px-5 py-3 sm:px-6 rounded-full border border-foreground/20 font-semibold text-sm hover:bg-muted transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                    className="px-5 py-2.5 sm:px-6 rounded-full border border-border font-semibold text-sm hover:bg-muted bg-card text-foreground transition-colors disabled:opacity-35 disabled:bg-transparent shadow-sm"
                   >
                     Deselect All
                   </button>
@@ -456,7 +456,7 @@ export default function ConnectionsGame() {
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     onClick={handleSubmit} 
                     disabled={selectedIds.length !== 4 || animatingSubmit} 
-                    className="px-6 py-3 sm:px-8 rounded-full font-semibold text-sm transition-colors disabled:opacity-30 disabled:bg-muted disabled:text-muted-foreground disabled:border-transparent bg-foreground text-background hover:bg-foreground/90 border-foreground border"
+                    className="px-6 py-2.5 sm:px-8 rounded-full font-semibold text-sm transition-colors disabled:opacity-35 disabled:bg-muted disabled:text-muted-foreground bg-primary text-primary-foreground hover:opacity-90 border border-primary/20 shadow-sm"
                   >
                     Submit
                   </motion.button>
@@ -466,7 +466,7 @@ export default function ConnectionsGame() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="flex flex-col items-center gap-6 w-full mt-4 bg-card border border-border p-8 rounded-2xl shadow-xl"
+                  className="flex flex-col items-center gap-6 w-full mt-4 bg-card border border-border p-6 sm:p-8 rounded-2xl shadow-md"
                 >
                   
                   {won ? (

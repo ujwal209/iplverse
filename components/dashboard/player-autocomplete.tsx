@@ -5,13 +5,15 @@ import { Search } from "lucide-react";
 import { searchPlayersFromDB } from "@/app/actions/games";
  
 interface PlayerAutocompleteProps {
-  label: string;
-  placeholder: string;
-  value: string;
-  onChange: (val: string) => void;
+  label?: string;
+  placeholder?: string;
+  value?: string;
+  onChange?: (val: string) => void;
+  onSelect?: (player: any) => void;
+  disabled?: boolean;
 }
  
-export function PlayerAutocomplete({ label, placeholder, value, onChange }: PlayerAutocompleteProps) {
+export function PlayerAutocomplete({ label, placeholder, value, onChange, onSelect, disabled }: PlayerAutocompleteProps) {
   // If we receive an ID as value initially, we might want to fetch its name. 
   // For simplicity, we just keep query as text typed, and when selected, we set query to fullName.
   const [query, setQuery] = useState("");
@@ -61,26 +63,28 @@ export function PlayerAutocomplete({ label, placeholder, value, onChange }: Play
   const handleSelect = (player: any) => {
     setIsSelecting(true);
     setQuery(player.name);
-    onChange(player.name);
+    if (onChange) onChange(player.name);
+    if (onSelect) onSelect(player);
     setShowDropdown(false);
   };
  
   return (
     <div className="w-full relative" ref={dropdownRef}>
-      <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block">{label}</label>
+      {label && <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block">{label}</label>}
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <input 
           type="text"
           value={query} 
+          disabled={disabled}
           onChange={(e) => {
             setQuery(e.target.value);
             // If they clear the input, clear the parent value
-            if (e.target.value === "") onChange("");
+            if (e.target.value === "") onChange?.("");
           }}
-          onFocus={() => { if (results.length > 0) setShowDropdown(true); }}
+          onFocus={() => { if (results.length > 0 && !disabled) setShowDropdown(true); }}
           placeholder={placeholder} 
-          className="w-full pl-12 pr-4 h-16 inter-regular text-xl rounded-xl bg-background border border-border/60 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+          className="w-full pl-12 pr-4 h-16 inter-regular text-xl rounded-xl bg-background border border-border/60 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all disabled:opacity-60"
         />
       </div>
  

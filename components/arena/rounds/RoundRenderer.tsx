@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, XCircle, Info, Lightbulb, Calendar, Loader2, MapPin, ArrowUp, ArrowDown, Activity, TrendingUp, Zap, Award, Sparkles, Lock, Target } from "lucide-react";
+import { CheckCircle2, XCircle, Info, Lightbulb, Calendar, Loader2, MapPin, ArrowUp, ArrowDown, Activity, TrendingUp, Zap, Award, Sparkles, Lock, Target, Users } from "lucide-react";
 import { PlayerAutocomplete } from "@/components/dashboard/player-autocomplete";
 import { getPlayerCareer, getAdvancedBatting, getAdvancedBowling, fetchPlayerImage } from "@/app/actions/analytics";
 import { getAllTeams, getAllSearchableMatches } from "@/app/actions/games";
@@ -934,7 +934,7 @@ interface GuessRecord {
   centuries: number;
   isCorrect: boolean;
 }
-function ArenaGuessWhoRound({ questionData, onAnswer, disabled, myAnswer, correctAnswer, gameState }: RoundProps) {
+function ArenaGuessWhoRound({ roundType, questionData, onAnswer, disabled, myAnswer, correctAnswer, gameState }: RoundProps) {
   const isReveal = gameState === "answer_reveal" || gameState === "scoreboard";
   const targetId = isReveal ? (questionData?.answer || correctAnswer || questionData?.playerName) : (questionData?.playerName);
   
@@ -948,6 +948,19 @@ function ArenaGuessWhoRound({ questionData, onAnswer, disabled, myAnswer, correc
   const mysteryMilestones = questionData?.milestones;
   const mysteryImage = questionData?.playerImage;
   const mysteryTeamsCount = questionData?.teamsCount || 1;
+  const mysteryPartnership = questionData?.partnership;
+
+  const maskPartnerName = (name: string) => {
+    if (!name) return "";
+    const parts = name.split(" ");
+    return parts.map((part, idx) => {
+      if (idx === 0) {
+        return part.charAt(0) + ".";
+      }
+      if (part.length <= 2) return part;
+      return part.substring(0, 1) + "*".repeat(part.length - 1);
+    }).join(" ");
+  };
 
   // Reveal clues progressively if not revealed
   useEffect(() => {
@@ -999,8 +1012,8 @@ function ArenaGuessWhoRound({ questionData, onAnswer, disabled, myAnswer, correc
   return (
     <div className="w-full mx-auto flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-300">
       <GameHeader 
-        title="Guess Who?"
-        subtitle="Identify the mystery player based on the unfolding clues and career blueprint."
+        title={roundType === "MYSTERY_PLAYER" ? "Mystery Player" : "Guess Who?"}
+        subtitle={roundType === "MYSTERY_PLAYER" ? "Identify the mystery player based on the unfolding clues and career stats." : "Identify the mystery player based on the unfolding clues and career blueprint."}
         backHref="/dashboard/arena"
         className="w-full max-w-6xl mb-4"
       />
@@ -1079,55 +1092,82 @@ function ArenaGuessWhoRound({ questionData, onAnswer, disabled, myAnswer, correc
 
           {/* Stats Panels */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Career Base Card */}
-            <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Target className="h-24 w-24 text-[#0B2A96]" />
+            {/* Batting Career Summary */}
+            <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm relative overflow-hidden group">
+               <div className="absolute top-0 right-0 p-5 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
+                <Target className="h-20 w-20 text-slate-800" />
               </div>
-              <h3 className="font-extrabold text-slate-800 text-lg mb-6 flex items-center gap-2">
-                <Activity className="h-5 w-5 text-[#0B2A96]" />
-                Career Base
+              <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-2 outfit-bold uppercase tracking-wider">
+                <Activity className="h-4.5 w-4.5 text-[#0B2A96]" />
+                Batting Career
               </h3>
-              <div className="grid grid-cols-2 gap-4 relative z-10">
+              <div className="grid grid-cols-3 gap-3 relative z-10">
                 <PremiumStatBox label="Matches" value={mysteryStats?.matches || "-"} highlight />
+                <PremiumStatBox label="Innings" value={mysteryStats?.innings_batted || "-"} />
                 <PremiumStatBox label="Total Runs" value={mysteryStats?.runs || "-"} />
-                <PremiumStatBox label="Total Wickets" value={mysteryStats?.wickets || "-"} />
-                <PremiumStatBox 
-                  label={(mysteryStats?.runs || 0) > (mysteryStats?.wickets || 0) * 15 ? "Highest Score" : "Best Bowling"} 
-                  value={(mysteryStats?.runs || 0) > (mysteryStats?.wickets || 0) * 15 ? (mysteryStats?.highest_score || "-") : (mysteryStats?.best_bowling_figures || "-")} 
-                />
+                <PremiumStatBox label="Average" value={mysteryStats?.batting_average || "-"} />
+                <PremiumStatBox label="Strike Rate" value={mysteryStats?.batting_strike_rate || mysteryBatting?.strike_rate || (mysteryBatting?.runs_per_ball ? (mysteryBatting.runs_per_ball * 105).toFixed(1) : "-")} />
+                <PremiumStatBox label="Highest Score" value={mysteryStats?.highest_score || mysteryMilestones?.highest_score || "-"} />
               </div>
             </div>
 
-            {/* Deep Profile Card */}
-            <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Zap className="h-24 w-24 text-[#0B2A96]" />
+            {/* Bowling Career Summary */}
+            <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm relative overflow-hidden group">
+               <div className="absolute top-0 right-0 p-5 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
+                <Zap className="h-20 w-20 text-slate-800" />
               </div>
-              <h3 className="font-extrabold text-slate-800 text-lg mb-6 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-[#0B2A96]" />
-                Deep Profile
+              <h3 className="text-sm font-black text-slate-800 mb-4 flex items-center gap-2 outfit-bold uppercase tracking-wider">
+                <TrendingUp className="h-4.5 w-4.5 text-[#0B2A96]" />
+                Bowling Career
               </h3>
-              
-              {(mysteryStats?.runs || 0) > (mysteryStats?.wickets || 0) * 15 ? (
-                <div className="grid grid-cols-2 gap-4 relative z-10">
-                  <PremiumStatBox 
-                    label="Strike Rate" 
-                    value={mysteryBatting?.strike_rate ? mysteryBatting.strike_rate.toFixed(1) : mysteryBatting?.runs_per_ball ? (mysteryBatting.runs_per_ball * 100).toFixed(1) : "-"} 
-                    highlight 
-                  />
-                  <PremiumStatBox label="Boundary %" value={mysteryBatting?.boundary_percentage ? `${mysteryBatting.boundary_percentage}%` : "-"} />
-                  <PremiumStatBox label="Dot Ball %" value={mysteryBatting?.dot_ball_percentage ? `${mysteryBatting.dot_ball_percentage}%` : "-"} />
-                  <PremiumStatBox label="Sixes" value={mysteryBatting?.sixes || mysteryMilestones?.sixes || "-"} />
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-4 relative z-10">
-                  <PremiumStatBox label="Economy" value={mysteryBowling?.economy || "-"} highlight />
-                  <PremiumStatBox label="Bowling SR" value={mysteryBowling?.bowling_strike_rate || "-"} />
-                  <PremiumStatBox label="Bowling Avg" value={mysteryBowling?.bowling_average || "-"} />
-                  <PremiumStatBox label="Dot Ball %" value={mysteryBowling?.dot_ball_percentage ? `${mysteryBowling.dot_ball_percentage}%` : "-"} />
-                </div>
-              )}
+              <div className="grid grid-cols-3 gap-3 relative z-10">
+                <PremiumStatBox label="Wickets" value={mysteryStats?.wickets || "-"} highlight />
+                <PremiumStatBox label="Innings" value={mysteryStats?.innings_bowled || "-"} />
+                <PremiumStatBox label="Economy" value={mysteryStats?.economy || mysteryBowling?.economy || "-"} />
+                <PremiumStatBox label="Avg" value={mysteryStats?.bowling_average || mysteryBowling?.bowling_average || "-"} />
+                <PremiumStatBox label="Strike Rate" value={mysteryStats?.bowling_strike_rate || mysteryBowling?.bowling_strike_rate || "-"} />
+                <PremiumStatBox label="Best Bowling" value={mysteryStats?.best_bowling_figures || "-"} />
+              </div>
+            </div>
+          </div>
+
+          {/* Top Partnership Card (Gameplay clue) */}
+          {mysteryPartnership && (
+            <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm relative overflow-hidden group animate-in fade-in slide-in-from-bottom-4">
+              <div className="absolute top-0 right-0 p-5 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
+                <Users className="h-20 w-20 text-slate-800" />
+              </div>
+              <h3 className="text-sm font-black text-slate-850 mb-4 flex items-center gap-2 outfit-bold uppercase tracking-wider">
+                <Users className="h-4.5 w-4.5 text-[#0B2A96]" />
+                Top Franchise Partnership
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10">
+                <PremiumStatBox 
+                  label="Partner" 
+                  value={isReveal ? mysteryPartnership.partner_name : maskPartnerName(mysteryPartnership.partner_name)} 
+                  highlight 
+                />
+                <PremiumStatBox label="Partnership Runs" value={mysteryPartnership.runs || "-"} />
+                <PremiumStatBox label="Highest Stand" value={mysteryPartnership.highest || "-"} />
+                <PremiumStatBox label="Avg Partnership" value={mysteryPartnership.avg || "-"} />
+              </div>
+            </div>
+          )}
+
+          {/* Combined Advanced Metrics (Deep Profile) */}
+          <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm relative overflow-hidden group">
+             <div className="absolute top-0 right-0 p-5 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
+              <TrendingUp className="h-20 w-20 text-slate-800" />
+            </div>
+            <h3 className="text-sm font-black text-slate-850 mb-4 flex items-center gap-2 outfit-bold uppercase tracking-wider">
+              <TrendingUp className="h-4.5 w-4.5 text-[#0B2A96]" />
+              Advanced Metrics (Deep Profile)
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10">
+              <PremiumStatBox label="Batting Dot %" value={mysteryBatting?.dot_ball_percentage ? `${mysteryBatting.dot_ball_percentage}%` : "-"} />
+              <PremiumStatBox label="Boundary %" value={mysteryBatting?.boundary_percentage ? `${mysteryBatting.boundary_percentage}%` : "-"} />
+              <PremiumStatBox label="Bowling Dot %" value={mysteryBowling?.dot_ball_percentage ? `${mysteryBowling.dot_ball_percentage}%` : "-"} />
+              <PremiumStatBox label="Bowling Econ" value={mysteryBowling?.economy || "-"} />
             </div>
           </div>
 
@@ -1246,13 +1286,9 @@ function ArenaGuessWhoRound({ questionData, onAnswer, disabled, myAnswer, correc
 
 function PremiumStatBox({ label, value, highlight = false }: { label: string, value: string | number, highlight?: boolean }) {
   return (
-    <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col justify-center transition-all duration-300 hover:-translate-y-0.5 ${
-      highlight 
-        ? 'bg-[#0B2A96] text-white border-[#0B2A96] shadow-[0_4px_15px_rgba(11,42,150,0.25)]' 
-        : 'bg-slate-50/50 border-slate-200/60 hover:border-[#0B2A96]/40 hover:bg-slate-50'
-    }`}>
-      <p className={`text-[10px] uppercase tracking-widest font-extrabold mb-1.5 truncate ${highlight ? 'text-white/85' : 'text-slate-400'}`}>{label}</p>
-      <p className="text-2xl font-black font-display">{value}</p>
+    <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col justify-center transition-all duration-300 hover:-translate-y-1 ${highlight ? 'bg-[#0B2A96] text-white border-[#0B2A96] shadow-lg' : 'bg-white border-slate-200/65 hover:border-[#0B2A96]/40 hover:bg-slate-50'}`}>
+      <p className={`text-[10px] sm:text-xs uppercase tracking-widest font-extrabold mb-1.5 leading-tight ${highlight ? 'text-white/80' : 'text-slate-400'}`}>{label}</p>
+      <p className={`text-lg sm:text-xl font-black ${highlight ? 'text-white' : 'text-slate-800'} outfit-bold truncate`}>{value}</p>
     </div>
   );
 }
@@ -1311,20 +1347,23 @@ function ArenaCareerPathRound({ questionData, onAnswer, disabled, myAnswer, corr
               
               const dbTeam = teamsDb.find(t => t.name.toLowerCase() === team.toLowerCase() || t.short_name.toLowerCase() === team.toLowerCase());
               return (
-                <div key={idx} className="p-4 rounded-2xl border border-slate-100 flex items-center justify-between bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className="shrink-0 h-12 w-12 rounded-full overflow-hidden border border-blue-200 bg-white flex items-center justify-center p-2">
-                      {dbTeam?.image_url ? (
-                        <img src={dbTeam.image_url} alt={team} className="object-contain w-full h-full" />
-                      ) : (
-                        <div className="font-bold text-xs text-blue-900">{team.substring(0,3).toUpperCase()}</div>
-                      )}
-                    </div>
-                    <p className="font-bold text-lg text-slate-800">{team}</p>
+                <div 
+                  key={idx} 
+                  className="p-4 sm:p-5 rounded-xl border border-primary/20 transition-all duration-500 flex items-center gap-4 bg-gradient-to-br from-primary/5 to-transparent hover:from-primary/10 hover:border-primary/40"
+                >
+                  <div className="shrink-0 h-12 w-12 rounded-full overflow-hidden border border-border/50 bg-background flex items-center justify-center p-2">
+                    {dbTeam?.image_url ? (
+                      <img src={dbTeam.image_url} alt={team} className="object-contain w-full h-full" />
+                    ) : (
+                      <div className="h-8 w-8 bg-muted rounded-full flex items-center justify-center font-bold text-xs text-muted-foreground">{team.substring(0,2).toUpperCase()}</div>
+                    )}
                   </div>
-                  {year && (
-                    <span className="text-xs font-black text-[#0B2A96] bg-[#0B2A96]/10 px-3 py-1 rounded-full">{year}</span>
-                  )}
+                  <div>
+                    {year && (
+                      <p className="text-xs font-bold text-primary/70 uppercase tracking-wider">{year}</p>
+                    )}
+                    <p className="font-heading text-lg text-foreground/90">{team}</p>
+                  </div>
                 </div>
               );
             })}

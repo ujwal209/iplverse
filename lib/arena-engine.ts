@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { createClient } from "@supabase/supabase-js";
 import { getRandomStatSmashQuestion, getPlayerAIHints, getCareerPathClues, getArenaConnections, getAllSearchableMatches, getMatchClues } from "@/app/actions/games";
+import { getPlayerTopPartnership } from "@/app/actions/analytics";
 
 export type RoundType = 
   | "WHO_AM_I"
@@ -82,19 +83,11 @@ export class ArenaQuestionEngine {
             wickets: p.wickets || 0
           }
         }))
-        .filter(p => p.name && p.image_url);
+        .filter(p => p.name);
 
       if (careerError || validPlayers.length === 0) throw new Error("Could not fetch players with stats");
       
       const targetPlayer = getRandom(validPlayers);
-
-      // Fetch dynamic Groq + Tavily hints
-      const res = await getPlayerAIHints(targetPlayer.name);
-      const hints = res.success && res.hints ? res.hints : [
-        "This player has played in the IPL.",
-        "This player has represented a franchise.",
-        "This player is a well-known cricketer."
-      ];
 
       // Load mapping, milestones, and career journey for this player
       const playerMappings = await readDataFile("player-mappings.json");
@@ -128,6 +121,48 @@ export class ArenaQuestionEngine {
         };
       }
 
+      // Build dbStats context for Groq (ensuring no null fields are passed)
+      const dbStats: any = {};
+      if (career) {
+        dbStats.career = {
+          matches: career.matches,
+          runs: career.runs,
+          wickets: career.wickets
+        };
+      }
+      if (batting) {
+        const batStats: any = {};
+        if (batting.strike_rate !== null && batting.strike_rate !== undefined) batStats.strike_rate = batting.strike_rate;
+        if (batting.average !== null && batting.average !== undefined) batStats.average = batting.average;
+        if (batting.highest_score !== null && batting.highest_score !== undefined) batStats.highest_score = batting.highest_score;
+        if (batting.hundreds !== null && batting.hundreds !== undefined) batStats.hundreds = batting.hundreds;
+        if (batting.fifties !== null && batting.fifties !== undefined) batStats.fifties = batting.fifties;
+        if (Object.keys(batStats).length > 0) dbStats.batting = batStats;
+      }
+      if (bowling) {
+        const bowlStats: any = {};
+        if (bowling.economy !== null && bowling.economy !== undefined) bowlStats.economy = bowling.economy;
+        if (bowling.average !== null && bowling.average !== undefined) bowlStats.average = bowling.average;
+        if (bowling.best_bowling_figures !== null && bowling.best_bowling_figures !== undefined) bowlStats.best_bowling_figures = bowling.best_bowling_figures;
+        if (bowling.wickets !== null && bowling.wickets !== undefined) bowlStats.wickets = bowling.wickets;
+        if (Object.keys(bowlStats).length > 0) dbStats.bowling = bowlStats;
+      }
+      if (milestoneData) {
+        const milestoneStats: any = {};
+        if (milestoneData.orange_caps !== null && milestoneData.orange_caps !== undefined) milestoneStats.orange_caps = milestoneData.orange_caps;
+        if (milestoneData.purple_caps !== null && milestoneData.purple_caps !== undefined) milestoneStats.purple_caps = milestoneData.purple_caps;
+        if (milestoneData.teams_played_for !== null && milestoneData.teams_played_for !== undefined) milestoneStats.teams_played_for = milestoneData.teams_played_for;
+        if (Object.keys(milestoneStats).length > 0) dbStats.milestones = milestoneStats;
+      }
+
+      // Fetch dynamic Groq + Tavily hints with the dbStats context
+      const res = await getPlayerAIHints(targetPlayer.name, dbStats);
+      const hints = res.success && res.hints ? res.hints : [
+        "This player has played in the IPL.",
+        "This player has represented a franchise.",
+        "This player is a well-known cricketer."
+      ];
+
       // Calculate teams count
       const careerTimeline = careerJourneys[displayName] || [];
       const teams = new Set<string>();
@@ -140,19 +175,32 @@ export class ArenaQuestionEngine {
       }
       const teamsCount = teams.size || 1;
 
+      const playerImage = targetPlayer.image_url || (mapping?.photo || "https://ui-avatars.com/api/?name=" + encodeURIComponent(displayName) + "&background=random&color=fff&size=128");
+
+      let partnershipData = null;
+      try {
+        const pRes = await getPlayerTopPartnership(targetPlayer.id);
+        if (pRes.success && pRes.data) {
+          partnershipData = pRes.data;
+        }
+      } catch (pErr) {
+        console.error("Failed to fetch top partnership in generateGuessWho:", pErr);
+      }
+
       return {
         type: "WHO_AM_I",
         points: 100,
         questionData: { 
           clues: hints,
-          playerImage: targetPlayer.image_url,
+          playerImage: playerImage,
           playerId: targetPlayer.id,
           playerName: targetPlayer.name,
           career: career,
           batting: batting,
           bowling: bowling,
           milestones: milestoneData,
-          teamsCount: teamsCount
+          teamsCount: teamsCount,
+          partnership: partnershipData
         },
         answerData: { answer: targetPlayer.name }
       };
@@ -168,18 +216,10 @@ export class ArenaQuestionEngine {
   }
 
   static async generateMysteryPlayer(): Promise<ArenaRound> {
-    const milestones = await readDataFile("milestones.json");
-    const players = Object.keys(milestones);
-    const targetPlayer = getRandom(players);
-    const facts = milestones[targetPlayer];
-    
-    const clues = await generateArenaClues("MYSTERY_PLAYER", facts);
-
+    const round = await this.generateGuessWho();
     return {
-      type: "MYSTERY_PLAYER",
-      points: 100, // Speed bonus handled by frontend state machine
-      questionData: { clues },
-      answerData: { answer: targetPlayer }
+      ...round,
+      type: "MYSTERY_PLAYER"
     };
   }
 

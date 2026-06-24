@@ -432,20 +432,16 @@ export default function ArenaRoom() {
       return () => clearTimeout(timer);
     }
 
-    if (gameState === "countdown" || gameState === "generating_round") {
-      // If we are host and got stuck here on reload, auto-trigger next question setup
-      if (!isGeneratingRef.current) {
+    if (gameState === "countdown") {
+      if (!countdownIntervalRef.current && isHost) {
+        startCountdown();
+      }
+    }
+
+    if (gameState === "generating_round") {
+      if (!isGeneratingRef.current && isHost) {
         isGeneratingRef.current = true;
-        if (gameState !== "generating_round") {
-          advanceArenaState(matchRecord.id, "generating_round").then((res) => {
-            if (res?.serverTime) {
-              clockSkewRef.current = new Date(res.serverTime).getTime() - Date.now();
-            }
-            generateNextQuestion();
-          });
-        } else {
-          generateNextQuestion();
-        }
+        generateNextQuestion();
       }
     }
   }, [gameState, hostReady, guestReady, hostAnswer, guestAnswer, isHost, roundData, roundType, roundNumber, maxRounds, hostScore, guestScore, matchRecord]);
@@ -1138,16 +1134,7 @@ export default function ArenaRoom() {
 
           {(gameState === "question" || gameState === "answer_reveal") && question && (
             <div className="w-full">
-              {isHost && gameState === "question" && (
-                <div className="flex justify-end w-full max-w-6xl mx-auto mb-4">
-                  <button
-                    onClick={handleSkipRound}
-                    className="px-4 py-2 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 hover:border-rose-200 text-xs font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5"
-                  >
-                    Skip Round
-                  </button>
-                </div>
-              )}
+
               <RoundRenderer 
                 roundType={roundType}
                 questionData={question}

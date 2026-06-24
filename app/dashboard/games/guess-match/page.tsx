@@ -85,6 +85,11 @@ export default function GuessTheMatch() {
     setLoadingMatch(false);
   };
 
+  const handleRestart = () => {
+    setScore(0);
+    fetchNextMatch(allMatches);
+  };
+
   useEffect(() => {
     if (!gameOver && !animating && fuseRef.current) {
       if (query.trim().length > 0) {
@@ -253,7 +258,7 @@ export default function GuessTheMatch() {
               </div>
             </div>
 
-            {gameOver && (
+            {gameOver && !hasWon && (
               <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-primary/10 border border-primary/20 rounded-xl text-center animate-in zoom-in-95 duration-500">
                 <h3 className="text-xl sm:text-2xl font-heading text-primary mb-2">Game Over!</h3>
                 <p className="text-sm sm:text-base text-muted-foreground mb-4">
