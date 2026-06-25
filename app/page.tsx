@@ -30,7 +30,7 @@ import {
 import { useAuth } from "@clerk/nextjs";
 import { GlobalNav } from "@/components/global-nav";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { GameMockup } from "@/components/mockups/GameMockups";
+
 
 const games = [
   {
@@ -113,7 +113,7 @@ export default function Home() {
   const router = useRouter();
   const { isSignedIn } = useAuth();
   const [roomCode, setRoomCode] = useState("");
-  const [selectedGame, setSelectedGame] = useState<string | null>(null);
+
 
   const handleJoinMatchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,10 +228,10 @@ export default function Home() {
               }
 
               return (
-                <div 
+                <Link 
                   key={game.id}
-                  onClick={() => setSelectedGame(game.id)}
-                  className="group relative h-[500px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-[#0B2A96]/30 transition-all duration-500 hover:-translate-y-2 border border-[#0B2A96]/10 bg-slate-950"
+                  href={game.isMultiplayer ? (isSignedIn ? "/dashboard/arena" : "/login") : game.href}
+                  className="group block relative h-[500px] rounded-[2.5rem] overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-[#0B2A96]/30 transition-all duration-500 hover:-translate-y-2 border border-[#0B2A96]/10 bg-slate-950"
                 >
                   {/* Blurred Background Layer (Fills empty space beautifully) */}
                   <img src={imgSrc} className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 transition-transform duration-700 group-hover:scale-110 z-0" />
@@ -275,7 +275,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -342,84 +342,8 @@ export default function Home() {
 
       </main>
 
-      {/* Game Detail Modal */}
-      {selectedGame && (
-        <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 lg:p-8">
-          <div className="absolute inset-0" onClick={() => setSelectedGame(null)} />
-          {(() => {
-            const game = games.find(g => g.id === selectedGame) || games[0];
-            const GameIcon = game.icon;
-            return (
-              <div className="bg-white w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl relative flex flex-col lg:flex-row animate-in zoom-in-95 duration-300 z-10">
-                <button 
-                  onClick={() => setSelectedGame(null)}
-                  className="absolute top-6 right-6 z-50 p-3 bg-white/50 hover:bg-slate-100 rounded-full text-slate-500 transition-colors backdrop-blur-md cursor-pointer border border-slate-200 shadow-sm hover:scale-110"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-                
-                {/* Left Side: Game Details */}
-                <div className="w-full lg:w-5/12 p-8 sm:p-14 bg-slate-50 border-r border-slate-200 flex flex-col">
-                  <div className="h-20 w-20 rounded-[1.5rem] bg-[#0B2A96]/10 text-[#0B2A96] flex items-center justify-center mb-8 border border-[#0B2A96]/20 shadow-inner">
-                    <GameIcon className="h-10 w-10" />
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {game.isNew && <span className="bg-emerald-500 text-white text-[10px] px-3.5 py-1.5 rounded-full font-black uppercase tracking-widest shadow-sm">NEW</span>}
-                    <span className="bg-[#0B2A96]/10 text-[#0B2A96] text-[10px] px-3.5 py-1.5 rounded-full font-black uppercase tracking-widest border border-[#0B2A96]/20">{game.difficulty}</span>
-                  </div>
+      {/* Game Detail Modal removed */}
 
-                  <h2 className="text-4xl sm:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-[1.1]">{game.title}</h2>
-                  <p className="text-slate-600 text-lg leading-relaxed font-medium mb-12 flex-grow">
-                    {game.description}
-                  </p>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                    <div className="flex-1 bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
-                      <div className="p-3 bg-slate-50 rounded-xl"><Clock className="w-6 h-6 text-slate-500" /></div>
-                      <div>
-                        <div className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Duration</div>
-                        <div className="font-black text-slate-800 text-lg">{game.time}</div>
-                      </div>
-                    </div>
-                    <div className="flex-1 bg-white border border-yellow-500/20 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
-                      <div className="p-3 bg-yellow-500/10 rounded-xl"><Award className="w-6 h-6 text-yellow-600" /></div>
-                      <div>
-                        <div className="text-[10px] uppercase font-bold text-yellow-600/70 tracking-widest mb-1">Reward</div>
-                        <div className="font-black text-yellow-600 text-lg">{game.xp}</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {game.isMultiplayer ? (
-                    <Link 
-                      href={isSignedIn ? "/dashboard/arena" : "/login"}
-                      className="w-full h-16 bg-[#0B2A96] hover:bg-[#082072] text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(11,42,150,0.3)] hover:shadow-[0_15px_40px_rgba(11,42,150,0.4)] transition-all active:scale-[0.98]"
-                    >
-                      <Play className="h-5 w-5 fill-white" /> Host Match
-                    </Link>
-                  ) : (
-                    <Link 
-                      href={game.href}
-                      className="w-full h-16 bg-[#0B2A96] hover:bg-[#082072] text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(11,42,150,0.3)] hover:shadow-[0_15px_40px_rgba(11,42,150,0.4)] transition-all active:scale-[0.98]"
-                    >
-                      <Play className="h-5 w-5 fill-white" /> Play Now
-                    </Link>
-                  )}
-                </div>
-
-                {/* Right Side: Interactive UI Mockup */}
-                <div className="w-full lg:w-7/12 bg-[#0B2A96]/5 p-6 sm:p-10 flex items-center justify-center relative overflow-hidden min-h-[500px]">
-                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0B2A96]/5 to-transparent pointer-events-none" />
-                  <div className="w-full max-w-[400px] h-[650px] max-h-[85vh] relative z-10 flex items-center justify-center drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500">
-                    <GameMockup gameId={game.id} />
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
-        </div>
-      )}
 
       {/* Footer */}
       <footer className="bg-white py-6 border-t border-[#0B2A96]/10 mt-auto font-sans">
