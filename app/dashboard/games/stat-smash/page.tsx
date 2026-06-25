@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUp, ArrowDown, Trophy, Activity, RotateCcw, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { ArrowUp, ArrowDown, Trophy, Activity, RotateCcw, CheckCircle2, XCircle, Loader2, ArrowLeft } from "lucide-react";
 import { getRandomStatSmashQuestion, submitDailyGame } from "@/app/actions/games";
 import confetti from "canvas-confetti";
+import { GameHeader } from "@/components/game/game-header";
+import Link from "next/link";
 import { GameHeader } from "@/components/game/game-header";
 
 export default function StatSmash() {
@@ -76,21 +78,43 @@ export default function StatSmash() {
   if (!question) return null;
 
   return (
-    <div className="flex flex-col items-center justify-between lg:justify-start h-[100dvh] lg:h-auto lg:min-h-[80vh] w-full p-2 lg:p-8 space-y-2 lg:space-y-8 bg-slate-50 overflow-hidden lg:overflow-visible">
-      <GameHeader 
-        title="Stat Smash"
-        subtitle={
-          <span className="text-slate-600 text-[10px] lg:text-base leading-tight">
-            Which player has a higher <span className="font-black text-[#0B2A96] uppercase tracking-wider">{question.stat_display}</span>?
-          </span>
-        }
-        action={
-          <div className="inline-flex items-center gap-2 px-3 py-2 lg:px-6 lg:py-3 bg-white rounded-xl lg:rounded-2xl text-[#0B2A96] font-black text-sm lg:text-lg shadow-sm border border-[#0B2A96]/10">
-            <Trophy className="h-4 w-4 lg:h-5 lg:w-5 text-yellow-500" />
-            STREAK: {score}
+    <div className="flex flex-col items-center justify-start h-[100dvh] lg:h-auto lg:min-h-[80vh] w-full p-2 lg:p-8 space-y-2 lg:space-y-8 bg-slate-50 overflow-hidden lg:overflow-visible">
+      
+      {/* MOBILE HUD */}
+      <div className="w-full flex lg:hidden items-center justify-between px-2 pt-2 pb-1 shrink-0 animate-in fade-in slide-in-from-top-4">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+            <Link href="/dashboard/games" className="p-2 -ml-2 rounded-lg bg-slate-200/50 hover:bg-slate-200 text-slate-600 transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <h1 className="font-black text-xl tracking-tight text-slate-900">Stat Smash</h1>
           </div>
-        }
-      />
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 ml-1">
+            Higher <span className="text-[#0B2A96]">{question.stat_display}</span>?
+          </p>
+        </div>
+        <div className="flex items-center gap-1.5 px-3 py-2 bg-white rounded-xl shadow-sm border border-slate-200">
+          <Trophy className="w-4 h-4 text-yellow-500" />
+          <span className="font-black text-[#0B2A96] text-sm">{score}</span>
+        </div>
+      </div>
+
+      <div className="hidden lg:block w-full">
+        <GameHeader 
+          title="Stat Smash"
+          subtitle={
+            <span className="text-slate-600">
+              Which player has a higher <span className="font-black text-[#0B2A96] uppercase tracking-wider">{question.stat_display}</span>?
+            </span>
+          }
+          action={
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-2xl text-[#0B2A96] font-black text-lg shadow-sm border border-[#0B2A96]/10">
+              <Trophy className="h-5 w-5 text-yellow-500" />
+              STREAK: {score}
+            </div>
+          }
+        />
+      </div>
 
       {gameOver && (
         <div className="mt-2 lg:mt-6 text-center animate-in slide-in-from-top-8 fade-in flex flex-col items-center z-20 shrink-0">
@@ -108,7 +132,7 @@ export default function StatSmash() {
         </div>
       )}
 
-      <div className={`flex flex-col lg:flex-row items-center justify-center w-full max-w-6xl gap-2 lg:gap-6 relative z-10 flex-1 min-h-0 ${gameOver ? 'mt-2 lg:mt-6 opacity-75' : 'mt-2 lg:mt-12'} ${(loading && question) ? 'opacity-60 scale-[0.98] blur-[1px]' : ''} transition-all duration-300`}>
+      <div className={`flex flex-col lg:flex-row items-stretch lg:items-center justify-start lg:justify-center w-full max-w-6xl gap-0 lg:gap-6 relative z-10 flex-1 min-h-0 ${gameOver ? 'mt-2 lg:mt-6 opacity-75' : 'mt-2 lg:mt-12'} ${(loading && question) ? 'opacity-60 scale-[0.98] blur-[1px]' : ''} transition-all duration-300`}>
         
         {loading && question && (
           <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
@@ -120,62 +144,72 @@ export default function StatSmash() {
         )}
         
         {/* Left Player Card */}
-        <div className="flex-1 w-full bg-white border border-slate-200 rounded-[1.5rem] lg:rounded-[2.5rem] p-4 lg:p-12 flex flex-col items-center justify-center shadow-xl min-h-0 lg:min-h-[350px] relative overflow-hidden group">
+        <div className="flex-none lg:flex-1 w-full bg-white border-2 border-slate-200 rounded-[1.5rem] lg:rounded-[2.5rem] p-3 lg:p-12 flex flex-row lg:flex-col items-center justify-between lg:justify-center shadow-xl lg:min-h-[350px] relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0B2A96]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          {question.left_player_image && (
-            <img src={question.left_player_image} alt={question.left_player_name} className="w-12 h-12 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg mb-2 lg:mb-6 z-10 bg-slate-100 shrink-0" />
-          )}
-          <h2 className="text-base lg:text-5xl font-black text-slate-900 text-center mb-1 lg:mb-6 tracking-tight z-10 leading-tight">
-            {question.left_player_name}
-          </h2>
-          <div className="text-3xl lg:text-7xl font-black text-[#0B2A96] drop-shadow-sm z-10 leading-none">
-            {question.left_player_value.toLocaleString()}
+          
+          <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-center w-full gap-3 lg:gap-6 z-10">
+            <div className="flex items-center gap-3 lg:gap-6 flex-1 lg:flex-col">
+              {question.left_player_image && (
+                <img src={question.left_player_image} alt={question.left_player_name} className="w-14 h-14 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg bg-slate-100 shrink-0" />
+              )}
+              <div className="flex flex-col items-start lg:items-center">
+                <h2 className="text-sm lg:text-5xl font-black text-slate-900 lg:text-center tracking-tight leading-tight line-clamp-2 lg:mb-6">
+                  {question.left_player_name}
+                </h2>
+                <p className="lg:hidden text-[9px] font-bold text-slate-400 uppercase tracking-[0.1em] leading-none mt-1">{question.stat_display}</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-end lg:items-center shrink-0 pr-2 lg:pr-0">
+              <div className="text-3xl lg:text-7xl font-black text-[#0B2A96] drop-shadow-sm leading-none">
+                {question.left_player_value.toLocaleString()}
+              </div>
+              <p className="hidden lg:block text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mt-4 leading-none">{question.stat_display}</p>
+            </div>
           </div>
-          <p className="text-[10px] lg:text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 lg:mt-4 z-10 leading-none">{question.stat_display}</p>
         </div>
  
         {/* VS Badge */}
-        <div className="h-8 w-8 lg:h-20 lg:w-20 shrink-0 bg-[#0B2A96] text-white rounded-full flex items-center justify-center font-black text-xs lg:text-2xl z-20 -my-3 lg:my-0 lg:-mx-10 shadow-xl lg:shadow-2xl border-2 lg:border-4 border-slate-50 shadow-[#0B2A96]/20">
+        <div className="absolute lg:relative top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:transform-none h-10 w-10 lg:h-20 lg:w-20 shrink-0 bg-[#0B2A96] text-white rounded-full flex items-center justify-center font-black text-[10px] lg:text-2xl z-30 lg:z-20 shadow-xl lg:shadow-2xl border-[3px] lg:border-4 border-slate-50 lg:my-0 lg:-mx-10 shadow-[#0B2A96]/30">
           VS
         </div>
  
         {/* Right Player Card */}
         {/* Right Player Card */}
-        <div className={`flex-1 w-full bg-white border-2 rounded-[1.5rem] lg:rounded-[2.5rem] p-4 lg:p-12 flex flex-col items-center justify-center shadow-xl min-h-0 lg:min-h-[350px] transition-all duration-500 relative overflow-hidden ${gameOver ? 'border-red-500 shadow-red-500/20' : animating ? 'border-emerald-500 shadow-emerald-500/20' : 'border-slate-200 hover:border-[#0B2A96]/30'}`}>
-          {question.right_player_image && (
-            <img src={question.right_player_image} alt={question.right_player_name} className="w-12 h-12 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg mb-2 lg:mb-6 z-10 bg-slate-100 shrink-0" />
-          )}
-          <h2 className="text-base lg:text-5xl font-black text-slate-900 text-center mb-1 lg:mb-6 tracking-tight z-10 leading-tight">
-            {question.right_player_name}
-          </h2>
+        <div className={`flex-1 w-full bg-white border-2 rounded-[1.5rem] lg:rounded-[2.5rem] p-5 lg:p-12 flex flex-col items-center justify-center shadow-xl lg:min-h-[350px] transition-all duration-500 relative overflow-hidden mt-1.5 lg:mt-0 ${gameOver ? 'border-red-500 shadow-red-500/20' : animating ? 'border-emerald-500 shadow-emerald-500/20' : 'border-slate-200 hover:border-[#0B2A96]/30'}`}>
+          
+          <div className="flex flex-col items-center gap-2 lg:gap-6 z-10 w-full mb-6 lg:mb-8 mt-2 lg:mt-0">
+            {question.right_player_image && (
+              <img src={question.right_player_image} alt={question.right_player_name} className="w-20 h-20 lg:w-32 lg:h-32 object-cover rounded-full border-4 border-white shadow-xl bg-slate-100 shrink-0" />
+            )}
+            <h2 className="text-2xl lg:text-5xl font-black text-slate-900 text-center tracking-tight leading-tight line-clamp-2 px-4">
+              {question.right_player_name}
+            </h2>
+          </div>
           
           {animating || gameOver ? (
-            <div className="animate-in zoom-in duration-500 flex flex-col items-center z-10">
-              <div className={`text-3xl lg:text-7xl font-black drop-shadow-sm flex items-center gap-2 lg:gap-4 leading-none ${gameOver ? 'text-red-500' : 'text-emerald-500'}`}>
+            <div className="animate-in zoom-in duration-500 flex flex-col items-center justify-center flex-1 w-full z-10 pb-4 lg:pb-0">
+              <div className={`text-6xl lg:text-7xl font-black drop-shadow-sm flex items-center gap-3 lg:gap-4 leading-none ${gameOver ? 'text-red-500' : 'text-emerald-500'}`}>
                 {question.right_player_value.toLocaleString()}
-                {gameOver ? <XCircle className="w-6 h-6 lg:w-10 lg:h-10" /> : <CheckCircle2 className="w-6 h-6 lg:w-10 lg:h-10" />}
+                {gameOver ? <XCircle className="w-10 h-10 lg:w-10 lg:h-10" /> : <CheckCircle2 className="w-10 h-10 lg:w-10 lg:h-10" />}
               </div>
-              <p className="text-[10px] lg:text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 lg:mt-4 leading-none">{question.stat_display}</p>
+              <p className="text-xs lg:text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mt-3 lg:mt-4 leading-none">{question.stat_display}</p>
             </div>
           ) : (
-            <div className="flex flex-col items-center w-full z-10">
-              <div className="flex flex-row lg:flex-col gap-2 lg:gap-4 w-full max-w-[300px] lg:max-w-[240px] animate-in fade-in">
+            <div className="flex flex-col items-center justify-center w-full z-10 pb-2 lg:pb-0">
+              <div className="flex flex-col gap-3 lg:gap-4 w-full max-w-sm lg:max-w-[240px] animate-in fade-in">
                 <button 
                   onClick={() => handleGuess("higher")}
-                  className="flex-1 lg:w-full h-12 lg:h-16 rounded-xl lg:rounded-2xl bg-slate-900 text-white font-black text-[11px] lg:text-lg tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-0 lg:gap-3 hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-900/20 cursor-pointer"
+                  className="w-full h-16 lg:h-16 rounded-2xl bg-slate-900 text-white font-black text-lg lg:text-lg tracking-widest uppercase flex items-center justify-center gap-3 hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-900/20 cursor-pointer border-b-4 border-slate-950 active:border-b-0 active:translate-y-1"
                 >
-                  <ArrowUp className="h-4 w-4 lg:h-6 lg:w-6 mb-1 lg:mb-0" /> HIGHER
+                  <ArrowUp className="h-6 w-6" /> HIGHER
                 </button>
                 <button 
                   onClick={() => handleGuess("lower")}
-                  className="flex-1 lg:w-full h-12 lg:h-16 rounded-xl lg:rounded-2xl bg-white border-2 border-slate-200 text-slate-600 font-black text-[11px] lg:text-lg tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-0 lg:gap-3 hover:bg-slate-50 transition-all active:scale-95 shadow-sm cursor-pointer"
+                  className="w-full h-16 lg:h-16 rounded-2xl bg-white border-2 border-slate-200 text-slate-600 font-black text-lg lg:text-lg tracking-widest uppercase flex items-center justify-center gap-3 hover:bg-slate-50 transition-all active:scale-95 shadow-sm cursor-pointer border-b-4 border-slate-300 active:border-b-0 active:translate-y-1 mt-1 lg:mt-0"
                 >
-                  <ArrowDown className="h-4 w-4 lg:h-6 lg:w-6 mb-1 lg:mb-0" /> LOWER
+                  <ArrowDown className="h-6 w-6" /> LOWER
                 </button>
               </div>
-              <p className="text-center text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2 lg:mt-2">
-                Than {question.left_player_name}
-              </p>
             </div>
           )}
         </div>
