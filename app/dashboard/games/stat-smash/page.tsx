@@ -6,7 +6,6 @@ import { getRandomStatSmashQuestion, submitDailyGame } from "@/app/actions/games
 import confetti from "canvas-confetti";
 import { GameHeader } from "@/components/game/game-header";
 import Link from "next/link";
-import { GameHeader } from "@/components/game/game-header";
 
 export default function StatSmash() {
   const [loading, setLoading] = useState(true);
