@@ -120,15 +120,15 @@ export default function StatSmash() {
         )}
         
         {/* Left Player Card */}
-        <div className="flex-1 w-full bg-white border border-slate-200 rounded-[1.5rem] lg:rounded-[2.5rem] p-4 lg:p-12 flex flex-col items-center justify-center shadow-xl min-h-[140px] lg:min-h-[350px] relative overflow-hidden group">
+        <div className="flex-1 w-full bg-white border border-slate-200 rounded-[1.5rem] lg:rounded-[2.5rem] p-4 lg:p-12 flex flex-col items-center justify-center shadow-xl min-h-0 lg:min-h-[350px] relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-[#0B2A96]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           {question.left_player_image && (
-            <img src={question.left_player_image} alt={question.left_player_name} className="w-12 h-12 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg mb-2 lg:mb-6 z-10 bg-slate-100" />
+            <img src={question.left_player_image} alt={question.left_player_name} className="w-12 h-12 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg mb-2 lg:mb-6 z-10 bg-slate-100 shrink-0" />
           )}
-          <h2 className="text-lg lg:text-5xl font-black text-slate-900 text-center mb-1 lg:mb-6 tracking-tight z-10 leading-none line-clamp-1">
+          <h2 className="text-base lg:text-5xl font-black text-slate-900 text-center mb-1 lg:mb-6 tracking-tight z-10 leading-tight">
             {question.left_player_name}
           </h2>
-          <div className="text-4xl lg:text-7xl font-black text-[#0B2A96] drop-shadow-sm z-10 leading-none">
+          <div className="text-3xl lg:text-7xl font-black text-[#0B2A96] drop-shadow-sm z-10 leading-none">
             {question.left_player_value.toLocaleString()}
           </div>
           <p className="text-[10px] lg:text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 lg:mt-4 z-10 leading-none">{question.stat_display}</p>
@@ -140,37 +140,40 @@ export default function StatSmash() {
         </div>
  
         {/* Right Player Card */}
-        <div className={`flex-1 w-full bg-white border-2 rounded-[1.5rem] lg:rounded-[2.5rem] p-4 lg:p-12 flex flex-col items-center justify-center shadow-xl min-h-[140px] lg:min-h-[350px] transition-all duration-500 relative overflow-hidden ${gameOver ? 'border-red-500 shadow-red-500/20' : animating ? 'border-emerald-500 shadow-emerald-500/20' : 'border-slate-200 hover:border-[#0B2A96]/30'}`}>
+        {/* Right Player Card */}
+        <div className={`flex-1 w-full bg-white border-2 rounded-[1.5rem] lg:rounded-[2.5rem] p-4 lg:p-12 flex flex-col items-center justify-center shadow-xl min-h-0 lg:min-h-[350px] transition-all duration-500 relative overflow-hidden ${gameOver ? 'border-red-500 shadow-red-500/20' : animating ? 'border-emerald-500 shadow-emerald-500/20' : 'border-slate-200 hover:border-[#0B2A96]/30'}`}>
           {question.right_player_image && (
-            <img src={question.right_player_image} alt={question.right_player_name} className="w-12 h-12 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg mb-2 lg:mb-6 z-10 bg-slate-100" />
+            <img src={question.right_player_image} alt={question.right_player_name} className="w-12 h-12 lg:w-32 lg:h-32 object-cover rounded-full border-2 lg:border-4 border-white shadow-lg mb-2 lg:mb-6 z-10 bg-slate-100 shrink-0" />
           )}
-          <h2 className="text-lg lg:text-5xl font-black text-slate-900 text-center mb-1 lg:mb-6 tracking-tight z-10 leading-none line-clamp-1">
+          <h2 className="text-base lg:text-5xl font-black text-slate-900 text-center mb-1 lg:mb-6 tracking-tight z-10 leading-tight">
             {question.right_player_name}
           </h2>
           
           {animating || gameOver ? (
             <div className="animate-in zoom-in duration-500 flex flex-col items-center z-10">
-              <div className={`text-4xl lg:text-7xl font-black drop-shadow-sm flex items-center gap-2 lg:gap-4 leading-none ${gameOver ? 'text-red-500' : 'text-emerald-500'}`}>
+              <div className={`text-3xl lg:text-7xl font-black drop-shadow-sm flex items-center gap-2 lg:gap-4 leading-none ${gameOver ? 'text-red-500' : 'text-emerald-500'}`}>
                 {question.right_player_value.toLocaleString()}
                 {gameOver ? <XCircle className="w-6 h-6 lg:w-10 lg:h-10" /> : <CheckCircle2 className="w-6 h-6 lg:w-10 lg:h-10" />}
               </div>
               <p className="text-[10px] lg:text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 lg:mt-4 leading-none">{question.stat_display}</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-2 lg:gap-4 w-full max-w-[240px] animate-in fade-in z-10">
-              <button 
-                onClick={() => handleGuess("higher")}
-                className="w-full h-12 lg:h-16 rounded-xl lg:rounded-2xl bg-slate-900 text-white font-black text-sm lg:text-lg tracking-widest uppercase flex items-center justify-center gap-2 lg:gap-3 hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-900/20 cursor-pointer"
-              >
-                <ArrowUp className="h-4 w-4 lg:h-6 lg:w-6" /> HIGHER
-              </button>
-              <button 
-                onClick={() => handleGuess("lower")}
-                className="w-full h-12 lg:h-16 rounded-xl lg:rounded-2xl bg-white border-2 border-slate-200 text-slate-600 font-black text-sm lg:text-lg tracking-widest uppercase flex items-center justify-center gap-2 lg:gap-3 hover:bg-slate-50 transition-all active:scale-95 shadow-sm cursor-pointer"
-              >
-                <ArrowDown className="h-4 w-4 lg:h-6 lg:w-6" /> LOWER
-              </button>
-              <p className="text-center text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 lg:mt-2">
+            <div className="flex flex-col items-center w-full z-10">
+              <div className="flex flex-row lg:flex-col gap-2 lg:gap-4 w-full max-w-[300px] lg:max-w-[240px] animate-in fade-in">
+                <button 
+                  onClick={() => handleGuess("higher")}
+                  className="flex-1 lg:w-full h-12 lg:h-16 rounded-xl lg:rounded-2xl bg-slate-900 text-white font-black text-[11px] lg:text-lg tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-0 lg:gap-3 hover:bg-slate-800 transition-all active:scale-95 shadow-lg shadow-slate-900/20 cursor-pointer"
+                >
+                  <ArrowUp className="h-4 w-4 lg:h-6 lg:w-6 mb-1 lg:mb-0" /> HIGHER
+                </button>
+                <button 
+                  onClick={() => handleGuess("lower")}
+                  className="flex-1 lg:w-full h-12 lg:h-16 rounded-xl lg:rounded-2xl bg-white border-2 border-slate-200 text-slate-600 font-black text-[11px] lg:text-lg tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-0 lg:gap-3 hover:bg-slate-50 transition-all active:scale-95 shadow-sm cursor-pointer"
+                >
+                  <ArrowDown className="h-4 w-4 lg:h-6 lg:w-6 mb-1 lg:mb-0" /> LOWER
+                </button>
+              </div>
+              <p className="text-center text-[8px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2 lg:mt-2">
                 Than {question.left_player_name}
               </p>
             </div>
