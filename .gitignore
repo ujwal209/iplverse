@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scratch and temp assets
+scratch/
+public/guess_the_player_old.jpeg
+public/image.png
