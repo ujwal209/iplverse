@@ -25,7 +25,7 @@ Dive into the most comprehensive IPL historical database:
 ## The Team
 
 Built with ❤️ by:
-- **Pranay** - [LinkedIn](https://www.linkedin.com/in/pranaysb/)
+- **Pranay S B** - [LinkedIn](https://www.linkedin.com/in/pranaysb/)
 - **Ujwal** - [LinkedIn](https://www.linkedin.com/in/ujwal-venkatesh-b85829326/)
 
 For any enquiries or collaborations, feel free to reach out to us at:

@@ -371,7 +371,7 @@ export default function Home() {
               <div className="flex flex-col items-center sm:items-end gap-3 sm:pr-10 sm:border-r border-slate-200">
                 <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Built By</div>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-bold text-slate-700">Pranay</span>
+                  <span className="text-sm font-bold text-slate-700">Pranay S B</span>
                   <a href="https://www.linkedin.com/in/pranaysb/" target="_blank" rel="noreferrer" className="flex items-center justify-center h-7 w-7 rounded-md bg-[#0A66C2] text-white shadow-sm shadow-[#0A66C2]/20 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#0A66C2]/30 transition-all" title="Pranay's LinkedIn">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                   </a>
