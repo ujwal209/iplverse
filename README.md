@@ -21,3 +21,40 @@ Dive into the most comprehensive IPL historical database:
 - **Head to Head**: Directly compare the historic match-ups between batters and bowlers.
 - **Venues & Teams**: Stadium statistics, franchise records, and team histories.
 - **Leaderboards**: Track the all-time top run-scorers and wicket-takers.
+
+## 💻 Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org) (App Router)
+- **Styling**: Tailwind CSS & Lucide Icons
+- **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
+- **Realtime**: Supabase Realtime for 1v1 Battle Arena 
+- **Authentication**: [Clerk](https://clerk.com/)
+- **AI Engine**: Groq (for generating dynamic trivia & hints)
+
+## 🚀 Getting Started
+
+First, set up your environment variables by creating a `.env.local` file:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+GROQ_API_KEY=your_groq_api_key
+```
+
+Then, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
