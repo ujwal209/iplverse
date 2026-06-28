@@ -25,7 +25,8 @@ import {
   BarChart3,
   Users,
   History,
-  User
+  User,
+  Mail
 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 import { GlobalNav } from "@/components/global-nav";
@@ -346,18 +347,60 @@ export default function Home() {
 
 
       {/* Footer */}
-      <footer className="bg-white py-6 border-t border-[#0B2A96]/10 mt-auto font-sans">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex items-center">
-              <img src="/main_logo.png" alt="IPL Verse Logo" className="h-9 w-auto object-contain" />
+      <footer className="bg-white py-12 border-t border-slate-200 mt-auto font-sans relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/50 to-white pointer-events-none" />
+        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-10">
+            
+            {/* Branding & Legal */}
+            <div className="flex flex-col items-center lg:items-start gap-4">
+              <img src="/main_logo.png" alt="IPL Verse Logo" className="h-10 w-auto object-contain" />
+              <p className="text-sm text-slate-500 font-medium">
+                © {new Date().getFullYear()} IPL Verse. All rights reserved.
+              </p>
+              <div className="flex gap-5 text-xs font-bold text-slate-400 uppercase tracking-wider mt-2">
+                <Link href="/terms" className="hover:text-[#0B2A96] transition-colors">Terms</Link>
+                <Link href="/privacy" className="hover:text-[#0B2A96] transition-colors">Privacy</Link>
+              </div>
             </div>
-            <p className="text-xs text-slate-600 font-medium font-sans">
-              © {new Date().getFullYear()} IPL Verse. All rights reserved.
-            </p>
-            <div className="flex gap-4 text-xs font-semibold text-slate-600 font-sans">
-              <Link href="/terms" className="hover:text-[#0B2A96] transition-colors">Terms</Link>
-              <Link href="/privacy" className="hover:text-[#0B2A96] transition-colors">Privacy</Link>
+            
+            {/* Credits & Contact */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-8 sm:gap-10">
+              
+              {/* Creators */}
+              <div className="flex flex-col items-center sm:items-end gap-3 sm:pr-10 sm:border-r border-slate-200">
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Built By</div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-slate-700">Pranay</span>
+                  <a href="https://www.linkedin.com/in/pranaysb/" target="_blank" rel="noreferrer" className="flex items-center justify-center h-7 w-7 rounded-md bg-[#0A66C2] text-white shadow-sm shadow-[#0A66C2]/20 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#0A66C2]/30 transition-all" title="Pranay's LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </a>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold text-slate-700">Ujwal</span>
+                  <a href="https://www.linkedin.com/in/ujwal-venkatesh-b85829326/" target="_blank" rel="noreferrer" className="flex items-center justify-center h-7 w-7 rounded-md bg-[#0A66C2] text-white shadow-sm shadow-[#0A66C2]/20 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#0A66C2]/30 transition-all" title="Ujwal's LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              {/* Contact */}
+              <div className="flex flex-col items-center sm:items-end gap-3">
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Enquiries & Collaborations</div>
+                <a href="mailto:pranaysb9@gmail.com" className="flex items-center gap-3 group" title="pranaysb9@gmail.com">
+                  <span className="text-sm font-bold text-slate-600 group-hover:text-slate-900 transition-colors">pranaysb9@gmail.com</span>
+                  <div className="flex items-center justify-center h-7 w-7 rounded-md bg-[#EA4335] text-white shadow-sm shadow-[#EA4335]/20 group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:shadow-[#EA4335]/30 transition-all">
+                    <Mail className="h-3.5 w-3.5" />
+                  </div>
+                </a>
+                <a href="mailto:easynetcraft@gmail.com" className="flex items-center gap-3 group" title="easynetcraft@gmail.com">
+                  <span className="text-sm font-bold text-slate-600 group-hover:text-slate-900 transition-colors">easynetcraft@gmail.com</span>
+                  <div className="flex items-center justify-center h-7 w-7 rounded-md bg-[#EA4335] text-white shadow-sm shadow-[#EA4335]/20 group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:shadow-[#EA4335]/30 transition-all">
+                    <Mail className="h-3.5 w-3.5" />
+                  </div>
+                </a>
+              </div>
+              
             </div>
           </div>
         </div>
