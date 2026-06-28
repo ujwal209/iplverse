@@ -58,3 +58,12 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## 🤝 The Team
+
+Built with ❤️ by:
+- **Pranay** - [LinkedIn](https://www.linkedin.com/in/pranaysb/)
+- **Ujwal** - [LinkedIn](https://www.linkedin.com/in/ujwal-venkatesh-b85829326/)
+
+For any enquiries or collaborations, feel free to reach out to us at:
+`pranaysb9@gmail.com` or `easynetcraft@gmail.com`
